@@ -1,0 +1,27 @@
+.toggleBtn {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  margin-left: 12px;
+  flex-shrink: 0;
+}
+
+.toggleBtn:hover {
+  background: var(--border-color);
+}
+
+/* Light mode: show moon, hide sun */
+.sunIcon { display: none; }
+.moonIcon { display: flex; }
+
+/* Dark mode: show sun, hide moon */
+[data-theme='dark'] .sunIcon { display: flex; }
+[data-theme='dark'] .moonIcon { display: none; }

@@ -1,26 +1,95 @@
-@import "tailwindcss";
-
+/* ─── Design Tokens ──────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --text-primary:   #111827;
+  --text-secondary: #4b5563;
+  --text-tertiary:  #6b7280;
+  --bg-color:       #ffffff;
+  --bg-page:        #f9fafb;
+  --bg-card:        #ffffff;
+  --bg-input:       #ffffff;
+  --border-color:   #e5e7eb;
+  --primary-blue:   #3b35c3;
+  --hover-blue:     #312ec2;
+  --accent-green:   #22c55e;
+  --accent-green-h: #16a34a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme='dark'] {
+  --text-primary:   #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-tertiary:  #94a3b8;
+  --bg-color:       #0f172a;
+  --bg-page:        #0f172a;
+  --bg-card:        #1e293b;
+  --bg-input:       #1e293b;
+  --border-color:   #334155;
+  --primary-blue:   #6366f1;
+  --hover-blue:     #818cf8;
+  --accent-green:   #22c55e;
+  --accent-green-h: #16a34a;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Reset ──────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html, body {
+  max-width: 100vw;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ─── Dark mode global overrides ────────── */
+[data-theme='dark'] .trustBar {
+  background: #0f172a !important;
+  border-bottom-color: #1e293b !important;
+  color: #94a3b8 !important;
+}
+
+[data-theme='dark'] .heroWrapper,
+[data-theme='dark'] .header {
+  background: #1e1b4b !important;
+}
+
+[data-theme='dark'] .ctaSection {
+  background: #1e1b4b !important;
+}
+
+[data-theme='dark'] .caseStudyTag {
+  background: #312e81 !important;
+  color: #a5b4fc !important;
+}
+
+[data-theme='dark'] .caseCardBullets li {
+  color: #a5b4fc !important;
+}
+
+[data-theme='dark'] .ctaAvatars img {
+  border-color: #1e1b4b !important;
+}
+
+[data-theme='dark'] .avatarRow img {
+  border-color: #1e1b4b !important;
+}
+
+[data-theme='dark'] .heroClip {
+  background: #0f172a !important;
 }

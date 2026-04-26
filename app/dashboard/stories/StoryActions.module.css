@@ -1,0 +1,40 @@
+.actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-decoration: none;
+  padding: 0;
+}
+
+.iconBtn:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+  border-color: transparent;
+}
+
+.deleteBtn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.viewBtn:hover {
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--primary-blue);
+  border-color: rgba(37, 99, 235, 0.25);
+}

@@ -1,0 +1,149 @@
+/* StoriesPage.module.css */
+
+/* New Story Button */
+.newStoryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--primary-blue);
+  color: #fff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.18s ease;
+  white-space: nowrap;
+}
+
+.newStoryBtn:hover {
+  opacity: 0.88;
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  gap: 12px;
+}
+
+.emptyIcon {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.emptyState h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.emptyState p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+/* Story List */
+.storyList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.storyCard {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.15s ease;
+}
+
+.storyCard:last-child {
+  border-bottom: none;
+}
+
+.storyCard:hover {
+  background: var(--bg-input);
+}
+
+/* Index Number */
+.storyIndex {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+  opacity: 0.5;
+}
+
+/* Story Info */
+.storyInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.storyTitle {
+  font-size: 0.97rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.storyMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.businessTag {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--primary-blue);
+  background: rgba(37, 99, 235, 0.1);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  opacity: 0.4;
+}
+
+.date {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+/* Actions */
+.storyActions {
+  flex-shrink: 0;
+}

@@ -1,0 +1,133 @@
+/* app/components/RichTextEditor.module.css */
+.editorContainer {
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--bg-input, #ffffff);
+  display: flex;
+  flex-direction: column;
+}
+
+.toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  background-color: var(--bg-card, #f8fafc);
+  flex-wrap: wrap;
+}
+
+.toolbarButton {
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary, #64748b);
+  transition: all 0.2s ease;
+}
+
+.toolbarButton:hover {
+  background-color: var(--border-color, #e2e8f0);
+  color: var(--text-primary, #1e293b);
+}
+
+.toolbarButton[data-active="true"] {
+  background-color: var(--primary-blue, #2563eb);
+  color: #ffffff;
+}
+
+.toolbarDivider {
+  width: 1px;
+  background-color: var(--border-color, #e2e8f0);
+  margin: 0 4px;
+}
+
+.editorContent {
+  padding: 16px;
+  min-height: 400px;
+  cursor: text;
+  color: var(--text-primary);
+}
+
+/* ProseMirror styles */
+.editorContainer :global(.ProseMirror) {
+  min-height: 400px;
+  outline: none;
+  line-height: 1.7;
+}
+
+.editorContainer :global(.ProseMirror > *:first-child) {
+  margin-top: 0;
+}
+
+.editorContainer :global(.ProseMirror p) {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.editorContainer :global(.ProseMirror h2) {
+  font-size: 1.5em;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.editorContainer :global(.ProseMirror h3) {
+  font-size: 1.25em;
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.editorContainer :global(.ProseMirror ul),
+.editorContainer :global(.ProseMirror ol) {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.editorContainer :global(.ProseMirror blockquote) {
+  border-left: 4px solid var(--border-color, #e2e8f0);
+  padding-left: 1rem;
+  margin-left: 0;
+  color: var(--text-secondary, #64748b);
+  font-style: italic;
+}
+
+.editorContainer :global(.ProseMirror img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.editorContainer :global(.ProseMirror a) {
+  color: var(--primary-blue, #2563eb);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Placeholder plugin style */
+.editorContainer :global(.ProseMirror p.is-editor-empty:first-child::before) {
+  color: var(--text-tertiary, #94a3b8);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Upload spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinning {
+  animation: spin 0.8s linear infinite;
+}
