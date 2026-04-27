@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/sign-in') || request.nextUrl.pathname.startsWith('/sign-up');
-  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') || request.nextUrl.pathname.startsWith('/admin');
+  const isAuthRoute = request.nextUrl.pathname.startsWith('/admin') || request.nextUrl.pathname.startsWith('/sign-up');
+  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard');
 
   try {
     const res = await fetch(`${request.nextUrl.origin}/api/auth/get-session`, {
@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
     const session = res.ok ? await res.json() : null;
 
     if (isProtectedRoute && (!session || !session.session)) {
-      return NextResponse.redirect(new URL('/sign-in', request.url));
+      return NextResponse.redirect(new URL('/admin', request.url));
     }
 
     if (isAuthRoute && session && session.session) {
@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
 
   } catch (error) {
     if (isProtectedRoute) {
-      return NextResponse.redirect(new URL('/sign-in', request.url));
+      return NextResponse.redirect(new URL('/admin', request.url));
     }
   }
 
@@ -31,5 +31,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/admin/:path*', '/sign-in', '/sign-up'],
+  matcher: ['/dashboard/:path*', '/admin', '/sign-up'],
 };
