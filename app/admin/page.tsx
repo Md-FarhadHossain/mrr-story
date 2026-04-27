@@ -15,9 +15,15 @@ export default function AdminLoginPage() {
     setIsGoogleLoading(true);
     setError("");
     try {
-      await signIn.social({ provider: "google", callbackURL: "/dashboard" });
-    } catch {
-      setError("Failed to sign in with Google.");
+      const res = await signIn.social({ provider: "google", callbackURL: "/dashboard" });
+      console.log("signIn res:", res);
+      if (res.error) {
+        setError(res.error.message || "Failed to sign in with Google.");
+        setIsGoogleLoading(false);
+      }
+    } catch (e: any) {
+      console.error("signIn error:", e);
+      setError(e.message || "Failed to sign in with Google.");
       setIsGoogleLoading(false);
     }
   };

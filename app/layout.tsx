@@ -8,6 +8,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "My AI App Makes $100K/Month - MRR Stories",
   description: "A clone of the MRR Stories article",
+  verification: {
+    google: "oryD3hnuW3o3E_kY4AjFmNTK2NnsyZJaCJwtLFj1OSA",
+  },
 };
 
 export default function RootLayout({
