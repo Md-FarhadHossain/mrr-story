@@ -57,6 +57,7 @@ export const storiesTable = sqliteTable('stories', {
   niche: text('niche'),
   productUrl: text('product_url'),
   heroImageUrl: text('hero_image_url'),
+  profileImageUrl: text('profile_image_url'),
   twitterUrl: text('twitter_url'),
   content: text('content').notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),

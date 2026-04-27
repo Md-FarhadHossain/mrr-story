@@ -15,6 +15,7 @@ export async function saveStory(formData: FormData) {
   const niche = formData.get('niche') as string;
   const productUrl = formData.get('productUrl') as string;
   const heroImageUrl = formData.get('heroImageUrl') as string;
+  const profileImageUrl = formData.get('profileImageUrl') as string;
   const twitterUrl = formData.get('twitterUrl') as string;
   const content = formData.get('content') as string;
 
@@ -40,6 +41,7 @@ export async function saveStory(formData: FormData) {
     niche: niche || null,
     productUrl: productUrl || null,
     heroImageUrl: heroImageUrl || null,
+    profileImageUrl: profileImageUrl || null,
     twitterUrl: twitterUrl || null,
     content,
   });
@@ -65,6 +67,7 @@ export async function updateStory(id: number, formData: FormData) {
   const niche = formData.get('niche') as string;
   const productUrl = formData.get('productUrl') as string;
   const heroImageUrl = formData.get('heroImageUrl') as string;
+  const profileImageUrl = formData.get('profileImageUrl') as string;
   const twitterUrl = formData.get('twitterUrl') as string;
   const content = formData.get('content') as string;
 
@@ -89,6 +92,7 @@ export async function updateStory(id: number, formData: FormData) {
     niche: niche || null,
     productUrl: productUrl || null,
     heroImageUrl: heroImageUrl || null,
+    profileImageUrl: profileImageUrl || null,
     twitterUrl: twitterUrl || null,
     content,
   }).where(eq(storiesTable.id, id));

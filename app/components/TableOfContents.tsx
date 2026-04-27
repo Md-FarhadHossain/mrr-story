@@ -43,6 +43,7 @@ export default function TableOfContents({ title, headers }: TableOfContentsProps
 
   return (
     <aside className={styles.leftSidebar}>
+      <p className={styles.leftSidebarLabel}>In this story</p>
       <h2 className={styles.leftSidebarTitle}>{title}</h2>
       <div className={styles.tocList}>
         {headers.map((header, index) => {
@@ -60,7 +61,9 @@ export default function TableOfContents({ title, headers }: TableOfContentsProps
                 e.preventDefault();
                 const elem = document.getElementById(header.id);
                 if (elem) {
-                  elem.scrollIntoView({ behavior: 'smooth' });
+                  const STICKY_HEADER_HEIGHT = 80; // navbar (64px) + breathing room
+                  const top = elem.getBoundingClientRect().top + window.scrollY - STICKY_HEADER_HEIGHT;
+                  window.scrollTo({ top, behavior: 'smooth' });
                 }
               }}
             >

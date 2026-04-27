@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -92,7 +92,9 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
         transformCopiedText: true,
       }),
     ],
-    content: defaultValue,
+    // Start empty — content is loaded via useEffect so the Markdown
+    // extension can properly parse headings, bold, etc.
+    content: '',
     immediatelyRender: false,
     onUpdate: ({ editor }) => {
       const md = (editor.storage as any).markdown.getMarkdown();
@@ -102,6 +104,19 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
       attributes: { class: styles.editorContent },
     },
   });
+
+  // Load initial markdown AFTER the editor is mounted so that
+  // tiptap-markdown's parser converts `### heading` → H3 nodes,
+  // `**bold**` → bold marks, etc. (the content: prop bypasses this).
+  useEffect(() => {
+    if (editor && defaultValue) {
+      editor.commands.setContent(defaultValue);
+      // Sync the hidden input with the parsed-then-re-serialised markdown
+      const md = (editor.storage as any)?.markdown?.getMarkdown?.();
+      if (md) setMarkdownOutput(md);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor]); // run once when the editor instance is first available
 
   const handleImageUpload = () => {
     fileInputRef.current?.click();

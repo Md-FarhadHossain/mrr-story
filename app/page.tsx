@@ -53,16 +53,16 @@ export default async function Feed() {
               formClassName={styles.heroForm}
               inputClassName={styles.heroInput}
               btnClassName={styles.heroBtn}
-              placeholder="Get new stories in your inbox"
-              buttonText="Subscribe Free"
+              placeholder="Your email here"
+              buttonText="Join Our Community"
             />
             <div className={styles.heroPoof}>
               <div className={styles.avatarRow}>
-                {['Alex','Sam','Jordan','Chris','Dana','Morgan','Taylor','Casey'].map(name => (
+                {['Alex','Sam','Jordan','Chris','Dana','Morgan','Taylor'].map(name => (
                   <img key={name} src={`https://ui-avatars.com/api/?name=${name}&background=random&color=fff`} alt={name} />
                 ))}
               </div>
-              <span>Join builders sharing their first wins</span>
+              <span className={styles.heroPoofText}>Join thousands of founders</span>
             </div>
           </div>
           <div className={styles.heroRight}>
@@ -100,7 +100,7 @@ export default async function Feed() {
           <div className={styles.caseGrid}>
             {featured.map((story) => (
               <Link href={`/stories/${story.slug}`} key={story.id} className={styles.caseCard}>
-                <div className={styles.caseCardImg} style={{ backgroundImage: `url(${story.heroImageUrl || ''})` }}>
+                <div className={styles.caseCardImg} style={{ backgroundImage: `url(${story.profileImageUrl || story.heroImageUrl || ''})` }}>
                   <span className={styles.revenueBadge}>{story.revenue}/mo</span>
                 </div>
                 <div className={styles.caseCardBody}>
@@ -138,7 +138,7 @@ export default async function Feed() {
         <h2 className={styles.ctaTitle}>
           Made your first dollar? <span className={styles.ctaUnderline}>We want to feature you.</span>
         </h2>
-        <p style={{color:'rgba(255,255,255,0.65)', fontSize:'1rem', marginBottom:'28px', maxWidth:'520px', margin:'0 auto 28px', lineHeight:1.7}}>
+        <p className={styles.ctaSub}>
           It doesn't matter if it's $1, $50, $500, or $5,000 — if you got paid for something you built, your story belongs here. Drop your email and we'll reach out.
         </p>
         <NewsletterForm 

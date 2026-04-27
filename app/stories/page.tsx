@@ -52,7 +52,7 @@ export default async function StoriesPage() {
           <div className={styles.caseGrid}>
             {allStories.map((story) => (
               <Link href={`/stories/${story.slug}`} key={story.id} className={styles.caseCard}>
-                <div className={styles.caseCardImg} style={{ backgroundImage: `url(${story.heroImageUrl || ''})` }}>
+                <div className={styles.caseCardImg} style={{ backgroundImage: `url(${story.profileImageUrl || story.heroImageUrl || ''})` }}>
                   <span className={styles.revenueBadge}>{story.revenue}/mo</span>
                 </div>
                 <div className={styles.caseCardBody}>

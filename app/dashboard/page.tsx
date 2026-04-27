@@ -85,9 +85,17 @@ export default function Dashboard() {
               <input type="text" name="revenue" required placeholder="$100K" className={styles.input} />
             </div>
             <div className={styles.formGroup}>
-              <label>Hero Image URL (Optional)</label>
-              <input type="url" name="heroImageUrl" placeholder="https://example.com/image.jpg" className={styles.input} />
+              <label>Profile Image URL (Optional)</label>
+              <input type="url" name="profileImageUrl" placeholder="https://example.com/photo.jpg" className={styles.input} />
             </div>
+          </div>
+
+          <div className={styles.grid2}>
+            <div className={styles.formGroup}>
+              <label>Hero / Story Image URL (Optional)</label>
+              <input type="url" name="heroImageUrl" placeholder="https://example.com/screenshot.jpg" className={styles.input} />
+            </div>
+            <div className={styles.formGroup} />
           </div>
 
           <div className={styles.grid2}>

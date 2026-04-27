@@ -2,12 +2,36 @@ import styles from '../../Story.module.css';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import rehypeSlug from 'rehype-slug';
+import rehypeRaw from 'rehype-raw';
 import TableOfContents from '../../components/TableOfContents';
+import { Globe } from 'lucide-react';
 import { db } from '../../../db';
 import { storiesTable } from '../../../db/schema';
 import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { ThemeToggle } from '../../components/ThemeToggle';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+/**
+ * Fix content saved by tiptap-markdown / Tiptap HTML that has `###` either:
+ * 1. Backslash-escaped at start of line: `\### text` → `### text`
+ * 2. Literally inside an HTML heading tag: `<h3>### text</h3>` → `<h3>text</h3>`
+ */
+function sanitizeMarkdown(md: string): string {
+  if (!md) return '';
+  let out = md;
+  // 1. Remove backslash escapes before headings: `\### ` -> `### `
+  out = out.replace(/\\(#{1,6}\s+)/g, '$1');
+  // 2. Remove escaped hashes inside an already valid heading: `### \### Hello` -> `### Hello`
+  out = out.replace(/(#{1,6}\s+)\\(#{1,6}\s*)/g, '$1');
+  // 3. Remove literal unescaped hashes inside an already valid heading: `### ### Hello` -> `### Hello`
+  out = out.replace(/(#{1,6}\s+)(#{1,6}\s*)/g, '$1');
+  // 4. Remove hashes from the start of HTML headings: `<h3>### Hello</h3>` -> `<h3>Hello</h3>`
+  out = out.replace(/(<h[1-6][^>]*>)\s*\\?(#{1,6})\s*/g, '$1');
+  return out;
+}
 
 function extractHeaders(markdown: string) {
   const headers: { id: string; text: string }[] = [];
@@ -37,7 +61,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
     return notFound();
   }
 
-  const headers = extractHeaders(story.content);
+  const headers = extractHeaders(sanitizeMarkdown(story.content));
 
   return (
     <>
@@ -80,7 +104,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
 
           <div className={styles.contentBlock}>
             <ReactMarkdown
-              rehypePlugins={[rehypeSlug]}
+              rehypePlugins={[rehypeSlug, rehypeRaw]}
               components={{
                 h2: ({node, ...props}) => <h2 className={styles.markdownHeader} {...props} />,
                 h3: ({node, ...props}) => <h3 className={styles.markdownHeader} {...props} />,
@@ -88,7 +112,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
                 img: ({node, ...props}) => <img className={styles.markdownImage} style={{maxWidth: '100%', height: 'auto', borderRadius: '12px', border: '1px solid var(--border-color)', margin: '16px 0', display: 'block'}} {...props} />
               }}
             >
-              {story.content}
+              {sanitizeMarkdown(story.content)}
             </ReactMarkdown>
           </div>
         </article>
@@ -96,57 +120,49 @@ export default async function StoryPage({ params }: { params: { slug: string } }
         <aside className={styles.sidebar}>
           {/* ── About Widget ── */}
           <div className={styles.aboutWidget}>
-            {/* Header */}
-            <div className={styles.aboutHeader}>
+            {/* Header Cover & Info */}
+            <div className={styles.aboutHeaderCover}></div>
+            <div className={styles.aboutHeaderContent}>
               <img
-                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(story.founderName)}&background=6366f1&color=fff&size=80&bold=true`}
+                src={
+                  story.profileImageUrl
+                    ? story.profileImageUrl
+                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(story.founderName)}&background=6366f1&color=fff&size=80&bold=true`
+                }
                 alt={story.founderName}
                 className={styles.aboutAvatar}
               />
               <div className={styles.aboutHeaderInfo}>
-                <span className={styles.aboutBadge}>Founder</span>
                 <h3 className={styles.aboutFounderName}>{story.founderName}</h3>
-                <p className={styles.aboutBusinessName}>{story.businessName}</p>
+                <p className={styles.aboutBusinessName}>Founder of <strong>{story.businessName}</strong></p>
               </div>
             </div>
 
-            {/* Stats rows */}
-            <div className={styles.aboutStats}>
-              <div className={styles.aboutStatRow}>
-                <span className={styles.aboutStatLabel}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                  Revenue / mo
-                </span>
+            {/* Stats Grid */}
+            <div className={styles.aboutStatsGrid}>
+              <div className={styles.aboutStatBox}>
+                <span className={styles.aboutStatLabel}>Revenue / mo</span>
                 <span className={styles.aboutStatValue + ' ' + styles.aboutStatGreen}>{story.revenue}</span>
               </div>
 
               {story.customers && (
-                <div className={styles.aboutStatRow}>
-                  <span className={styles.aboutStatLabel}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    Customers
-                  </span>
+                <div className={styles.aboutStatBox}>
+                  <span className={styles.aboutStatLabel}>Customers</span>
                   <span className={styles.aboutStatValue}>{story.customers}</span>
                 </div>
               )}
 
+              <div className={styles.aboutStatBox}>
+                <span className={styles.aboutStatLabel}>Founders</span>
+                <span className={styles.aboutStatValue}>1</span>
+              </div>
+
               {story.niche && (
-                <div className={styles.aboutStatRow}>
-                  <span className={styles.aboutStatLabel}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                    Niche
-                  </span>
+                <div className={`${styles.aboutStatBox} ${styles.aboutStatBoxFull}`}>
+                  <span className={styles.aboutStatLabel}>Niche</span>
                   <span className={styles.aboutStatValue + ' ' + styles.aboutStatNiche}>{story.niche}</span>
                 </div>
               )}
-
-              <div className={styles.aboutStatRow}>
-                <span className={styles.aboutStatLabel}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                  Founders
-                </span>
-                <span className={styles.aboutStatValue}>1</span>
-              </div>
             </div>
 
             {/* Connect links */}
@@ -171,13 +187,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
                     rel="noopener noreferrer"
                     className={styles.aboutLinkBtn + ' ' + styles.aboutLinkProduct}
                   >
-                    <img
-                      src={`https://www.google.com/s2/favicons?domain=${story.productUrl.replace(/^https?:\/\//, '').split('/')[0]}&sz=32`}
-                      alt=""
-                      width="16"
-                      height="16"
-                      style={{ borderRadius: '3px', flexShrink: 0 }}
-                    />
+                    <Globe size={16} style={{ flexShrink: 0 }} />
                     <span>{story.productUrl.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,'')}</span>
                   </a>
                 )}

@@ -71,9 +71,17 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
               <input type="text" name="revenue" defaultValue={story.revenue} required placeholder="$100K" className={styles.input} />
             </div>
             <div className={styles.formGroup}>
-              <label>Hero Image URL (Optional)</label>
-              <input type="url" name="heroImageUrl" defaultValue={story.heroImageUrl || ''} placeholder="https://example.com/image.jpg" className={styles.input} />
+              <label>Profile Image URL (Optional)</label>
+              <input type="url" name="profileImageUrl" defaultValue={story.profileImageUrl || ''} placeholder="https://example.com/photo.jpg" className={styles.input} />
             </div>
+          </div>
+
+          <div className={styles.grid2}>
+            <div className={styles.formGroup}>
+              <label>Hero / Story Image URL (Optional)</label>
+              <input type="url" name="heroImageUrl" defaultValue={story.heroImageUrl || ''} placeholder="https://example.com/screenshot.jpg" className={styles.input} />
+            </div>
+            <div className={styles.formGroup} />
           </div>
 
           <div className={styles.grid2}>
