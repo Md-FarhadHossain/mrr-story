@@ -37,8 +37,6 @@ export default async function Feed() {
           </nav>
           <div className={styles.navActions}>
             <ThemeToggle />
-            <Link href="/sign-in" className={styles.loginBtn}>Login</Link>
-            <Link href="/dashboard" className={styles.submitBtn}>Write a Story</Link>
           </div>
         </div>
       </header>

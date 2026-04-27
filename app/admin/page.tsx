@@ -6,32 +6,10 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 
-export default function SignInPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+export default function AdminLoginPage() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
-
-  const handleCredentialsSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
-    try {
-      const { error } = await signIn.email({ email, password });
-      if (error) {
-        setError(error.message || "Failed to sign in. Please check your credentials.");
-      } else {
-        router.push("/dashboard");
-        router.refresh();
-      }
-    } catch {
-      setError("An unexpected error occurred. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
@@ -139,52 +117,6 @@ export default function SignInPage() {
           text-align: center;
           margin-bottom: 28px;
         }
-        .auth-input {
-          width: 100%;
-          padding: 12px 16px;
-          border-radius: 10px;
-          border: 1.5px solid rgba(255,255,255,0.1);
-          background: rgba(255,255,255,0.06);
-          color: #fff;
-          font-size: 0.95rem;
-          outline: none;
-          box-sizing: border-box;
-          transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .auth-input::placeholder { color: rgba(255,255,255,0.3); }
-        .auth-input:focus {
-          border-color: #7c3aed;
-          box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
-        }
-        .auth-label {
-          display: block;
-          font-size: 0.875rem;
-          font-weight: 600;
-          color: rgba(255,255,255,0.75);
-          margin-bottom: 6px;
-        }
-        .auth-btn-primary {
-          background: #22c55e;
-          color: #fff;
-          width: 100%;
-          padding: 13px 20px;
-          border-radius: 10px;
-          font-weight: 700;
-          font-size: 0.95rem;
-          border: none;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-          margin-top: 8px;
-        }
-        .auth-btn-primary:hover:not(:disabled) {
-          background: #16a34a;
-          transform: translateY(-1px);
-          box-shadow: 0 8px 24px rgba(34,197,94,0.35);
-        }
         .auth-btn-google {
           width: 100%;
           display: flex;
@@ -206,22 +138,6 @@ export default function SignInPage() {
           border-color: rgba(255,255,255,0.25);
           transform: translateY(-1px);
         }
-        .auth-divider {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          margin: 24px 0;
-        }
-        .auth-divider div {
-          flex: 1;
-          height: 1px;
-          background: rgba(255,255,255,0.1);
-        }
-        .auth-divider span {
-          font-size: 0.78rem;
-          color: rgba(255,255,255,0.35);
-          font-weight: 500;
-        }
         .auth-error {
           margin-bottom: 20px;
           padding: 12px 16px;
@@ -234,21 +150,6 @@ export default function SignInPage() {
           gap: 8px;
           align-items: flex-start;
         }
-        .auth-footer-text {
-          margin-top: 24px;
-          text-align: center;
-          font-size: 0.875rem;
-          color: rgba(255,255,255,0.4);
-        }
-        .auth-link {
-          color: #a78bfa;
-          font-weight: 700;
-          text-decoration: none;
-        }
-        .auth-link:hover {
-          color: #c4b5fd;
-          text-decoration: underline;
-        }
       `}</style>
 
       <div className="auth-container">
@@ -258,12 +159,19 @@ export default function SignInPage() {
             <span className="auth-logo-text" style={{color:'#fff'}}>MRR Story</span>
           </Link>
 
-          <h1 className="auth-title">Welcome back 👋</h1>
-          <p className="auth-subtitle">Sign in to your founder account</p>
+          <h1 className="auth-title">Admin Portal</h1>
+          <p className="auth-subtitle">Restricted Access</p>
+
+          {error && (
+            <div className="auth-error">
+              <span>⚠️</span>
+              <span>{error}</span>
+            </div>
+          )}
 
           <button
             onClick={handleGoogleSignIn}
-            disabled={isLoading || isGoogleLoading}
+            disabled={isGoogleLoading}
             className="auth-btn-google"
           >
             {isGoogleLoading ? (
@@ -280,72 +188,8 @@ export default function SignInPage() {
               </>
             )}
           </button>
-
-          <div className="auth-divider">
-            <div />
-            <span>or sign in with email</span>
-            <div />
-          </div>
-
-          {error && (
-            <div className="auth-error">
-              <span>⚠️</span>
-              <span>{error}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleCredentialsSignIn} style={{ display:'flex', flexDirection:'column', gap:'16px' }}>
-            <div>
-              <label htmlFor="signin-email" className="auth-label">Email address</label>
-              <input
-                id="signin-email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="auth-input"
-                placeholder="name@example.com"
-                required
-              />
-            </div>
-
-            <div>
-              <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'6px' }}>
-                <label htmlFor="signin-password" className="auth-label" style={{ marginBottom:0 }}>Password</label>
-                <Link href="#" className="auth-link" style={{ fontSize:'0.8rem', fontWeight:500 }}>Forgot password?</Link>
-              </div>
-              <input
-                id="signin-password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="auth-input"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading || isGoogleLoading}
-              className="auth-btn-primary"
-              style={{ opacity: (isLoading || isGoogleLoading) ? 0.7 : 1 }}
-            >
-              {isLoading ? (
-                <><Loader2 style={{ width:'18px', height:'18px', animation:'spin 1s linear infinite' }} /> Signing in...</>
-              ) : (
-                'Sign In'
-              )}
-            </button>
-          </form>
-
-          <p className="auth-footer-text">
-            Don't have an account?{' '}
-            <Link href="/sign-up" className="auth-link">
-              Create one free →
-            </Link>
-            <br />
-            <Link href="/" style={{color:'rgba(255,255,255,0.3)', fontSize:'0.75rem', textDecoration:'none', display:'block', marginTop:'16px'}}>← Back to home</Link>
-          </p>
+          
+          <Link href="/" style={{color:'rgba(255,255,255,0.3)', fontSize:'0.75rem', textDecoration:'none', display:'block', marginTop:'24px', textAlign: 'center'}}>← Back to home</Link>
         </div>
       </div>
     </>

@@ -78,8 +78,6 @@ export default async function StoryPage({ params }: { params: { slug: string } }
           </nav>
           <div className={styles.navActions}>
             <ThemeToggle />
-            <Link href="#" className={styles.loginBtn}>Login</Link>
-            <Link href="/dashboard" className={styles.submitBtn}>Write a Story</Link>
           </div>
         </div>
       </header>
