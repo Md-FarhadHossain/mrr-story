@@ -255,7 +255,7 @@ export default function SignInPage() {
         <div className="auth-card">
           <Link href="/" className="auth-logo">
             <div className="auth-logo-icon">M</div>
-            <span className="auth-logo-text" style={{color:'#fff'}}>MRR Stories</span>
+            <span className="auth-logo-text" style={{color:'#fff'}}>MRR Story</span>
           </Link>
 
           <h1 className="auth-title">Welcome back 👋</h1>
