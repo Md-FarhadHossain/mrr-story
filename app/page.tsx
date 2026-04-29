@@ -5,6 +5,12 @@ import { storiesTable } from '../db/schema';
 import { desc } from 'drizzle-orm';
 import { ThemeToggle } from './components/ThemeToggle';
 import NewsletterForm from './components/NewsletterForm';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "MRR Stories - How Indie Hackers Made Their First Dollar",
+  description: "Discover how indie hackers and solopreneurs made their first dollar and built profitable businesses. Real founders, real products, real revenue.",
+};
 
 export const dynamic = 'force-dynamic';
 

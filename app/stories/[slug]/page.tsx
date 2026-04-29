@@ -10,6 +10,7 @@ import { storiesTable } from '../../../db/schema';
 import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { ThemeToggle } from '../../components/ThemeToggle';
+import { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -49,6 +50,36 @@ function extractHeaders(markdown: string) {
     headers.push({ id, text });
   }
   return headers;
+}
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const { slug } = await params;
+  const fetchedStories = await db.select().from(storiesTable).where(eq(storiesTable.slug, slug)).limit(1);
+  const story = fetchedStories[0];
+
+  if (!story) {
+    return { title: 'Story Not Found' };
+  }
+
+  const cleanContent = sanitizeMarkdown(story.content).replace(/<[^>]*>?/gm, '').replace(/[#*_>\[\]]/g, '');
+  const description = cleanContent.length > 150 ? cleanContent.substring(0, 147) + '...' : cleanContent;
+
+  const imageUrl = story.heroImageUrl || story.profileImageUrl || undefined;
+
+  return {
+    title: story.title,
+    description: description,
+    openGraph: {
+      title: story.title,
+      description: description,
+      images: imageUrl ? [{ url: imageUrl }] : undefined,
+    },
+    twitter: {
+      title: story.title,
+      description: description,
+      images: imageUrl ? [imageUrl] : undefined,
+    },
+  };
 }
 
 export default async function StoryPage({ params }: { params: { slug: string } }) {
@@ -97,7 +128,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
 
 
           {story.heroImageUrl && (
-            <img src={story.heroImageUrl} alt="Hero" className={styles.heroImage} />
+            <img src={story.heroImageUrl} alt={story.title} className={styles.heroImage} />
           )}
 
           <div className={styles.contentBlock}>
