@@ -110,7 +110,17 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
   // `**bold**` → bold marks, etc. (the content: prop bypasses this).
   useEffect(() => {
     if (editor && defaultValue) {
-      editor.commands.setContent(defaultValue);
+      // Pre-sanitize: fix any doubled heading markers that can appear after
+      // round-tripping through tiptap-markdown (e.g. `## ## Hello` → `## Hello`)
+      let sanitized = defaultValue;
+      // Remove escaped heading markers: `\## ` → `## `
+      sanitized = sanitized.replace(/\\(#{1,6}\s+)/g, '$1');
+      // Remove doubled heading markers: `## ## ` → `## ` and `### ### ` → `### `
+      sanitized = sanitized.replace(/^(#{1,6})\s+\1\s+/gm, '$1 ');
+      // Remove doubled heading markers where levels differ: `## ### ` → `## `
+      sanitized = sanitized.replace(/^(#{1,6})\s+(#{1,6})\s+/gm, '$1 ');
+
+      editor.commands.setContent(sanitized);
       // Sync the hidden input with the parsed-then-re-serialised markdown
       const md = (editor.storage as any)?.markdown?.getMarkdown?.();
       if (md) setMarkdownOutput(md);
