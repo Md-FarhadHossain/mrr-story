@@ -8,6 +8,7 @@ import RichTextEditor from '../components/RichTextEditor';
 import { useSession } from '@/lib/auth-client';
 import SignOutButton from './SignOutButton';
 import { useRouter } from 'next/navigation';
+import { countries } from '@/lib/countries';
 
 export default function Dashboard() {
   const { data: session, isPending: isSessionPending } = useSession();
@@ -92,14 +93,6 @@ export default function Dashboard() {
 
           <div className={styles.grid2}>
             <div className={styles.formGroup}>
-              <label>Hero / Story Image URL (Optional)</label>
-              <input type="url" name="heroImageUrl" placeholder="https://example.com/screenshot.jpg" className={styles.input} />
-            </div>
-            <div className={styles.formGroup} />
-          </div>
-
-          <div className={styles.grid2}>
-            <div className={styles.formGroup}>
               <label>Twitter / Social URL (Optional)</label>
               <input type="url" name="twitterUrl" placeholder="https://x.com/username" className={styles.input} />
             </div>
@@ -118,6 +111,21 @@ export default function Dashboard() {
               <label>Niche / Market (Optional)</label>
               <input type="text" name="niche" placeholder="e.g. AI Marketing Automation for Reddit" className={styles.input} />
             </div>
+          </div>
+
+          <div className={styles.grid2}>
+            <div className={styles.formGroup}>
+              <label>Location (Optional)</label>
+              <select name="location" className={styles.input}>
+                <option value="">Select a location</option>
+                {countries.map((country) => (
+                  <option key={country.code || country.name} value={country.name}>
+                    {country.name} {country.flag}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className={styles.formGroup} />
           </div>
 
           <div className={styles.formGroup}>

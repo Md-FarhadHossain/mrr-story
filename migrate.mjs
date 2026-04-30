@@ -10,6 +10,7 @@ async function migrate() {
     { name: 'customers', type: 'TEXT' },
     { name: 'niche', type: 'TEXT' },
     { name: 'product_url', type: 'TEXT' },
+    { name: 'location', type: 'TEXT' },
   ];
 
   for (const col of cols) {

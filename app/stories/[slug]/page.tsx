@@ -11,6 +11,7 @@ import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import { Metadata } from 'next';
+import { countries } from '@/lib/countries';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -164,6 +165,25 @@ export default async function StoryPage({ params }: { params: { slug: string } }
               <div className={styles.aboutHeaderInfo}>
                 <h3 className={styles.aboutFounderName}>{story.founderName}</h3>
                 <p className={styles.aboutBusinessName}>Founder of <strong>{story.businessName}</strong></p>
+                {story.location && (
+                  (() => {
+                    const country = countries.find(c => c.name === story.location);
+                    return (
+                      <p className="text-sm mt-1 text-[var(--text-secondary)] flex items-center gap-2">
+                        {country?.code && (
+                          <img 
+                            src={`https://flagcdn.com/w20/${country.code.toLowerCase()}.png`} 
+                            srcSet={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png 2x`}
+                            width="16" 
+                            alt={country.name}
+                            style={{ borderRadius: '2px', marginRight: '6px' }}
+                          />
+                        )}
+                        <span>{story.location}</span>
+                      </p>
+                    );
+                  })()
+                )}
               </div>
             </div>
 

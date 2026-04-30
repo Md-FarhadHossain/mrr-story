@@ -17,6 +17,7 @@ export async function saveStory(formData: FormData) {
   const heroImageUrl = formData.get('heroImageUrl') as string;
   const profileImageUrl = formData.get('profileImageUrl') as string;
   const twitterUrl = formData.get('twitterUrl') as string;
+  const location = formData.get('location') as string;
   const content = formData.get('content') as string;
 
   if (!title || !businessName || !founderName || !revenue || !content) {
@@ -43,6 +44,7 @@ export async function saveStory(formData: FormData) {
     heroImageUrl: heroImageUrl || null,
     profileImageUrl: profileImageUrl || null,
     twitterUrl: twitterUrl || null,
+    location: location || null,
     content,
   });
 
@@ -69,6 +71,7 @@ export async function updateStory(id: number, formData: FormData) {
   const heroImageUrl = formData.get('heroImageUrl') as string;
   const profileImageUrl = formData.get('profileImageUrl') as string;
   const twitterUrl = formData.get('twitterUrl') as string;
+  const location = formData.get('location') as string;
   const content = formData.get('content') as string;
 
   if (!title || !businessName || !founderName || !revenue || !content) {
@@ -94,6 +97,7 @@ export async function updateStory(id: number, formData: FormData) {
     heroImageUrl: heroImageUrl || null,
     profileImageUrl: profileImageUrl || null,
     twitterUrl: twitterUrl || null,
+    location: location || null,
     content,
   }).where(eq(storiesTable.id, id));
 

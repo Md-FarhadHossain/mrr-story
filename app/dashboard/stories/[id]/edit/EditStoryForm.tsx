@@ -6,6 +6,7 @@ import { updateStory } from '../../../actions';
 import { ThemeToggle } from '../../../../components/ThemeToggle';
 import RichTextEditor from '../../../../components/RichTextEditor';
 import styles from '../../../Dashboard.module.css';
+import { countries } from '@/lib/countries';
 
 interface EditStoryFormProps {
   story: any;
@@ -78,14 +79,6 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
 
           <div className={styles.grid2}>
             <div className={styles.formGroup}>
-              <label>Hero / Story Image URL (Optional)</label>
-              <input type="url" name="heroImageUrl" defaultValue={story.heroImageUrl || ''} placeholder="https://example.com/screenshot.jpg" className={styles.input} />
-            </div>
-            <div className={styles.formGroup} />
-          </div>
-
-          <div className={styles.grid2}>
-            <div className={styles.formGroup}>
               <label>Twitter / Social URL (Optional)</label>
               <input type="url" name="twitterUrl" defaultValue={story.twitterUrl || ''} placeholder="https://x.com/username" className={styles.input} />
             </div>
@@ -104,6 +97,21 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
               <label>Niche / Market (Optional)</label>
               <input type="text" name="niche" defaultValue={story.niche || ''} placeholder="e.g. AI Marketing Automation for Reddit" className={styles.input} />
             </div>
+          </div>
+
+          <div className={styles.grid2}>
+            <div className={styles.formGroup}>
+              <label>Location (Optional)</label>
+              <select name="location" defaultValue={story.location || ''} className={styles.input}>
+                <option value="">Select a location</option>
+                {countries.map((country) => (
+                  <option key={country.code || country.name} value={country.name}>
+                    {country.name} {country.flag}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className={styles.formGroup} />
           </div>
 
           <div className={styles.formGroup}>
