@@ -153,7 +153,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
           <div className={styles.researchDisclaimer}>
             <span className={styles.disclaimerIcon}>📋</span>
             <p className={styles.disclaimerText}>
-              <strong>Disclaimer:</strong> This case study is <strong>research-based</strong> and has not been directly verified through an interview with the founder. Information was compiled from publicly available sources.
+              <strong>Disclaimer:</strong> This case study is <strong>research-based</strong> and has not been directly verified through an interview with the founder. Information was compiled from publicly available sources and is presented in an interview format for a better reading experience.
             </p>
           </div>
         </article>
