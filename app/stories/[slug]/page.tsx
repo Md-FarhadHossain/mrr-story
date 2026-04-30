@@ -123,14 +123,13 @@ export default async function StoryPage({ params }: { params: { slug: string } }
 
         <article className={styles.article}>
           <div className={styles.articleMeta}>
-            <span className={styles.badge}>Interview</span>
+            <span className={styles.badge}>Case Study</span>
             <span className={styles.date}>
               {story.createdAt ? new Date(story.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'N/A'}
             </span>
           </div>
           
           <h1 className={styles.articleTitle}>{story.title}</h1>
-
 
           {story.heroImageUrl && (
             <img src={story.heroImageUrl} alt={story.title} className={styles.heroImage} />
@@ -148,6 +147,14 @@ export default async function StoryPage({ params }: { params: { slug: string } }
             >
               {sanitizeMarkdown(story.content)}
             </ReactMarkdown>
+          </div>
+
+          {/* ── Research Disclaimer ── */}
+          <div className={styles.researchDisclaimer}>
+            <span className={styles.disclaimerIcon}>📋</span>
+            <p className={styles.disclaimerText}>
+              <strong>Disclaimer:</strong> This case study is <strong>research-based</strong> and has not been directly verified through an interview with the founder. Information was compiled from publicly available sources.
+            </p>
           </div>
         </article>
 
