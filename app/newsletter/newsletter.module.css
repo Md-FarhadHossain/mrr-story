@@ -253,7 +253,7 @@
 }
 
 .subscribeBtn {
-  background: #22c55e;
+  background: #3ECF8E;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -267,7 +267,7 @@
 }
 
 .subscribeBtn:hover {
-  background: #16a34a;
+  background: #24B47E;
   transform: translateY(-1px);
 }
 
@@ -601,7 +601,7 @@
 }
 
 .bottomCtaBtn {
-  background: #22c55e;
+  background: #3ECF8E;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -615,7 +615,7 @@
 }
 
 .bottomCtaBtn:hover {
-  background: #16a34a;
+  background: #24B47E;
   transform: translateY(-1px);
 }
 

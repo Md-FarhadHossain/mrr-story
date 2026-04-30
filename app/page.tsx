@@ -22,13 +22,6 @@ export default async function Feed() {
 
   return (
     <>
-      {/* ── Trust Bar ── */}
-      <div className={styles.trustBar}>
-        <span><span className={styles.trustCheck}>✓</span> {allStories.length > 0 ? `${allStories.length}+` : '100+'} founder stories & interviews</span>
-        <span><span className={styles.trustStars}>★★★★★</span> From $1 to $10K — every win featured</span>
-        <span><span className={styles.trustCheck}>✓</span> Real products. Real revenue. Real people.</span>
-      </div>
-
       {/* ── Header ── */}
       <header className={styles.header}>
         <div className={styles.headerContent}>
@@ -51,14 +44,14 @@ export default async function Feed() {
       <div className={styles.heroWrapper}>
         <div className={styles.heroInner}>
           <div className={styles.heroLeft}>
-            <h1 className={styles.heroTitle}>How indie hackers made their <span style={{color:'#22c55e'}}>first dollar</span> and what happened next</h1>
-            <p className={styles.heroSub}>Every week we interview solopreneurs & indie builders who got paid for the first time. Their product, their journey, their exact numbers — no fluff, no hype.</p>
+            <h1 className={styles.heroTitle}>The exact <span style={{color:'#22c55e'}}>playbooks & case studies</span> of successful indie hackers</h1>
+            <p className={styles.heroSub}>Inside the Businesses Built by Indie Hackers & SaaS Founders. Real case studies from solopreneurs who built profitable products with exact numbers and full breakdowns.</p>
             <NewsletterForm 
               formClassName={styles.heroForm}
               inputClassName={styles.heroInput}
               btnClassName={styles.heroBtn}
               placeholder="Your email here"
-              buttonText="Join Our Community"
+              buttonText="Subscribe (It's Free)"
             />
             <div className={styles.heroPoof}>
               <div className={styles.avatarRow}>

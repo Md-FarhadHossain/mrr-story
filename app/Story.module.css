@@ -173,7 +173,6 @@
   font-size: 1.1rem;
   color: rgba(255,255,255,0.8);
   margin-bottom: 32px;
-  max-width: 520px;
   line-height: 1.6;
 }
 
@@ -202,7 +201,7 @@
 }
 
 .heroBtn {
-  background: #4ade80;
+  background: #3ECF8E;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -216,7 +215,7 @@
 }
 
 .heroBtn:hover {
-  background: #22c55e;
+  background: #24B47E;
 }
 
 .heroPoof {
@@ -621,7 +620,7 @@
 }
 
 .ctaBtn {
-  background: #4ade80;
+  background: #3ECF8E;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -635,7 +634,7 @@
 }
 
 .ctaBtn:hover {
-  background: #22c55e;
+  background: #24B47E;
 }
 
 /* ─────────────────────────────────────────

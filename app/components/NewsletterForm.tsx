@@ -9,7 +9,7 @@ export default function NewsletterForm({
   inputClassName, 
   btnClassName,
   placeholder = "Your email here",
-  buttonText = "Join Our Community"
+  buttonText = "Subscribe (It's Free)"
 }: { 
   formClassName?: string;
   inputClassName?: string;
