@@ -38,7 +38,7 @@ export default async function Feed() {
           </Link>
           <nav className={styles.navLinks}>
             <Link href="/stories">Case Studies</Link>
-            <Link href="#">Newsletter</Link>
+            <Link href="/newsletter">Newsletter</Link>
             <Link href="#">Ideas</Link>
           </nav>
           <div className={styles.navActions}>
@@ -62,8 +62,12 @@ export default async function Feed() {
             />
             <div className={styles.heroPoof}>
               <div className={styles.avatarRow}>
-                {['Alex','Sam','Jordan','Chris','Dana','Morgan','Taylor'].map(name => (
-                  <img key={name} src={`https://ui-avatars.com/api/?name=${name}&background=random&color=fff`} alt={name} />
+                {allStories.filter(s => s.profileImageUrl).slice(0, 7).map(story => (
+                  <img 
+                    key={story.id} 
+                    src={story.profileImageUrl!} 
+                    alt={story.founderName} 
+                  />
                 ))}
               </div>
               <span className={styles.heroPoofText}>Join thousands of founders</span>
@@ -135,8 +139,12 @@ export default async function Feed() {
       {/* ── Bottom CTA ── */}
       <section className={styles.ctaSection}>
         <div className={styles.ctaAvatars}>
-          {['Alex','Sam','Jordan','Chris','Dana','Morgan','Taylor','Casey','Pat','Jamie'].map(name => (
-            <img key={name} src={`https://ui-avatars.com/api/?name=${name}&background=random&color=fff`} alt={name} />
+          {allStories.filter(s => s.profileImageUrl).slice(0, 10).map(story => (
+            <img 
+              key={story.id} 
+              src={story.profileImageUrl!} 
+              alt={story.founderName} 
+            />
           ))}
         </div>
         <h2 className={styles.ctaTitle}>

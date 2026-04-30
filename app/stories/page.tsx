@@ -22,7 +22,7 @@ export default async function StoriesPage() {
           </Link>
           <nav className={styles.navLinks}>
             <Link href="/stories">Case Studies</Link>
-            <Link href="#">Newsletter</Link>
+            <Link href="/newsletter">Newsletter</Link>
             <Link href="#">Ideas</Link>
           </nav>
           <div className={styles.navActions}>

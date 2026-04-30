@@ -12,6 +12,7 @@ import { notFound } from 'next/navigation';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import { Metadata } from 'next';
 import { countries } from '@/lib/countries';
+import ImageZoom from '../../components/ImageZoom';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -32,6 +33,9 @@ function sanitizeMarkdown(md: string): string {
   out = out.replace(/(#{1,6}\s+)(#{1,6}\s*)/g, '$1');
   // 4. Remove hashes from the start of HTML headings: `<h3>### Hello</h3>` -> `<h3>Hello</h3>`
   out = out.replace(/(<h[1-6][^>]*>)\s*\\?(#{1,6})\s*/g, '$1');
+  // 5. Ensure headings always have a blank line before them (fixes Tiptap missing newlines after images)
+  // Matches any non-newline character, an optional single newline, then the heading marker
+  out = out.replace(/([^\n])\n?(#{1,6}\s+[A-Za-z0-9])/g, '$1\n\n$2');
   return out;
 }
 
@@ -105,7 +109,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
           </Link>
           <nav className={styles.navLinks}>
             <Link href="/">Case Studies</Link>
-            <Link href="#">Newsletter</Link>
+            <Link href="/newsletter">Newsletter</Link>
             <Link href="#">Ideas</Link>
           </nav>
           <div className={styles.navActions}>
@@ -139,7 +143,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
                 h2: ({node, ...props}) => <h2 className={styles.markdownHeader} {...props} />,
                 h3: ({node, ...props}) => <h3 className={styles.markdownHeader} {...props} />,
                 p: ({node, ...props}) => <p className={styles.markdownParagraph} {...props} />,
-                img: ({node, ...props}) => <img className={styles.markdownImage} style={{maxWidth: '100%', height: 'auto', borderRadius: '12px', border: '1px solid var(--border-color)', margin: '16px 0', display: 'block'}} {...props} />
+                img: ({node, ...props}) => <ImageZoom src={props.src || ''} alt={props.alt || ''} className={styles.markdownImage} style={{maxWidth: '100%', height: 'auto', borderRadius: '12px', border: '1px solid var(--border-color)', margin: '16px 0', display: 'block'}} {...props as any} />
               }}
             >
               {sanitizeMarkdown(story.content)}
