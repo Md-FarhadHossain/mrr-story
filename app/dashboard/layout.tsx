@@ -16,7 +16,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className={styles.sidebarHeader}>
           <Link href="/" className={styles.logo}>
             <div className={styles.logoIcon}>M</div>
-            MRR Stories
+            MRR Story
           </Link>
         </div>
         <nav className={styles.nav}>
