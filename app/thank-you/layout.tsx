@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Thank You | MRR Stories',
-  description: 'Thank you for subscribing to MRR Stories.',
+  title: 'Thank You | MRR Story',
+  description: 'Thank you for subscribing to MRR Story.',
 };
 
 export default function ThankYouLayout({

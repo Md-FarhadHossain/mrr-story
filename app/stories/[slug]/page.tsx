@@ -105,7 +105,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
         <div className={styles.headerContent}>
           <Link href="/" className={styles.logoArea}>
             <div className={styles.logoIcon}>M</div>
-            <span>MRR Stories</span>
+            <span>MRR Story</span>
           </Link>
           <nav className={styles.navLinks}>
             <Link href="/">Case Studies</Link>
@@ -257,7 +257,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
 
           {/* ── CTA Widget ── */}
           <div className={styles.ctaWidget}>
-            <h3>MRR Stories</h3>
+            <h3>MRR Story</h3>
             <p>Read 4,000+ case studies of successful founders.</p>
             <Link href="/" className={styles.ctaButton}>See more Case Studies</Link>
           </div>

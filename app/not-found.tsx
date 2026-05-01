@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import styles from './not-found.module.css';
 
 export const metadata: Metadata = {
-  title: '404 — Page Not Found | MRR Stories',
+  title: '404 — Page Not Found | MRR Story',
   description: 'Oops! The page you are looking for does not exist. Head back to discover real indie hacker stories.',
 };
 
@@ -28,7 +28,7 @@ export default function NotFound() {
       <header className={styles.header}>
         <Link href="/" className={styles.logo}>
           <div className={styles.logoIcon}>M</div>
-          <span>MRR Stories</span>
+          <span>MRR Story</span>
         </Link>
       </header>
 

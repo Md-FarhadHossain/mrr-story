@@ -8,21 +8,21 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | MRR Stories",
-    default: "MRR Stories - Indie Hacker & Solopreneur Success Stories",
+    template: "%s | MRR Story",
+    default: "MRR Story - Indie Hacker & Solopreneur Success Stories",
   },
   description: "Discover how indie hackers and solopreneurs made their first dollar and built profitable businesses. Real founders, real products, real revenue.",
   openGraph: {
-    title: "MRR Stories - Indie Hacker & Solopreneur Success Stories",
+    title: "MRR Story - Indie Hacker & Solopreneur Success Stories",
     description: "Discover how indie hackers and solopreneurs made their first dollar and built profitable businesses.",
     url: "https://www.mrrstory.com",
-    siteName: "MRR Stories",
+    siteName: "MRR Story",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "MRR Stories - Indie Hacker & Solopreneur Success Stories",
+    title: "MRR Story - Indie Hacker & Solopreneur Success Stories",
     description: "Discover how indie hackers and solopreneurs made their first dollar and built profitable businesses.",
   },
   icons: {

@@ -38,7 +38,7 @@ export default async function NewsletterPage() {
         <div className={styles.headerContent}>
           <Link href="/" className={styles.logoArea}>
             <div className={styles.logoIcon}>M</div>
-            <span>MRR Stories</span>
+            <span>MRR Story</span>
           </Link>
           <nav className={styles.navLinks}>
             <Link href="/stories">Case Studies</Link>
@@ -187,7 +187,7 @@ export default async function NewsletterPage() {
         <div className={styles.footerInner}>
           <Link href="/" className={styles.footerLogo}>
             <div className={styles.logoIcon}>M</div>
-            <span>MRR Stories</span>
+            <span>MRR Story</span>
           </Link>
           <nav className={styles.footerNav}>
             <Link href="#">About</Link>

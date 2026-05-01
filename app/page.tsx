@@ -8,7 +8,7 @@ import NewsletterForm from './components/NewsletterForm';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "MRR Stories - How Indie Hackers Made Their First Dollar",
+  title: "MRR Story - How Indie Hackers Made Their First Dollar",
   description: "Discover how indie hackers and solopreneurs made their first dollar and built profitable businesses. Real founders, real products, real revenue.",
 };
 
@@ -27,7 +27,7 @@ export default async function Feed() {
         <div className={styles.headerContent}>
           <Link href="/" className={styles.logoArea}>
             <div className={styles.logoIcon}>M</div>
-            <span>MRR Stories</span>
+            <span>MRR Story</span>
           </Link>
           <nav className={styles.navLinks}>
             <Link href="/stories">Case Studies</Link>
@@ -71,7 +71,7 @@ export default async function Feed() {
               <div className={styles.phoneScreen}>
                 <div className={styles.phoneAppBar}>
                   <div className={styles.phoneAppDot} />
-                  <span>MRR Stories</span>
+                  <span>MRR Story</span>
                 </div>
                 <div className={styles.phoneCard}>
                   <div className={styles.phoneTrend}>🔥 FEATURED THIS WEEK</div>
@@ -160,7 +160,7 @@ export default async function Feed() {
         <div className={styles.siteFooterInner}>
           <Link href="/" className={styles.footerLogo}>
             <div className={styles.logoIcon}>M</div>
-            <span>MRR Stories</span>
+            <span>MRR Story</span>
           </Link>
           <nav className={styles.footerNav}>
             <Link href="#">About</Link>
