@@ -17,20 +17,20 @@ export default function Navbar() {
         </Link>
         <nav className={styles.navLinks}>
           <Link 
-            href="/" 
-            className={pathname === '/' || pathname.startsWith('/stories') ? styles.navActive : ''}
+            href="/stories"
+            style={pathname === '/stories' || pathname.startsWith('/stories/') ? { color: '#fff', fontWeight: 700, borderBottom: '2px solid #fff', paddingBottom: '2px' } : {}}
           >
             Case Studies
           </Link>
           <Link 
-            href="/newsletter" 
-            className={pathname === '/newsletter' ? styles.navActive : ''}
+            href="/newsletter"
+            style={pathname === '/newsletter' ? { color: '#fff', fontWeight: 700, borderBottom: '2px solid #fff', paddingBottom: '2px' } : {}}
           >
             Newsletter
           </Link>
           <Link 
-            href="/blog" 
-            className={pathname.startsWith('/blog') ? styles.navActive : ''}
+            href="/blog"
+            style={pathname.startsWith('/blog') ? { color: '#fff', fontWeight: 700, borderBottom: '2px solid #fff', paddingBottom: '2px' } : {}}
           >
             Blog
           </Link>
