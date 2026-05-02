@@ -1,0 +1,9 @@
+# MRR Story llms.txt
+
+> MRR Story shares actionable case studies of successful founders and bootstrapped businesses. Read revenue insights, growth strategies, and technical deep-dives.
+
+## Key Pages
+- [Home](https://www.mrrstory.com/)
+- [Case Studies](https://www.mrrstory.com/stories)
+- [Blog](https://www.mrrstory.com/blog)
+- [Newsletter](https://www.mrrstory.com/newsletter)

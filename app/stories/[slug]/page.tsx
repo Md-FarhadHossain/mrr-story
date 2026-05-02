@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import styles from '../../Story.module.css';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
@@ -118,7 +119,14 @@ export default async function StoryPage({ params }: { params: { slug: string } }
           <h1 className={styles.articleTitle}>{story.title}</h1>
 
           {story.heroImageUrl && (
-            <img src={story.heroImageUrl} alt={story.title} className={styles.heroImage} />
+            <Image
+              src={story.heroImageUrl}
+              alt={story.title}
+              width={1200}
+              height={800}
+              className={styles.heroImage}
+              style={{ maxHeight: '500px', objectFit: 'cover', objectPosition: 'center', width: '100%', height: 'auto', borderRadius: '16px', marginBottom: '40px', display: 'block' }}
+            />
           )}
 
           <div className={styles.contentBlock}>
@@ -150,13 +158,15 @@ export default async function StoryPage({ params }: { params: { slug: string } }
             {/* Header Cover & Info */}
             <div className={styles.aboutHeaderCover}></div>
             <div className={styles.aboutHeaderContent}>
-              <img
+              <Image
                 src={
                   story.profileImageUrl
                     ? story.profileImageUrl
                     : `https://ui-avatars.com/api/?name=${encodeURIComponent(story.founderName)}&background=6366f1&color=fff&size=80&bold=true`
                 }
                 alt={story.founderName}
+                width={64}
+                height={64}
                 className={styles.aboutAvatar}
               />
               <div className={styles.aboutHeaderInfo}>
@@ -168,10 +178,10 @@ export default async function StoryPage({ params }: { params: { slug: string } }
                     return (
                       <p className="text-sm mt-1 text-[var(--text-secondary)] flex items-center gap-2">
                         {country?.code && (
-                          <img 
-                            src={`https://flagcdn.com/w20/${country.code.toLowerCase()}.png`} 
-                            srcSet={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png 2x`}
-                            width="16" 
+                          <Image
+                            src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
+                            width={16}
+                            height={12}
                             alt={country.name}
                             style={{ borderRadius: '2px', marginRight: '6px' }}
                           />
