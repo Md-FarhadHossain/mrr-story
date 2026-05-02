@@ -52,6 +52,7 @@ export const storiesTable = sqliteTable('stories', {
   title: text('title').notNull(),
   businessName: text('business_name').notNull(),
   founderName: text('founder_name').notNull(),
+  founderType: text('founder_type').default('Founder'),
   revenue: text('revenue').notNull(),
   customers: text('customers'),
   niche: text('niche'),

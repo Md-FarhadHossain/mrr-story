@@ -10,6 +10,7 @@ export async function saveStory(formData: FormData) {
   const title = formData.get('title') as string;
   const businessName = formData.get('businessName') as string;
   const founderName = formData.get('founderName') as string;
+  const founderType = formData.get('founderType') as string || 'Founder';
   const revenue = formData.get('revenue') as string;
   const customers = formData.get('customers') as string;
   const niche = formData.get('niche') as string;
@@ -37,6 +38,7 @@ export async function saveStory(formData: FormData) {
     title,
     businessName,
     founderName,
+    founderType,
     revenue,
     customers: customers || null,
     niche: niche || null,
@@ -64,6 +66,7 @@ export async function updateStory(id: number, formData: FormData) {
   const title = formData.get('title') as string;
   const businessName = formData.get('businessName') as string;
   const founderName = formData.get('founderName') as string;
+  const founderType = formData.get('founderType') as string || 'Founder';
   const revenue = formData.get('revenue') as string;
   const customers = formData.get('customers') as string;
   const niche = formData.get('niche') as string;
@@ -90,6 +93,7 @@ export async function updateStory(id: number, formData: FormData) {
     title,
     businessName,
     founderName,
+    founderType,
     revenue,
     customers: customers || null,
     niche: niche || null,

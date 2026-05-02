@@ -161,7 +161,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
               />
               <div className={styles.aboutHeaderInfo}>
                 <h3 className={styles.aboutFounderName}>{story.founderName}</h3>
-                <p className={styles.aboutBusinessName}>Founder of <strong>{story.businessName}</strong></p>
+                <p className={styles.aboutBusinessName}>{story.founderType || 'Founder'} of <strong>{story.businessName}</strong></p>
                 {story.location && (
                   (() => {
                     const country = countries.find(c => c.name === story.location);

@@ -76,7 +76,13 @@ export default function Dashboard() {
             </div>
             <div className={styles.formGroup}>
               <label>Founder Name</label>
-              <input type="text" name="founderName" required placeholder="Adrian Berisha" className={styles.input} />
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <input type="text" name="founderName" required placeholder="Adrian Berisha" className={styles.input} style={{ flex: 1 }} />
+                <select name="founderType" className={styles.input} style={{ width: 'auto' }}>
+                  <option value="Founder">Founder</option>
+                  <option value="Co-Founder">Co-Founder</option>
+                </select>
+              </div>
             </div>
           </div>
 

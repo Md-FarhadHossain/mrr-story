@@ -62,7 +62,13 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
             </div>
             <div className={styles.formGroup}>
               <label>Founder Name</label>
-              <input type="text" name="founderName" defaultValue={story.founderName} required placeholder="Adrian Berisha" className={styles.input} />
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <input type="text" name="founderName" defaultValue={story.founderName} required placeholder="Adrian Berisha" className={styles.input} style={{ flex: 1 }} />
+                <select name="founderType" defaultValue={story.founderType || 'Founder'} className={styles.input} style={{ width: 'auto' }}>
+                  <option value="Founder">Founder</option>
+                  <option value="Co-Founder">Co-Founder</option>
+                </select>
+              </div>
             </div>
           </div>
 
