@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "Read SEO-friendly articles, insights, and growth hacks from the MRR Story team.",
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 function formatDate(date: Date | null) {
   if (!date) return '';

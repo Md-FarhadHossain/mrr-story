@@ -7,7 +7,7 @@ import { ThemeToggle } from '../components/ThemeToggle';
 import Navbar from '../components/Navbar';
 import NewsletterForm from '../components/NewsletterForm';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export default async function StoriesPage() {
   const allStories = await db.select().from(storiesTable).orderBy(desc(storiesTable.createdAt));

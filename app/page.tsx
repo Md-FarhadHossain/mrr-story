@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: "Discover how indie hackers and solopreneurs made their first dollar and built profitable businesses. Real founders, real products, real revenue.",
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 const FEATURED_COUNT = 4;
 

@@ -13,8 +13,7 @@ import Navbar from '../../components/Navbar';
 import { Metadata } from 'next';
 import ImageZoom from '../../components/ImageZoom';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 60;
 
 function sanitizeMarkdown(md: string): string {
   if (!md) return '';

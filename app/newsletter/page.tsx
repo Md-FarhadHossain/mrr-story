@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     'Get real founder stories, revenue breakdowns, and first-dollar moments delivered to your inbox every week. No fluff, no hype — just honest numbers.',
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 const PERKS = [
   { emoji: '💸', title: 'Real Revenue Numbers', desc: 'Exact MRR, ARR, and first-dollar breakdowns every issue.' },

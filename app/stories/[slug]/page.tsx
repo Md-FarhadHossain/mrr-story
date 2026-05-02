@@ -15,8 +15,7 @@ import { Metadata } from 'next';
 import { countries } from '@/lib/countries';
 import ImageZoom from '../../components/ImageZoom';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 60;
 
 /**
  * Fix content saved by tiptap-markdown / Tiptap HTML that has `###` either:
