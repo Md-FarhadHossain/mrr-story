@@ -4,6 +4,7 @@ import { db } from '../db';
 import { storiesTable } from '../db/schema';
 import { desc } from 'drizzle-orm';
 import { ThemeToggle } from './components/ThemeToggle';
+import Navbar from './components/Navbar';
 import NewsletterForm from './components/NewsletterForm';
 import { Metadata } from 'next';
 
@@ -23,22 +24,8 @@ export default async function Feed() {
   return (
     <>
       {/* ── Header ── */}
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <Link href="/" className={styles.logoArea}>
-            <div className={styles.logoIcon}>M</div>
-            <span>MRR Story</span>
-          </Link>
-          <nav className={styles.navLinks}>
-            <Link href="/stories">Case Studies</Link>
-            <Link href="/newsletter">Newsletter</Link>
-            <Link href="#">Ideas</Link>
-          </nav>
-          <div className={styles.navActions}>
-            <ThemeToggle />
-          </div>
-        </div>
-      </header>
+      {/* ── Header ── */}
+      <Navbar />
 
       {/* ── Hero ── */}
       <div className={styles.heroWrapper}>

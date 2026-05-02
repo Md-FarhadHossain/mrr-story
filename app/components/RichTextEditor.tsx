@@ -22,6 +22,8 @@ import {
   Undo,
   Redo,
   Loader2,
+  Code,
+  Code2,
 } from 'lucide-react';
 import styles from './RichTextEditor.module.css';
 
@@ -57,6 +59,8 @@ const MenuBar = ({ editor, onImageUpload, isUploading }: { editor: any; onImageU
       <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} data-active={editor.isActive('bulletList')} className={styles.toolbarButton} title="Bullet List"><List size={18} /></button>
       <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} data-active={editor.isActive('orderedList')} className={styles.toolbarButton} title="Ordered List"><ListOrdered size={18} /></button>
       <button type="button" onClick={() => editor.chain().focus().toggleBlockquote().run()} data-active={editor.isActive('blockquote')} className={styles.toolbarButton} title="Blockquote"><Quote size={18} /></button>
+      <button type="button" onClick={() => editor.chain().focus().toggleCode().run()} data-active={editor.isActive('code')} className={styles.toolbarButton} title="Inline Code"><Code size={18} /></button>
+      <button type="button" onClick={() => editor.chain().focus().toggleCodeBlock().run()} data-active={editor.isActive('codeBlock')} className={styles.toolbarButton} title="Code Block"><Code2 size={18} /></button>
       <div className={styles.toolbarDivider} />
       <button type="button" onClick={setLink} data-active={editor.isActive('link')} className={styles.toolbarButton} title="Link"><LinkIcon size={18} /></button>
       <button

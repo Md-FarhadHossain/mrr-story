@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './Dashboard.module.css';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { BookOpen, PenSquare } from 'lucide-react';
+import { BookOpen, PenSquare, Edit3, FileText } from 'lucide-react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -31,6 +31,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             className={`${styles.navItem} ${pathname.startsWith('/dashboard/stories') ? styles.active : ''}`}
           >
             <BookOpen size={16} /> My Stories
+          </Link>
+          <div style={{ height: '20px' }}></div>
+          <Link
+            href="/dashboard/blogs/new"
+            className={`${styles.navItem} ${pathname === '/dashboard/blogs/new' ? styles.active : ''}`}
+          >
+            <Edit3 size={16} /> Write a Blog
+          </Link>
+          <Link
+            href="/dashboard/blogs"
+            className={`${styles.navItem} ${pathname === '/dashboard/blogs' && !pathname.includes('new') ? styles.active : ''}`}
+          >
+            <FileText size={16} /> My Blogs
           </Link>
         </nav>
       </aside>

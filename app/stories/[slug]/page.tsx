@@ -10,6 +10,7 @@ import { storiesTable } from '../../../db/schema';
 import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { ThemeToggle } from '../../components/ThemeToggle';
+import Navbar from '../../components/Navbar';
 import { Metadata } from 'next';
 import { countries } from '@/lib/countries';
 import ImageZoom from '../../components/ImageZoom';
@@ -101,22 +102,8 @@ export default async function StoryPage({ params }: { params: { slug: string } }
 
   return (
     <>
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <Link href="/" className={styles.logoArea}>
-            <div className={styles.logoIcon}>M</div>
-            <span>MRR Story</span>
-          </Link>
-          <nav className={styles.navLinks}>
-            <Link href="/">Case Studies</Link>
-            <Link href="/newsletter">Newsletter</Link>
-            <Link href="#">Ideas</Link>
-          </nav>
-          <div className={styles.navActions}>
-            <ThemeToggle />
-          </div>
-        </div>
-      </header>
+      {/* ── Header ── */}
+      <Navbar />
 
       <main className={styles.mainLayout}>
         <TableOfContents title={story.title} headers={headers} />

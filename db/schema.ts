@@ -63,3 +63,17 @@ export const storiesTable = sqliteTable('stories', {
   content: text('content').notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
+
+export const blogsTable = sqliteTable('blogs', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  slug: text('slug').notNull().unique(),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  coverImageUrl: text('cover_image_url'),
+  coverImageAlt: text('cover_image_alt'),
+  focusKeyword: text('focus_keyword'),
+  tags: text('tags'), // comma-separated e.g. "Marketing,Growth,Bootstrapping"
+  content: text('content').notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
