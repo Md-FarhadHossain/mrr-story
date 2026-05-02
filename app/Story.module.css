@@ -403,6 +403,25 @@
   overflow: hidden;
 }
 
+.blogCard {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  border-radius: 16px;
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border-color);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  cursor: pointer;
+  align-items: center;
+}
+
+.blogCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--text-secondary, #6b7280);
+}
+
+
 .revenueBadge {
   position: absolute;
   bottom: 10px;

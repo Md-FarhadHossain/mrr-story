@@ -1,0 +1,181 @@
+/* ─────────────────────────────────────────
+   PAGE HEADER
+───────────────────────────────────────── */
+.pageHeader {
+  background: #3b35c3;
+  padding: 64px 24px 56px;
+  text-align: center;
+}
+
+:global([data-theme='dark']) .pageHeader {
+  background: #1e1b4b;
+}
+
+.pageEyebrow {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+
+.pageTitle {
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 16px;
+}
+
+.pageTitleAccent {
+  color: #a5b4fc;
+}
+
+.pageSubtitle {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.72);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ─────────────────────────────────────────
+   MAIN CONTAINER
+───────────────────────────────────────── */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 24px 100px;
+}
+
+/* ─────────────────────────────────────────
+   TAG PILL
+───────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  background: rgba(99, 102, 241, 0.85);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* ─────────────────────────────────────────
+   CARD IMAGE PLACEHOLDER (no cover set)
+───────────────────────────────────────── */
+.cardImagePlaceholder {
+  height: 210px;
+  background: linear-gradient(135deg, #3b35c3 0%, #6366f1 100%);
+  position: relative;
+  flex-shrink: 0;
+  padding: 14px;
+}
+
+/* ─────────────────────────────────────────
+   POSTS GRID
+───────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cardLink {
+  text-decoration: none;
+  display: block;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.card {
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cardLink:hover .card {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+  border-color: #6366f1;
+}
+
+.cardImage {
+  height: 210px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.cardImage .tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+}
+
+.cardBody {
+  padding: 22px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cardDate {
+  font-size: 0.78rem;
+  color: var(--text-tertiary, #94a3b8);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.cardTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+.cardDesc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.cardReadMore {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6366f1;
+  transition: color 0.2s;
+}
+
+.cardLink:hover .cardReadMore {
+  color: #4f46e5;
+}
