@@ -8,7 +8,7 @@ import TableOfContents from '../../components/TableOfContents';
 import { Globe } from 'lucide-react';
 import { db } from '../../../db';
 import { storiesTable } from '../../../db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, not, desc } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import Navbar from '../../components/Navbar';
@@ -104,6 +104,18 @@ export default async function StoryPage({ params }: { params: { slug: string } }
   if (!story) {
     return notFound();
   }
+
+  // --- Algo for similar stories ---
+  const allOtherStories = await db.select()
+    .from(storiesTable)
+    .where(not(eq(storiesTable.slug, slug)))
+    .orderBy(desc(storiesTable.createdAt))
+    .limit(10);
+
+  const sameNiche = allOtherStories.filter(s => s.niche === story.niche);
+  const others = allOtherStories.filter(s => s.niche !== story.niche);
+  const similarStories = [...sameNiche, ...others].slice(0, 4);
+
   const headers = extractHeaders(sanitizeMarkdown(story.content));
 
   const jsonLd = {
@@ -285,6 +297,35 @@ export default async function StoryPage({ params }: { params: { slug: string } }
           </div>
         </aside>
       </main>
+
+      {similarStories.length > 0 && (
+        <section className={styles.feedSection} style={{ borderTop: '1px solid var(--border-color)', paddingTop: '60px', marginTop: '20px', maxWidth: '1200px' }}>
+          <h2 className={styles.feedTitle} style={{ textAlign: 'left', marginBottom: '30px' }}>
+            More Case Studies
+          </h2>
+          <div className={styles.caseGrid}>
+            {similarStories.map((s) => (
+              <Link href={`/stories/${s.slug}`} key={s.id} className={styles.caseCard}>
+                <div className={styles.caseCardImg} style={{ backgroundImage: `url(${s.profileImageUrl || s.heroImageUrl || ''})` }}>
+                  {s.revenue && <span className={styles.revenueBadge}>{s.revenue}/mo</span>}
+                </div>
+                <div className={styles.caseCardBody}>
+                  <span className={styles.caseStudyTag}>founder story</span>
+                  <h3 className={styles.caseCardTitle}>{s.title}</h3>
+                  <p className={styles.caseCardBreaks}>
+                    <strong>{s.founderName}</strong> shares:
+                  </p>
+                  <ul className={styles.caseCardBullets}>
+                    <li>✓ What the product is & how they built it</li>
+                    <li>✓ How they got their very first paying customer</li>
+                  </ul>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       <Footer />
     </>
   );
