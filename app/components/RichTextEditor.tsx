@@ -47,6 +47,8 @@ const MenuBar = ({ editor, onImageUpload, isUploading }: { editor: any; onImageU
     editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
   };
 
+
+
   return (
     <div className={styles.toolbar}>
       <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} data-active={editor.isActive('bold')} className={styles.toolbarButton} title="Bold"><Bold size={18} /></button>
@@ -72,6 +74,7 @@ const MenuBar = ({ editor, onImageUpload, isUploading }: { editor: any; onImageU
       >
         {isUploading ? <Loader2 size={18} className={styles.spinning} /> : <ImageIcon size={18} />}
       </button>
+
       <div className={styles.toolbarDivider} />
       <button type="button" onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} className={styles.toolbarButton} title="Undo"><Undo size={18} /></button>
       <button type="button" onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()} className={styles.toolbarButton} title="Redo"><Redo size={18} /></button>

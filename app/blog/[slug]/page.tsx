@@ -10,6 +10,7 @@ import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import { Metadata } from 'next';
 import ImageZoom from '../../components/ImageZoom';
 
@@ -57,9 +58,14 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: blog.title,
     description: blog.description,
+    alternates: {
+      canonical: `https://www.mrrstory.com/blog/${slug}`,
+    },
     openGraph: {
       title: blog.title,
       description: blog.description,
+      type: 'article',
+      publishedTime: blog.createdAt ? new Date(blog.createdAt).toISOString() : undefined,
       images: imageUrl ? [{ url: imageUrl }] : undefined,
     },
     twitter: {
@@ -82,8 +88,34 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   const headers = extractHeaders(sanitizeMarkdown(blog.content));
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": blog.title,
+    "image": blog.coverImageUrl ? [blog.coverImageUrl] : [],
+    "datePublished": blog.createdAt ? new Date(blog.createdAt).toISOString() : undefined,
+    "dateModified": blog.updatedAt ? new Date(blog.updatedAt).toISOString() : undefined,
+    "author": {
+      "@type": "Person",
+      "name": "MRR Story"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "MRR Story",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.mrrstory.com/favicon.ico"
+      }
+    }
+  };
+
   return (
     <>
+      {/* ── JSON-LD Schema ── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ── Header ── */}
       <Navbar />
 
@@ -129,20 +161,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </aside>
       </main>
 
-      <footer className={styles.siteFooter}>
-        <div className={styles.siteFooterInner}>
-          <Link href="/" className={styles.footerLogo}>
-            <div className={styles.logoIcon}>M</div>
-            <span>MRR Story</span>
-          </Link>
-          <nav className={styles.footerNav}>
-            <Link href="#">About</Link>
-            <Link href="#">Support</Link>
-            <Link href="#">Privacy</Link>
-            <Link href="#">Terms of Use</Link>
-          </nav>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }

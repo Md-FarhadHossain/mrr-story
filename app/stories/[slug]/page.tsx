@@ -12,6 +12,7 @@ import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import { Metadata } from 'next';
 import { countries } from '@/lib/countries';
 import ImageZoom from '../../components/ImageZoom';
@@ -75,9 +76,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: story.title,
     description: description,
+    alternates: {
+      canonical: `https://www.mrrstory.com/stories/${slug}`,
+    },
     openGraph: {
       title: story.title,
       description: description,
+      type: 'article',
+      publishedTime: story.createdAt ? new Date(story.createdAt).toISOString() : undefined,
+      authors: story.founderName ? [story.founderName] : undefined,
       images: imageUrl ? [{ url: imageUrl }] : undefined,
     },
     twitter: {
@@ -97,11 +104,35 @@ export default async function StoryPage({ params }: { params: { slug: string } }
   if (!story) {
     return notFound();
   }
-
   const headers = extractHeaders(sanitizeMarkdown(story.content));
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": story.title,
+    "image": story.heroImageUrl || story.profileImageUrl ? [story.heroImageUrl || story.profileImageUrl] : [],
+    "datePublished": story.createdAt ? new Date(story.createdAt).toISOString() : undefined,
+    "author": {
+      "@type": "Person",
+      "name": story.founderName || "Founder"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "MRR Story",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.mrrstory.com/favicon.ico"
+      }
+    }
+  };
 
   return (
     <>
+      {/* ── JSON-LD Schema ── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ── Header ── */}
       <Navbar />
 
@@ -136,6 +167,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
                 h2: ({node, ...props}) => <h2 className={styles.markdownHeader} {...props} />,
                 h3: ({node, ...props}) => <h3 className={styles.markdownHeader} {...props} />,
                 p: ({node, ...props}) => <p className={styles.markdownParagraph} {...props} />,
+                blockquote: ({node, ...props}) => <blockquote className={styles.markdownBlockquote} {...props} />,
                 img: ({node, ...props}) => <ImageZoom src={props.src || ''} alt={props.alt || ''} className={styles.markdownImage} style={{maxWidth: '100%', height: 'auto', borderRadius: '12px', border: '1px solid var(--border-color)', margin: '16px 0', display: 'block'}} {...props as any} />
               }}
             >
@@ -143,13 +175,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
             </ReactMarkdown>
           </div>
 
-          {/* ── Research Disclaimer ── */}
-          <div className={styles.researchDisclaimer}>
-            <span className={styles.disclaimerIcon}>📋</span>
-            <p className={styles.disclaimerText}>
-              <strong>Disclaimer:</strong> This case study is <strong>research-based</strong> and has not been directly verified through an interview with the founder. Information was compiled from publicly available sources and is presented in an interview format for a better reading experience.
-            </p>
-          </div>
+          {/* Disclaimer moved to /terms */}
         </article>
 
         <aside className={styles.sidebar}>
@@ -259,6 +285,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
           </div>
         </aside>
       </main>
+      <Footer />
     </>
   );
 }

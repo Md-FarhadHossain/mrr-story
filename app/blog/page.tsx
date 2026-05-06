@@ -3,6 +3,7 @@ import { db } from '../../db';
 import { blogsTable } from '../../db/schema';
 import { desc } from 'drizzle-orm';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import { Metadata } from 'next';
 import styles from '../Story.module.css';
 import blogStyles from './blog.module.css';
@@ -97,20 +98,7 @@ export default async function BlogFeed() {
       </main>
 
       {/* ── Footer ── */}
-      <footer className={styles.siteFooter}>
-        <div className={styles.siteFooterInner}>
-          <Link href="/" className={styles.footerLogo}>
-            <div className={styles.logoIcon}>M</div>
-            <span>MRR Story</span>
-          </Link>
-          <nav className={styles.footerNav}>
-            <Link href="#">About</Link>
-            <Link href="#">Support</Link>
-            <Link href="#">Privacy</Link>
-            <Link href="#">Terms of Use</Link>
-          </nav>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }

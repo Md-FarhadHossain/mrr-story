@@ -1,0 +1,321 @@
+/* ─────────────────────────────────────────
+   LEGAL & UTILITY PAGES
+   (About, Support, Privacy, Terms of Use)
+───────────────────────────────────────── */
+
+.pageWrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-page, #f9fafb);
+}
+
+/* ── Hero Banner ── */
+.hero {
+  background: linear-gradient(135deg, #3b35c3 0%, #1e1b4b 100%);
+  padding: 72px 24px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 70% 50%, rgba(99,102,241,0.3) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.heroEyebrow {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 999px;
+  padding: 6px 18px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -1px;
+  margin: 0 auto 16px;
+  line-height: 1.15;
+  max-width: 700px;
+}
+
+.heroSub {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.75);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.heroClip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: var(--bg-page, #f9fafb);
+  clip-path: polygon(0 100%, 100% 100%, 100% 0);
+}
+
+/* ── Content Area ── */
+.contentWrapper {
+  flex: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 60px 24px 80px;
+  width: 100%;
+}
+
+/* ── Sections ── */
+.section {
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 20px;
+  padding: 40px 48px;
+  margin-bottom: 28px;
+  transition: box-shadow 0.2s;
+}
+
+.section:hover {
+  box-shadow: 0 8px 32px rgba(59,53,195,0.07);
+}
+
+:global([data-theme='dark']) .section {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.sectionIcon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.sectionTitle {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-primary, #111);
+  margin-bottom: 14px;
+  letter-spacing: -0.3px;
+}
+
+.sectionBody {
+  font-size: 0.97rem;
+  color: var(--text-secondary, #6b7280);
+  line-height: 1.8;
+}
+
+.sectionBody p {
+  margin-bottom: 12px;
+}
+
+.sectionBody p:last-child {
+  margin-bottom: 0;
+}
+
+.sectionBody ul {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sectionBody ul li {
+  padding-left: 20px;
+  position: relative;
+}
+
+.sectionBody ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #3b35c3;
+  font-weight: 700;
+}
+
+.sectionBody a {
+  color: #3b35c3;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.sectionBody a:hover {
+  border-color: #3b35c3;
+}
+
+/* ── Disclaimer block ── */
+.disclaimerBox {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 16px;
+  padding: 28px 36px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+:global([data-theme='dark']) .disclaimerBox {
+  background: #1c1a0e;
+  border-color: #7c6000;
+}
+
+.disclaimerBoxIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.disclaimerBoxBody {
+  flex: 1;
+}
+
+.disclaimerBoxTitle {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #92400e;
+  margin-bottom: 8px;
+}
+
+:global([data-theme='dark']) .disclaimerBoxTitle {
+  color: #fbbf24;
+}
+
+.disclaimerBoxText {
+  font-size: 0.93rem;
+  color: #78350f;
+  line-height: 1.7;
+}
+
+:global([data-theme='dark']) .disclaimerBoxText {
+  color: #d97706;
+}
+
+/* ── Support CTA ── */
+.supportCta {
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  border: 1px solid #c7d2fe;
+  border-radius: 20px;
+  padding: 48px 40px;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+:global([data-theme='dark']) .supportCta {
+  background: linear-gradient(135deg, #1e1b4b 0%, #1a1753 100%);
+  border-color: #3730a3;
+}
+
+.supportCtaTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary, #111);
+  margin-bottom: 10px;
+}
+
+.supportCtaSub {
+  font-size: 1rem;
+  color: var(--text-secondary, #6b7280);
+  margin-bottom: 28px;
+  max-width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.emailBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #3b35c3;
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.emailBtn:hover {
+  background: #312ec2;
+  transform: translateY(-2px);
+}
+
+/* ── About mission ── */
+.missionGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.missionCard {
+  background: #f8faff;
+  border: 1px solid #e0e7ff;
+  border-radius: 14px;
+  padding: 24px 20px;
+  text-align: center;
+}
+
+:global([data-theme='dark']) .missionCard {
+  background: #0f172a;
+  border-color: #1e293b;
+}
+
+.missionCardIcon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.missionCardTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary, #111);
+  margin-bottom: 6px;
+}
+
+.missionCardText {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6b7280);
+  line-height: 1.6;
+}
+
+/* ── Last updated badge ── */
+.lastUpdated {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary, #9ca3af);
+  background: var(--bg-card, #f3f4f6);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 999px;
+  padding: 4px 14px;
+  margin-bottom: 40px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .heroTitle { font-size: 2rem; }
+  .section { padding: 28px 22px; }
+  .disclaimerBox { flex-direction: column; gap: 12px; }
+  .supportCta { padding: 32px 20px; }
+  .missionGrid { grid-template-columns: 1fr; }
+  .contentWrapper { padding: 40px 16px 60px; }
+}

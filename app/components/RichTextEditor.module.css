@@ -40,6 +40,33 @@
   color: #ffffff;
 }
 
+.toolbarButtonBottomLine {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px !important;
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: #fff !important;
+  border-radius: 6px !important;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+  transition: all 0.2s ease !important;
+}
+
+.toolbarButtonBottomLine:hover {
+  background: linear-gradient(135deg, #d97706, #b45309) !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.45) !important;
+  transform: translateY(-1px);
+}
+
+.toolbarButtonLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
 .toolbarDivider {
   width: 1px;
   background-color: var(--border-color, #e2e8f0);
@@ -94,12 +121,38 @@
 }
 
 .editorContainer :global(.ProseMirror blockquote) {
-  border-left: 4px solid var(--border-color, #e2e8f0);
-  padding-left: 1rem;
-  margin-left: 0;
-  color: var(--text-secondary, #64748b);
+  position: relative;
+  border-left: 4px solid #6366f1;
+  padding: 20px 24px 20px 28px;
+  margin: 24px 0;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0.03) 100%);
+  border-radius: 0 10px 10px 0;
+  color: var(--text-primary);
   font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.8;
 }
+
+.editorContainer :global(.ProseMirror blockquote::before) {
+  content: '"';
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-size: 2.8rem;
+  font-family: Georgia, serif;
+  color: rgba(99, 102, 241, 0.2);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.editorContainer :global(.ProseMirror blockquote p) {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+
 
 .editorContainer :global(.ProseMirror img) {
   max-width: 100%;

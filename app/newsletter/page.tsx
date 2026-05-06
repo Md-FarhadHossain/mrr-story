@@ -6,6 +6,7 @@ import { desc } from 'drizzle-orm';
 import { ThemeToggle } from '../components/ThemeToggle';
 import Navbar from '../components/Navbar';
 import NewsletterForm from '../components/NewsletterForm';
+import Footer from '../components/Footer';
 import styles from './newsletter.module.css';
 
 export const metadata: Metadata = {
@@ -169,21 +170,7 @@ export default async function NewsletterPage() {
 
       </main>
 
-      {/* ── Footer ── */}
-      <footer className={styles.footer}>
-        <div className={styles.footerInner}>
-          <Link href="/" className={styles.footerLogo}>
-            <div className={styles.logoIcon}>M</div>
-            <span>MRR Story</span>
-          </Link>
-          <nav className={styles.footerNav}>
-            <Link href="#">About</Link>
-            <Link href="#">Support</Link>
-            <Link href="#">Privacy</Link>
-            <Link href="#">Terms</Link>
-          </nav>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }

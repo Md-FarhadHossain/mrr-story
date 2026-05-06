@@ -6,6 +6,7 @@ import { desc } from 'drizzle-orm';
 import { ThemeToggle } from '../components/ThemeToggle';
 import Navbar from '../components/Navbar';
 import NewsletterForm from '../components/NewsletterForm';
+import Footer from '../components/Footer';
 
 export const revalidate = 60;
 
@@ -57,23 +58,7 @@ export default async function StoriesPage() {
         )}
       </main>
 
-      {/* ── Footer ── */}
-      <footer className={styles.siteFooter} style={{ marginTop: 'auto' }}>
-        <div className={styles.siteFooterInner}>
-          <Link href="/" className={styles.footerLogo}>
-            <div className={styles.logoIcon}>M</div>
-            <span>MRR Story</span>
-          </Link>
-          <nav className={styles.footerNav}>
-            <Link href="#">About</Link>
-            <Link href="#">Support</Link>
-            <Link href="#">Privacy</Link>
-            <Link href="#">Terms of Use</Link>
-            <span>𝕏</span>
-            <span>▶</span>
-          </nav>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }

@@ -1,16 +1,39 @@
 import styles from './Story.module.css';
 import Link from 'next/link';
+import Image from 'next/image';
 import { db } from '../db';
 import { storiesTable } from '../db/schema';
 import { desc } from 'drizzle-orm';
 import { ThemeToggle } from './components/ThemeToggle';
 import Navbar from './components/Navbar';
 import NewsletterForm from './components/NewsletterForm';
+import Footer from './components/Footer';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: "MRR Story - How Indie Hackers Made Their First Dollar",
   description: "Discover how indie hackers and solopreneurs made their first dollar and built profitable businesses. Real founders, real products, real revenue.",
+  alternates: {
+    canonical: 'https://www.mrrstory.com',
+  },
+  openGraph: {
+    title: "MRR Story - How Indie Hackers Made Their First Dollar",
+    description: "Discover how indie hackers and solopreneurs made their first dollar and built profitable businesses. Real founders, real products, real revenue.",
+    url: 'https://www.mrrstory.com',
+    type: 'website',
+    images: [
+      {
+        url: 'https://www.mrrstory.com/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'MRR Story - Indie Hacker & Solopreneur Success Stories',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['https://www.mrrstory.com/og-image.png'],
+  },
 };
 
 export const revalidate = 60;
@@ -43,10 +66,12 @@ export default async function Feed() {
             <div className={styles.heroPoof}>
               <div className={styles.avatarRow}>
                 {allStories.filter(s => s.profileImageUrl).slice(0, 7).map(story => (
-                  <img 
+                  <Image 
                     key={story.id} 
                     src={story.profileImageUrl!} 
-                    alt={story.founderName} 
+                    alt={`Avatar of ${story.founderName}`} 
+                    width={40}
+                    height={40}
                   />
                 ))}
               </div>
@@ -120,10 +145,12 @@ export default async function Feed() {
       <section className={styles.ctaSection}>
         <div className={styles.ctaAvatars}>
           {allStories.filter(s => s.profileImageUrl).slice(0, 10).map(story => (
-            <img 
+            <Image 
               key={story.id} 
               src={story.profileImageUrl!} 
-              alt={story.founderName} 
+              alt={`Avatar of ${story.founderName}`} 
+              width={48}
+              height={48}
             />
           ))}
         </div>
@@ -143,22 +170,7 @@ export default async function Feed() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className={styles.siteFooter}>
-        <div className={styles.siteFooterInner}>
-          <Link href="/" className={styles.footerLogo}>
-            <div className={styles.logoIcon}>M</div>
-            <span>MRR Story</span>
-          </Link>
-          <nav className={styles.footerNav}>
-            <Link href="#">About</Link>
-            <Link href="#">Support</Link>
-            <Link href="#">Privacy</Link>
-            <Link href="#">Terms of Use</Link>
-            <span>𝕏</span>
-            <span>▶</span>
-          </nav>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }
