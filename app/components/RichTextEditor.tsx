@@ -119,13 +119,16 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
     if (editor && defaultValue) {
       // Pre-sanitize: fix any doubled heading markers that can appear after
       // round-tripping through tiptap-markdown (e.g. `## ## Hello` → `## Hello`)
-      let sanitized = defaultValue;
+      // Fix: Trim leading whitespace/newlines which can cause the first block to be parsed as a paragraph
+      let sanitized = defaultValue.trimStart();
       // Remove escaped heading markers: `\## ` → `## `
       sanitized = sanitized.replace(/\\(#{1,6}\s+)/g, '$1');
       // Remove doubled heading markers: `## ## ` → `## ` and `### ### ` → `### `
       sanitized = sanitized.replace(/^(#{1,6})\s+\1\s+/gm, '$1 ');
       // Remove doubled heading markers where levels differ: `## ### ` → `## `
       sanitized = sanitized.replace(/^(#{1,6})\s+(#{1,6})\s+/gm, '$1 ');
+      // Ensure headings always have a blank line before them (fixes missing newlines from previous blocks)
+      sanitized = sanitized.replace(/([^\n])\n?(#{1,6}\s+[A-Za-z0-9])/g, '$1\n\n$2');
 
       editor.commands.setContent(sanitized);
       // Sync the hidden input with the parsed-then-re-serialised markdown

@@ -2,7 +2,6 @@
 .editorContainer {
   border: 1px solid var(--border-color, #e2e8f0);
   border-radius: 8px;
-  overflow: hidden;
   background-color: var(--bg-input, #ffffff);
   display: flex;
   flex-direction: column;
@@ -15,6 +14,11 @@
   border-bottom: 1px solid var(--border-color, #e2e8f0);
   background-color: var(--bg-card, #f8fafc);
   flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 .toolbarButton {
