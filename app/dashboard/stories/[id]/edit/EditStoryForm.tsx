@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { updateStory } from '../../../actions';
 import { ThemeToggle } from '../../../../components/ThemeToggle';
 import RichTextEditor from '../../../../components/RichTextEditor';
+import ImageUploader from '../../../../components/ImageUploader';
 import styles from '../../../Dashboard.module.css';
 import { countries } from '@/lib/countries';
 
@@ -78,8 +79,8 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
               <input type="text" name="revenue" defaultValue={story.revenue} required placeholder="$100K" className={styles.input} />
             </div>
             <div className={styles.formGroup}>
-              <label>Profile Image URL (Optional)</label>
-              <input type="url" name="profileImageUrl" defaultValue={story.profileImageUrl || ''} placeholder="https://example.com/photo.jpg" className={styles.input} />
+              <label>Profile Image (Optional)</label>
+              <ImageUploader name="profileImageUrl" defaultValue={story.profileImageUrl || ''} />
             </div>
           </div>
 

@@ -5,6 +5,7 @@ import styles from './Dashboard.module.css';
 import { saveStory } from './actions';
 import { ThemeToggle } from '../components/ThemeToggle';
 import RichTextEditor from '../components/RichTextEditor';
+import ImageUploader from '../components/ImageUploader';
 import { useSession } from '@/lib/auth-client';
 import SignOutButton from './SignOutButton';
 import { useRouter } from 'next/navigation';
@@ -92,8 +93,8 @@ export default function Dashboard() {
               <input type="text" name="revenue" required placeholder="$100K" className={styles.input} />
             </div>
             <div className={styles.formGroup}>
-              <label>Profile Image URL (Optional)</label>
-              <input type="url" name="profileImageUrl" placeholder="https://example.com/photo.jpg" className={styles.input} />
+              <label>Profile Image (Optional)</label>
+              <ImageUploader name="profileImageUrl" />
             </div>
           </div>
 

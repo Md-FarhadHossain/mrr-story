@@ -155,7 +155,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           {/* ── CTA Widget ── */}
           <div className={styles.ctaWidget}>
             <h3>Enjoyed this post?</h3>
-            <p>Join our newsletter to get more insights, case studies, and growth hacks delivered to your inbox.</p>
+            <p>Join our newsletter to get a curated digest of 4-7 founder stories, case studies, and growth hacks delivered to your inbox every Tuesday.</p>
             <Link href="/newsletter" className={styles.ctaButton}>Subscribe</Link>
           </div>
         </aside>
