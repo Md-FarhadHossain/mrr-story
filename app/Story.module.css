@@ -547,6 +547,49 @@
 }
 
 /* ─────────────────────────────────────────
+   FAQ SECTION
+───────────────────────────────────────── */
+.faqSection {
+  max-width: 800px;
+  margin: 80px auto;
+  padding: 0 24px;
+}
+
+.faqTitle {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 40px;
+}
+
+.faqGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faqItem {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.faqQuestion {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.faqAnswer {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* ─────────────────────────────────────────
    BOTTOM CTA SECTION
 ───────────────────────────────────────── */
 .ctaSection {
@@ -1014,6 +1057,30 @@
   line-height: 1.7;
   color: var(--text-secondary);
   margin-bottom: 20px;
+}
+
+.markdownList {
+  margin-bottom: 24px;
+  padding-left: 0;
+  margin-left: 1.5rem;
+  list-style-type: disc;
+  list-style-position: outside;
+}
+
+.markdownOrderedList {
+  margin-bottom: 24px;
+  padding-left: 0;
+  margin-left: 1.5rem;
+  list-style-type: decimal;
+  list-style-position: outside;
+}
+
+.markdownListItem {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  display: list-item;
 }
 
 .markdownBlockquote {

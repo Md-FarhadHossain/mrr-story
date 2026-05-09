@@ -83,9 +83,27 @@ const MenuBar = ({ editor, onImageUpload, isUploading }: { editor: any; onImageU
 };
 
 export default function RichTextEditor({ name, defaultValue = '', placeholder = 'Start writing your story...' }: RichTextEditorProps) {
+  const [mounted, setMounted] = useState(false);
   const [markdownOutput, setMarkdownOutput] = useState(defaultValue);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Pre-sanitize: fix any doubled heading markers that can appear after
+  // round-tripping through tiptap-markdown (e.g. `## ## Hello` → `## Hello`)
+  // Fix: Trim leading whitespace/newlines which can cause the first block to be parsed as a paragraph
+  let sanitized = defaultValue.trimStart();
+  // Remove escaped heading markers: `\## ` → `## `
+  sanitized = sanitized.replace(/\\(#{1,6}\s+)/g, '$1');
+  // Remove doubled heading markers: `## ## ` → `## ` and `### ### ` → `### `
+  sanitized = sanitized.replace(/^(#{1,6})\s+\1\s+/gm, '$1 ');
+  // Remove doubled heading markers where levels differ: `## ### ` → `## `
+  sanitized = sanitized.replace(/^(#{1,6})\s+(#{1,6})\s+/gm, '$1 ');
+  // Ensure headings always have a blank line before them (fixes missing newlines from previous blocks)
+  sanitized = sanitized.replace(/([^\n])\n?(#{1,6}\s+[A-Za-z0-9])/g, '$1\n\n$2');
 
   const editor = useEditor({
     extensions: [
@@ -99,9 +117,9 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
         transformCopiedText: true,
       }),
     ],
-    // Start empty — content is loaded via useEffect so the Markdown
-    // extension can properly parse headings, bold, etc.
-    content: '',
+    // Pass the sanitized markdown directly to the content.
+    // Since this runs only on the client, tiptap-markdown parses it correctly.
+    content: sanitized,
     immediatelyRender: false,
     onUpdate: ({ editor }) => {
       const md = (editor.storage as any).markdown.getMarkdown();
@@ -112,31 +130,17 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
     },
   });
 
-  // Load initial markdown AFTER the editor is mounted so that
-  // tiptap-markdown's parser converts `### heading` → H3 nodes,
-  // `**bold**` → bold marks, etc. (the content: prop bypasses this).
+  // Sync initial markdown output after first mount
   useEffect(() => {
-    if (editor && defaultValue) {
-      // Pre-sanitize: fix any doubled heading markers that can appear after
-      // round-tripping through tiptap-markdown (e.g. `## ## Hello` → `## Hello`)
-      // Fix: Trim leading whitespace/newlines which can cause the first block to be parsed as a paragraph
-      let sanitized = defaultValue.trimStart();
-      // Remove escaped heading markers: `\## ` → `## `
-      sanitized = sanitized.replace(/\\(#{1,6}\s+)/g, '$1');
-      // Remove doubled heading markers: `## ## ` → `## ` and `### ### ` → `### `
-      sanitized = sanitized.replace(/^(#{1,6})\s+\1\s+/gm, '$1 ');
-      // Remove doubled heading markers where levels differ: `## ### ` → `## `
-      sanitized = sanitized.replace(/^(#{1,6})\s+(#{1,6})\s+/gm, '$1 ');
-      // Ensure headings always have a blank line before them (fixes missing newlines from previous blocks)
-      sanitized = sanitized.replace(/([^\n])\n?(#{1,6}\s+[A-Za-z0-9])/g, '$1\n\n$2');
-
-      editor.commands.setContent(sanitized);
-      // Sync the hidden input with the parsed-then-re-serialised markdown
+    if (editor) {
       const md = (editor.storage as any)?.markdown?.getMarkdown?.();
       if (md) setMarkdownOutput(md);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editor]); // run once when the editor instance is first available
+  }, [editor]);
+
+  if (!mounted) {
+    return null; // Avoid SSR issues with tiptap-markdown DOMParser
+  }
 
   const handleImageUpload = () => {
     fileInputRef.current?.click();

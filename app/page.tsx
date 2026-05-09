@@ -40,12 +40,48 @@ export const revalidate = 60;
 
 const FEATURED_COUNT = 4;
 
+const faqs = [
+  {
+    question: "What is MRR Story?",
+    answer: "MRR Story is a collection of case studies from successful indie hackers and solopreneurs sharing exactly how they built their products and made their first dollars."
+  },
+  {
+    question: "How do founders get featured?",
+    answer: "If you've made your first dollar from a product you've built, simply drop your email in the form below or contact us directly. We review every submission."
+  },
+  {
+    question: "Are the revenue numbers verified?",
+    answer: "Yes, we work closely with founders to verify their revenue claims through Stripe dashboards or other payment processor screenshots before publishing their stories."
+  },
+  {
+    question: "Is the newsletter really free?",
+    answer: "Absolutely. We send out a curated digest of 4-7 founder stories, case studies, and growth hacks every Tuesday, completely free."
+  }
+];
+
 export default async function Feed() {
   const allStories = await db.select().from(storiesTable).orderBy(desc(storiesTable.createdAt));
   const featured = allStories.slice(0, FEATURED_COUNT);
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       {/* ── Header ── */}
       {/* ── Header ── */}
       <Navbar />
@@ -140,6 +176,19 @@ export default async function Feed() {
           </div>
         )}
       </main>
+
+      {/* ── FAQ Section ── */}
+      <section className={styles.faqSection}>
+        <h2 className={styles.faqTitle}>Frequently Asked Questions</h2>
+        <div className={styles.faqGrid}>
+          {faqs.map((faq, index) => (
+            <div key={index} className={styles.faqItem}>
+              <h3 className={styles.faqQuestion}>{faq.question}</h3>
+              <p className={styles.faqAnswer}>{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* ── Bottom CTA ── */}
       <section className={styles.ctaSection}>

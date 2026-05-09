@@ -32,14 +32,17 @@ function extractHeaders(markdown: string) {
   const regex = /^(?:##|###)\s+(.+?)\s*$/gm;
   let match;
   while ((match = regex.exec(markdown)) !== null) {
-    const text = match[1];
-    let id = text.toLowerCase().trim()
+    let rawText = match[1];
+    let id = rawText.toLowerCase().trim()
       .replace(/[^\w\s-]/g, '')
       .replace(/[\s_-]+/g, '-')
       .replace(/^-+|-+$/g, '');
     
     if (!id) id = `header-${headers.length}`;
-    headers.push({ id, text });
+    
+    // Strip markdown formatting characters (*, _, `) for display in Table of Contents
+    const cleanText = rawText.replace(/(\*\*|__|\*|_|`)/g, '').trim();
+    headers.push({ id, text: cleanText });
   }
   return headers;
 }
@@ -88,26 +91,52 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   const headers = extractHeaders(sanitizeMarkdown(blog.content));
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": blog.title,
-    "image": blog.coverImageUrl ? [blog.coverImageUrl] : [],
-    "datePublished": blog.createdAt ? new Date(blog.createdAt).toISOString() : undefined,
-    "dateModified": blog.updatedAt ? new Date(blog.updatedAt).toISOString() : undefined,
-    "author": {
-      "@type": "Person",
-      "name": "MRR Story"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "MRR Story",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.mrrstory.com/favicon.ico"
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": blog.title,
+      "image": blog.coverImageUrl ? [blog.coverImageUrl] : [],
+      "datePublished": blog.createdAt ? new Date(blog.createdAt).toISOString() : undefined,
+      "dateModified": blog.updatedAt ? new Date(blog.updatedAt).toISOString() : undefined,
+      "author": {
+        "@type": "Person",
+        "name": "MRR Story"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "MRR Story",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.mrrstory.com/favicon.ico"
+        }
       }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.mrrstory.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Blog",
+          "item": "https://www.mrrstory.com/blog"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": blog.title,
+          "item": `https://www.mrrstory.com/blog/${slug}`
+        }
+      ]
     }
-  };
+  ];
 
   return (
     <>
@@ -143,6 +172,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 h2: ({node, ...props}) => <h2 className={styles.markdownHeader} {...props} />,
                 h3: ({node, ...props}) => <h3 className={styles.markdownHeader} {...props} />,
                 p: ({node, ...props}) => <p className={styles.markdownParagraph} {...props} />,
+                blockquote: ({node, ...props}) => <blockquote className={styles.markdownBlockquote} {...props} />,
+                ul: ({node, ...props}) => <ul className={styles.markdownList} {...props} />,
+                ol: ({node, ...props}) => <ol className={styles.markdownOrderedList} {...props} />,
+                li: ({node, ...props}) => <li className={styles.markdownListItem} {...props} />,
                 img: ({node, ...props}) => <ImageZoom src={props.src || ''} alt={props.alt || ''} className={styles.markdownImage} style={{maxWidth: '100%', height: 'auto', borderRadius: '12px', border: '1px solid var(--border-color)', margin: '16px 0', display: 'block'}} {...props as any} />
               }}
             >
