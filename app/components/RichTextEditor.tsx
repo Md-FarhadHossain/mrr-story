@@ -102,8 +102,10 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
   sanitized = sanitized.replace(/^(#{1,6})\s+\1\s+/gm, '$1 ');
   // Remove doubled heading markers where levels differ: `## ### ` → `## `
   sanitized = sanitized.replace(/^(#{1,6})\s+(#{1,6})\s+/gm, '$1 ');
+  // Remove bold/italic markers surrounding a heading that might have been accidentally added
+  sanitized = sanitized.replace(/^\s*([*_]{1,3})(#{1,6}\s+[\s\S]*?)\1/gm, '$2');
   // Ensure headings always have a blank line before them (fixes missing newlines from previous blocks)
-  sanitized = sanitized.replace(/([^\n])\n?(#{1,6}\s+[A-Za-z0-9])/g, '$1\n\n$2');
+  sanitized = sanitized.replace(/^(#{1,6}\s+[A-Za-z0-9])/gm, '\n\n$1').replace(/\n{3,}/g, '\n\n').trimStart();
 
   const editor = useEditor({
     extensions: [

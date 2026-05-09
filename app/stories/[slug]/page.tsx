@@ -35,9 +35,10 @@ function sanitizeMarkdown(md: string): string {
   out = out.replace(/(#{1,6}\s+)(#{1,6}\s*)/g, '$1');
   // 4. Remove hashes from the start of HTML headings: `<h3>### Hello</h3>` -> `<h3>Hello</h3>`
   out = out.replace(/(<h[1-6][^>]*>)\s*\\?(#{1,6})\s*/g, '$1');
-  // 5. Ensure headings always have a blank line before them (fixes Tiptap missing newlines after images)
-  // Matches any non-newline character, an optional single newline, then the heading marker
-  out = out.replace(/([^\n])\n?(#{1,6}\s+[A-Za-z0-9])/g, '$1\n\n$2');
+  // 5. Remove bold/italic markers surrounding a heading that might have been accidentally added
+  out = out.replace(/^\s*([*_]{1,3})(#{1,6}\s+[\s\S]*?)\1/gm, '$2');
+  // 6. Ensure headings always have a blank line before them (fixes Tiptap missing newlines after images)
+  out = out.replace(/^(#{1,6}\s+[A-Za-z0-9])/gm, '\n\n$1').replace(/\n{3,}/g, '\n\n').trimStart();
   return out;
 }
 
