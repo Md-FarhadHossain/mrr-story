@@ -8,6 +8,7 @@ import RichTextEditor from '../../../../components/RichTextEditor';
 import ImageUploader from '../../../../components/ImageUploader';
 import styles from '../../../Dashboard.module.css';
 import { countries } from '@/lib/countries';
+import { toast } from 'react-hot-toast';
 
 /** Strip common markdown syntax from pasted text so plain inputs show clean text. */
 function handlePlainTextPaste(e: React.ClipboardEvent<HTMLInputElement>) {
@@ -49,10 +50,9 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
     startTransition(async () => {
       try {
         await updateStory(story.id, formData);
-        alert('Story updated successfully!');
-        router.push('/dashboard/stories');
+        toast.success('Story updated successfully!');
       } catch (error: any) {
-        alert(error.message || 'Failed to update story');
+        toast.error(error.message || 'Failed to update story');
       }
     });
   };

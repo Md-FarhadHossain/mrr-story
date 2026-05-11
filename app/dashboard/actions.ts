@@ -33,7 +33,7 @@ export async function saveStory(formData: FormData) {
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '');
 
-  await db.insert(storiesTable).values({
+  const [newStory] = await db.insert(storiesTable).values({
     slug,
     title,
     businessName,
@@ -48,11 +48,13 @@ export async function saveStory(formData: FormData) {
     twitterUrl: twitterUrl || null,
     location: location || null,
     content,
-  });
+  }).returning({ id: storiesTable.id });
 
   revalidatePath('/');
   revalidatePath('/dashboard');
   revalidatePath('/dashboard/stories');
+
+  return newStory.id;
 }
 
 export async function deleteStory(id: number) {

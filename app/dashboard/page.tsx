@@ -10,6 +10,7 @@ import { useSession } from '@/lib/auth-client';
 import SignOutButton from './SignOutButton';
 import { useRouter } from 'next/navigation';
 import { countries } from '@/lib/countries';
+import { toast } from 'react-hot-toast';
 
 /** Strip common markdown syntax from pasted text so plain inputs show clean text. */
 function handlePlainTextPaste(e: React.ClipboardEvent<HTMLInputElement>) {
@@ -59,11 +60,11 @@ export default function Dashboard() {
   const clientAction = async (formData: FormData) => {
     startTransition(async () => {
       try {
-        await saveStory(formData);
-        alert('Story saved successfully!');
-        formRef.current?.reset();
+        const newStoryId = await saveStory(formData);
+        toast.success('Story saved successfully!');
+        router.push(`/dashboard/stories/${newStoryId}/edit`);
       } catch (error: any) {
-        alert(error.message || 'Failed to save story');
+        toast.error(error.message || 'Failed to save story');
       }
     });
   };
