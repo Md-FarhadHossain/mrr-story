@@ -1,6 +1,13 @@
 'use client';
 
 import { useRef, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { updateStory } from '../../../actions';
+import { ThemeToggle } from '../../../../components/ThemeToggle';
+import RichTextEditor from '../../../../components/RichTextEditor';
+import ImageUploader from '../../../../components/ImageUploader';
+import styles from '../../../Dashboard.module.css';
+import { countries } from '@/lib/countries';
 
 /** Strip common markdown syntax from pasted text so plain inputs show clean text. */
 function handlePlainTextPaste(e: React.ClipboardEvent<HTMLInputElement>) {
@@ -28,13 +35,6 @@ function handlePlainTextPaste(e: React.ClipboardEvent<HTMLInputElement>) {
   input.dispatchEvent(new Event('input', { bubbles: true }));
   input.setSelectionRange(start + clean.length, start + clean.length);
 }
-import { useRouter } from 'next/navigation';
-import { updateStory } from '../../../actions';
-import { ThemeToggle } from '../../../../components/ThemeToggle';
-import RichTextEditor from '../../../../components/RichTextEditor';
-import ImageUploader from '../../../../components/ImageUploader';
-import styles from '../../../Dashboard.module.css';
-import { countries } from '@/lib/countries';
 
 interface EditStoryFormProps {
   story: any;
@@ -58,9 +58,13 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
   };
 
   return (
-    <form ref={formRef} action={clientAction}>
+    <form ref={formRef} action={clientAction} style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}>
+      {/* ── Topbar ── */}
       <header className={styles.topbar}>
-        <h1 className={styles.topbarTitle}>Edit Story</h1>
+        <div>
+          <p className={styles.topbarTitle}>Edit Story</p>
+          <p className={styles.topbarSub}>Editing: {story.title}</p>
+        </div>
         <div className={styles.actionArea}>
           <button type="submit" disabled={isPending}>
             {isPending ? 'Saving...' : 'Save Changes'}
@@ -69,74 +73,154 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
         </div>
       </header>
 
-      <div className={styles.editorContainer}>
-        <div className={styles.card}>
-          <div className={styles.formGroup}>
-            <label>Story Title</label>
+      {/* ── Split pane ── */}
+      <div className={styles.splitPane}>
+
+        {/* ── Left: Editor ── */}
+        <div className={styles.editorPane}>
+          {/* Story Title */}
+          <div className={styles.storyTitleWrap}>
+            <span className={styles.storyTitleLabel}>Story Title</span>
             <input
               type="text"
               name="title"
               required
               defaultValue={story.title}
               placeholder="e.g. My AI App Makes $100K/Month"
-              className={`${styles.input} ${styles.titleInput}`}
+              className={styles.titleInput}
               onPaste={handlePlainTextPaste}
+              autoFocus
             />
           </div>
 
-          <div className={styles.grid2}>
-            <div className={styles.formGroup}>
-              <label>Business Name</label>
-              <input type="text" name="businessName" defaultValue={story.businessName} required placeholder="LeadFlow" className={styles.input} onPaste={handlePlainTextPaste} />
+          {/* Rich Text Editor */}
+          <div className={styles.editorWrap}>
+            <span className={styles.editorLabel}>Story Content</span>
+            <RichTextEditor
+              name="content"
+              defaultValue={story.content}
+              placeholder="Who are you and what business did you start?..."
+            />
+          </div>
+        </div>
+
+        {/* ── Right: Properties panel ── */}
+        <aside className={styles.propertiesPanel}>
+          <div className={styles.propertiesHeader}>
+            <p className={styles.propertiesHeaderTitle}>Story Details</p>
+          </div>
+
+          <div className={styles.propertiesBody}>
+
+            {/* Business Name */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Business Name *</label>
+              <input
+                type="text"
+                name="businessName"
+                defaultValue={story.businessName}
+                required
+                placeholder="LeadFlow"
+                className={styles.input}
+                onPaste={handlePlainTextPaste}
+              />
             </div>
-            <div className={styles.formGroup}>
-              <label>Founder Name</label>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <input type="text" name="founderName" defaultValue={story.founderName} required placeholder="Adrian Berisha" className={styles.input} style={{ flex: 1 }} onPaste={handlePlainTextPaste} />
-                <select name="founderType" defaultValue={story.founderType || 'Founder'} className={styles.input} style={{ width: 'auto' }}>
+
+            {/* Founder */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Founder Name *</label>
+              <div className={styles.propRow}>
+                <input
+                  type="text"
+                  name="founderName"
+                  defaultValue={story.founderName}
+                  required
+                  placeholder="Adrian Berisha"
+                  className={styles.input}
+                  onPaste={handlePlainTextPaste}
+                />
+                <select name="founderType" defaultValue={story.founderType || 'Founder'} className={`${styles.input} ${styles.founderSelect}`}>
                   <option value="Founder">Founder</option>
                   <option value="Co-Founder">Co-Founder</option>
                 </select>
               </div>
             </div>
-          </div>
 
-          <div className={styles.grid2}>
-            <div className={styles.formGroup}>
-              <label>Revenue / Month</label>
-              <input type="text" name="revenue" defaultValue={story.revenue} required placeholder="$100K" className={styles.input} onPaste={handlePlainTextPaste} />
+            {/* Revenue */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Revenue / Month *</label>
+              <input
+                type="text"
+                name="revenue"
+                defaultValue={story.revenue}
+                required
+                placeholder="$100K"
+                className={styles.input}
+                onPaste={handlePlainTextPaste}
+              />
             </div>
-            <div className={styles.formGroup}>
-              <label>Profile Image (Optional)</label>
+
+            {/* Profile Image */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Profile Image</label>
               <ImageUploader name="profileImageUrl" defaultValue={story.profileImageUrl || ''} />
             </div>
-          </div>
 
-          <div className={styles.grid2}>
-            <div className={styles.formGroup}>
-              <label>Twitter / Social URL (Optional)</label>
-              <input type="url" name="twitterUrl" defaultValue={story.twitterUrl || ''} placeholder="https://x.com/username" className={styles.input} onPaste={handlePlainTextPaste} />
+            {/* Twitter */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Twitter / Social URL</label>
+              <input
+                type="url"
+                name="twitterUrl"
+                defaultValue={story.twitterUrl || ''}
+                placeholder="https://x.com/username"
+                className={styles.input}
+                onPaste={handlePlainTextPaste}
+              />
             </div>
-            <div className={styles.formGroup}>
-              <label>Product URL (Optional)</label>
-              <input type="url" name="productUrl" defaultValue={story.productUrl || ''} placeholder="https://yourbusiness.com" className={styles.input} onPaste={handlePlainTextPaste} />
-            </div>
-          </div>
 
-          <div className={styles.grid2}>
-            <div className={styles.formGroup}>
-              <label>Paying Customers (Optional)</label>
-              <input type="text" name="customers" defaultValue={story.customers || ''} placeholder="e.g. 40 paying customers" className={styles.input} onPaste={handlePlainTextPaste} />
+            {/* Product URL */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Product URL</label>
+              <input
+                type="url"
+                name="productUrl"
+                defaultValue={story.productUrl || ''}
+                placeholder="https://yourbusiness.com"
+                className={styles.input}
+                onPaste={handlePlainTextPaste}
+              />
             </div>
-            <div className={styles.formGroup}>
-              <label>Niche / Market (Optional)</label>
-              <input type="text" name="niche" defaultValue={story.niche || ''} placeholder="e.g. AI Marketing Automation for Reddit" className={styles.input} onPaste={handlePlainTextPaste} />
-            </div>
-          </div>
 
-          <div className={styles.grid2}>
-            <div className={styles.formGroup}>
-              <label>Location (Optional)</label>
+            {/* Paying Customers */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Paying Customers</label>
+              <input
+                type="text"
+                name="customers"
+                defaultValue={story.customers || ''}
+                placeholder="e.g. 40 paying customers"
+                className={styles.input}
+                onPaste={handlePlainTextPaste}
+              />
+            </div>
+
+            {/* Niche */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Niche / Market</label>
+              <input
+                type="text"
+                name="niche"
+                defaultValue={story.niche || ''}
+                placeholder="e.g. AI Marketing Automation for Reddit"
+                className={styles.input}
+                onPaste={handlePlainTextPaste}
+              />
+            </div>
+
+            {/* Location */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Location</label>
               <select name="location" defaultValue={story.location || ''} className={styles.input}>
                 <option value="">Select a location</option>
                 {countries.map((country) => (
@@ -146,20 +230,10 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
                 ))}
               </select>
             </div>
-            <div className={styles.formGroup} />
-          </div>
 
-          <div className={styles.formGroup}>
-            <label>Story Content</label>
-            <RichTextEditor
-              name="content"
-              defaultValue={story.content}
-              placeholder="Who are you and what business did you start?..."
-            />
           </div>
-        </div>
+        </aside>
       </div>
     </form>
   );
 }
-
