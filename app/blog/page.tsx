@@ -9,7 +9,7 @@ import styles from '../Story.module.css';
 import blogStyles from './blog.module.css';
 
 export const metadata: Metadata = {
-  title: "Blog - MRR Story",
+  title: "Founder Growth Stories & Insights — MRR Story Blog",
   description: "Read SEO-friendly articles, insights, and growth hacks from the MRR Story team.",
 };
 
