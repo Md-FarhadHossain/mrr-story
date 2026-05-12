@@ -846,7 +846,7 @@
   position: sticky;
   top: 100px;
   align-self: start;
-  height: max-content;
+  max-height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
 }
@@ -870,12 +870,21 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .tocList {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  overflow-y: auto;
+  min-height: 0;
+  /* hide the scrollbar — JS auto-scrolls to the active item */
+  scrollbar-width: none;
+}
+
+.tocList::-webkit-scrollbar {
+  display: none;
 }
 
 .tocItem {
