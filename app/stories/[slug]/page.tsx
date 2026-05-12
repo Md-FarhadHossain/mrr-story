@@ -72,8 +72,19 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     return { title: 'Story Not Found' };
   }
 
-  const cleanContent = sanitizeMarkdown(story.content).replace(/<[^>]*>?/gm, '').replace(/[#*_>\[\]]/g, '');
-  const description = cleanContent.length > 150 ? cleanContent.substring(0, 147) + '...' : cleanContent;
+  const cleanContent = sanitizeMarkdown(story.content)
+    // Remove markdown images: ![alt](url)
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+    // Remove markdown links: [text](url) -> keep text
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    // Remove raw HTML tags
+    .replace(/<[^>]*>?/gm, '')
+    // Remove remaining markdown syntax chars
+    .replace(/[#*_>`~\[\]]/g, '')
+    // Collapse extra whitespace
+    .replace(/\s+/g, ' ')
+    .trim();
+  const description = cleanContent.length > 155 ? cleanContent.substring(0, 152) + '...' : cleanContent;
 
   const imageUrl = story.heroImageUrl || story.profileImageUrl || undefined;
 
@@ -127,18 +138,35 @@ export default async function StoryPage({ params }: { params: { slug: string } }
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": story.title,
+      "description": story.content
+        ? sanitizeMarkdown(story.content)
+            .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+            .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+            .replace(/<[^>]*>?/gm, '')
+            .replace(/[#*_>`~\[\]]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .substring(0, 160)
+        : undefined,
       "image": story.heroImageUrl || story.profileImageUrl ? [story.heroImageUrl || story.profileImageUrl] : [],
       "datePublished": story.createdAt ? new Date(story.createdAt).toISOString() : undefined,
+      "dateModified": story.createdAt ? new Date(story.createdAt).toISOString() : undefined,
+      "url": `https://www.mrrstory.com/stories/${slug}`,
       "author": {
         "@type": "Person",
-        "name": story.founderName || "Founder"
+        "name": story.founderName || "Founder",
+        ...(story.twitterUrl ? { "sameAs": [story.twitterUrl] } : {}),
+        ...(story.productUrl ? { "url": story.productUrl } : {})
       },
       "publisher": {
         "@type": "Organization",
+        "@id": "https://www.mrrstory.com/#organization",
         "name": "MRR Story",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://www.mrrstory.com/favicon.ico"
+          "url": "https://www.mrrstory.com/og-image.png",
+          "width": 1200,
+          "height": 630
         }
       }
     },
@@ -325,7 +353,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
           {/* ── CTA Widget ── */}
           <div className={styles.ctaWidget}>
             <h3>MRR Story</h3>
-            <p>Read 4,000+ case studies of successful founders.</p>
+            <p>A growing library of case studies from successful indie hackers and solopreneurs.</p>
             <Link href="/" className={styles.ctaButton}>See more Case Studies</Link>
           </div>
         </aside>

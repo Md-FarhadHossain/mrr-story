@@ -7,6 +7,29 @@ import { ThemeToggle } from '../components/ThemeToggle';
 import Navbar from '../components/Navbar';
 import NewsletterForm from '../components/NewsletterForm';
 import Footer from '../components/Footer';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Indie Hacker Success Stories Database | MRR Story',
+  description:
+    'Browse our database of indie hacker and solopreneur success stories. Real case studies with exact revenue numbers, growth strategies, and first-dollar moments from bootstrapped founders.',
+  alternates: {
+    canonical: 'https://www.mrrstory.com/stories',
+  },
+  openGraph: {
+    title: 'Indie Hacker Success Stories Database | MRR Story',
+    description:
+      'Browse our database of indie hacker and solopreneur success stories. Real case studies with exact revenue numbers, growth strategies, and first-dollar moments.',
+    url: 'https://www.mrrstory.com/stories',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Indie Hacker Success Stories Database | MRR Story',
+    description:
+      'Browse our database of indie hacker and solopreneur success stories. Real case studies with exact revenue numbers and first-dollar moments.',
+  },
+};
 
 export const revalidate = 60;
 

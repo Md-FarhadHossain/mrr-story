@@ -69,8 +69,14 @@ export default function RootLayout({
                     "url": "https://www.mrrstory.com",
                     "logo": {
                       "@type": "ImageObject",
-                      "url": "https://www.mrrstory.com/favicon.ico"
-                    }
+                      "url": "https://www.mrrstory.com/og-image.png",
+                      "width": 1200,
+                      "height": 630
+                    },
+                    "sameAs": [
+                      "https://x.com/mrrstory",
+                      "https://twitter.com/mrrstory"
+                    ]
                   }
                 ]
               })
