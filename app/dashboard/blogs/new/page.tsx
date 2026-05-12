@@ -5,9 +5,11 @@ import styles from '../../Dashboard.module.css';
 import { saveBlog } from '../../blogActions';
 import { ThemeToggle } from '../../../components/ThemeToggle';
 import RichTextEditor from '../../../components/RichTextEditor';
+import ImageUploader from '../../../components/ImageUploader';
 import { useSession } from '@/lib/auth-client';
 import SignOutButton from '../../SignOutButton';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 
 const BLOG_CATEGORIES = [
   'Marketing', 'Growth', 'Bootstrapping', 'SaaS', 'Product',
@@ -23,12 +25,13 @@ function CharCounter({ value, limit }: { value: string; limit: number }) {
   const isClose = count > limit * 0.85;
   return (
     <span style={{
-      fontSize: '0.78rem',
-      fontWeight: 500,
+      fontSize: '0.72rem',
+      fontWeight: 600,
       color: isOver ? '#ef4444' : isClose ? '#f59e0b' : 'var(--text-secondary)',
       transition: 'color 0.2s',
+      letterSpacing: '0.04em',
     }}>
-      {count}/{limit} {isOver ? '⚠ Over limit' : ''}
+      {count}/{limit} {isOver ? '⚠' : ''}
     </span>
   );
 }
@@ -78,32 +81,33 @@ export default function NewBlog() {
   };
 
   if (isSessionPending) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>;
   }
 
   if (!session) return null;
 
   const clientAction = async (formData: FormData) => {
-    // Inject tags as comma-separated string
     formData.set('tags', selectedTags.join(','));
     startTransition(async () => {
       try {
         await saveBlog(formData);
-        alert('Blog saved successfully to database!');
+        toast.success('Blog published successfully!');
         router.push('/dashboard/blogs');
       } catch (error: any) {
-        alert(error.message || 'Failed to save blog');
+        toast.error(error.message || 'Failed to publish blog');
       }
     });
   };
 
   return (
-    <form ref={formRef} action={clientAction}>
+    <form ref={formRef} action={clientAction} style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}>
       <input type="hidden" name="tags" value={selectedTags.join(',')} />
+
+      {/* ── Topbar ── */}
       <header className={styles.topbar}>
         <div>
-          <h1 className={styles.topbarTitle}>New Blog Post</h1>
-          <p className="text-sm text-[var(--text-secondary)]">Share your insights</p>
+          <p className={styles.topbarTitle}>New Blog Post</p>
+          <p className={styles.topbarSub}>Share your insights with the world</p>
         </div>
         <div className={styles.actionArea}>
           <button type="submit" disabled={isPending}>
@@ -114,25 +118,14 @@ export default function NewBlog() {
         </div>
       </header>
 
-      <div className={styles.editorContainer}>
-        <div className={styles.card}>
+      {/* ── Split pane ── */}
+      <div className={styles.splitPane}>
 
-          {/* ── SEO Section Header ── */}
-          <div style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--border-color)' }}>
-            <h2 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '4px' }}>
-              🎯 SEO Settings
-            </h2>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              Fill in these fields carefully — they directly impact how Google ranks this post.
-            </p>
-          </div>
-
-          {/* ── Blog Title + Character Counter ── */}
-          <div className={styles.formGroup}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <label style={{ margin: 0 }}>Blog Title <span style={{ color: '#ef4444' }}>*</span></label>
-              <CharCounter value={title} limit={TITLE_LIMIT} />
-            </div>
+        {/* ── Left: Editor ── */}
+        <div className={styles.editorPane}>
+          {/* Blog Title */}
+          <div className={styles.storyTitleWrap}>
+            <span className={styles.storyTitleLabel}>Blog Title</span>
             <input
               type="text"
               name="title"
@@ -140,137 +133,122 @@ export default function NewBlog() {
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder="e.g. 10 Proven Ways to Increase Your SaaS MRR"
-              className={`${styles.input} ${styles.titleInput}`}
-            />
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-              This will be the &lt;h1&gt; on the page. Keep it under 60 characters for Google.
-            </p>
-          </div>
-
-          {/* ── URL Slug ── */}
-          <div className={styles.formGroup}>
-            <label>URL Slug <span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--text-secondary)' }}>(auto-generated if left empty)</span></label>
-            <input
-              type="text"
-              name="slug"
-              value={customSlug}
-              onChange={e => setCustomSlug(e.target.value)}
-              placeholder="e.g. increase-mrr-10-ways"
-              className={styles.input}
-            />
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-              Preview: <strong style={{ color: '#6366f1' }}>mrrstory.com/blog/{slugPreview || '...'}</strong>
-            </p>
-          </div>
-
-          {/* ── Focus Keyword ── */}
-          <div className={styles.formGroup}>
-            <label>Focus Keyword <span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--text-secondary)' }}>(Optional)</span></label>
-            <input
-              type="text"
-              name="focusKeyword"
-              placeholder="e.g. increase MRR, SaaS revenue growth"
-              className={styles.input}
-            />
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-              Keep this in mind as you write — use it naturally in your title, description, and content.
-            </p>
-          </div>
-
-          {/* ── SEO Description + Character Counter ── */}
-          <div className={styles.formGroup}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-              <label style={{ margin: 0 }}>SEO Description <span style={{ color: '#ef4444' }}>*</span></label>
-              <CharCounter value={description} limit={DESC_LIMIT} />
-            </div>
-            <textarea
-              name="description"
-              required
-              value={description}
-              onChange={e => setDescription(e.target.value)}
-              placeholder="Write a compelling hook under 160 characters containing your focus keyword..."
-              className={styles.input}
-              rows={3}
-              style={{ resize: 'vertical' }}
+              className={styles.titleInput}
+              autoFocus
             />
           </div>
 
-          {/* ── Categories / Tags ── */}
-          <div className={styles.formGroup}>
-            <label>Categories / Tags</label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '4px' }}>
-              {BLOG_CATEGORIES.map(tag => (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => toggleTag(tag)}
-                  style={{
-                    padding: '5px 14px',
-                    borderRadius: '20px',
-                    border: selectedTags.includes(tag) ? '2px solid #6366f1' : '1px solid var(--border-color)',
-                    background: selectedTags.includes(tag) ? 'rgba(99,102,241,0.12)' : 'transparent',
-                    color: selectedTags.includes(tag) ? '#6366f1' : 'var(--text-secondary)',
-                    fontWeight: selectedTags.includes(tag) ? 600 : 400,
-                    fontSize: '0.85rem',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s',
-                  }}
-                >
-                  {tag}
-                </button>
-              ))}
-            </div>
-            {selectedTags.length > 0 && (
-              <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '8px' }}>
-                Selected: {selectedTags.join(', ')}
-              </p>
-            )}
+          {/* Rich Text Editor */}
+          <div className={styles.editorWrap}>
+            <span className={styles.editorLabel}>Blog Content</span>
+            <RichTextEditor
+              name="content"
+              placeholder="Write your blog post here… Use H2/H3 for sections, and Code Block for code snippets."
+            />
+          </div>
+        </div>
+
+        {/* ── Right: Properties panel ── */}
+        <aside className={styles.propertiesPanel}>
+          <div className={styles.propertiesHeader}>
+            <p className={styles.propertiesHeaderTitle}>SEO &amp; Metadata</p>
           </div>
 
-          {/* ── Cover Image ── */}
-          <div className={styles.grid2}>
-            <div className={styles.formGroup}>
-              <label>Cover Image URL <span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--text-secondary)' }}>(Optional)</span></label>
+          <div className={styles.propertiesBody}>
+
+            {/* URL Slug */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>URL Slug <span style={{ fontWeight: 400, textTransform: 'none', fontSize: '0.7rem' }}>(auto if empty)</span></label>
               <input
-                type="url"
-                name="coverImageUrl"
-                placeholder="https://example.com/cover.jpg"
+                type="text"
+                name="slug"
+                value={customSlug}
+                onChange={e => setCustomSlug(e.target.value)}
+                placeholder="increase-mrr-10-ways"
+                className={styles.input}
+              />
+              {slugPreview && (
+                <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: '5px', wordBreak: 'break-all' }}>
+                  /blog/<strong style={{ color: '#6366f1' }}>{slugPreview}</strong>
+                </p>
+              )}
+            </div>
+
+            {/* Focus Keyword */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Focus Keyword <span style={{ fontWeight: 400, textTransform: 'none', fontSize: '0.7rem' }}>(optional)</span></label>
+              <input
+                type="text"
+                name="focusKeyword"
+                placeholder="e.g. SaaS revenue growth"
                 className={styles.input}
               />
             </div>
-            <div className={styles.formGroup}>
-              <label>Cover Image Alt Text <span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--text-secondary)' }}>(Optional)</span></label>
+
+            {/* SEO Description */}
+            <div className={styles.propGroup}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <label className={styles.propLabel} style={{ margin: 0 }}>SEO Description *</label>
+                <CharCounter value={description} limit={DESC_LIMIT} />
+              </div>
+              <textarea
+                name="description"
+                required
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                placeholder="A compelling hook under 160 chars with your focus keyword…"
+                className={styles.input}
+                rows={4}
+                style={{ resize: 'vertical' }}
+              />
+            </div>
+
+            {/* Categories / Tags */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Categories / Tags</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px' }}>
+                {BLOG_CATEGORIES.map(tag => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => toggleTag(tag)}
+                    style={{
+                      padding: '4px 11px',
+                      borderRadius: '20px',
+                      border: selectedTags.includes(tag) ? '2px solid #6366f1' : '1px solid var(--border-color)',
+                      background: selectedTags.includes(tag) ? 'rgba(99,102,241,0.12)' : 'transparent',
+                      color: selectedTags.includes(tag) ? '#6366f1' : 'var(--text-secondary)',
+                      fontWeight: selectedTags.includes(tag) ? 600 : 400,
+                      fontSize: '0.78rem',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s',
+                    }}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Cover Image */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Cover Image</label>
+              <ImageUploader name="coverImageUrl" defaultValue="" />
+            </div>
+
+            {/* Cover Image Alt */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Cover Image Alt</label>
               <input
                 type="text"
                 name="coverImageAlt"
-                placeholder="e.g. Chart showing MRR growth over 12 months"
+                placeholder="Describe the image for SEO"
                 className={styles.input}
               />
-              <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                Describe the image using your focus keyword for SEO.
-              </p>
             </div>
-          </div>
 
-          {/* ── Content Section Header ── */}
-          <div style={{ margin: '24px 0 16px', paddingTop: '16px', borderTop: '1px solid var(--border-color)' }}>
-            <h2 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '4px' }}>
-              ✍️ Blog Content
-            </h2>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              Use H2 and H3 for headings — never H1 (the blog title is already the H1). Use the Code Block button for code snippets.
-            </p>
           </div>
-
-          {/* ── Blog Content ── */}
-          <div className={styles.formGroup}>
-            <RichTextEditor
-              name="content"
-              placeholder="Write your blog post here... Use H2/H3 for sections, and Code Block for code snippets."
-            />
-          </div>
-
-        </div>
+        </aside>
       </div>
     </form>
   );
