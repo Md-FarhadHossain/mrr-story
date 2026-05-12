@@ -1430,8 +1430,6 @@
   border-color: rgba(34, 197, 94, 0.2);
 }
 
-}
-
 :global([data-theme='dark']) .aboutLinkProduct:hover {
   background: rgba(34, 197, 94, 0.15);
   border-color: rgba(34, 197, 94, 0.3);
