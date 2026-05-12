@@ -1430,8 +1430,392 @@
   border-color: rgba(34, 197, 94, 0.2);
 }
 
+}
+
 :global([data-theme='dark']) .aboutLinkProduct:hover {
   background: rgba(34, 197, 94, 0.15);
   border-color: rgba(34, 197, 94, 0.3);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
+
+/* ═══════════════════════════════════════════════════════
+   RELATED BLOGS + CASE STUDIES SECTIONS
+═══════════════════════════════════════════════════════ */
+
+.relatedSection {
+  background: var(--bg-color);
+  border-top: 1px solid var(--border-color);
+  padding: 72px 24px 80px;
+}
+
+.caseStudiesSection {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-color);
+  padding: 72px 24px 80px;
+}
+
+.relatedInner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.relatedHeader {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.relatedEyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #6366f1;
+  margin-bottom: 12px;
+}
+
+.relatedTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+
+.relatedSub {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+/* ── Related Blog Cards ── */
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 1024px) {
+  .relatedGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .relatedGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.relatedCardLink {
+  text-decoration: none;
+  display: block;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.relatedCard {
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.relatedCardLink:hover .relatedCard {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+  border-color: #6366f1;
+}
+
+.relatedCardImage {
+  height: 190px;
+  background-size: cover;
+  background-position: center;
+  background-color: linear-gradient(135deg, #3b35c3 0%, #6366f1 100%);
+  background-image: linear-gradient(135deg, #3b35c3 0%, #6366f1 100%);
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.relatedCardImageIcon {
+  font-size: 2.5rem;
+  opacity: 0.6;
+}
+
+.relatedCardTag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(99, 102, 241, 0.9);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.relatedCardBody {
+  padding: 20px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.relatedCardDate {
+  font-size: 0.75rem;
+  color: var(--text-tertiary, #94a3b8);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.relatedCardTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.35;
+  margin-bottom: 8px;
+}
+
+.relatedCardDesc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.relatedCardCta {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: #6366f1;
+  transition: color 0.2s;
+}
+
+.relatedCardLink:hover .relatedCardCta {
+  color: #4f46e5;
+}
+
+/* ── View All button ── */
+.relatedViewAll {
+  display: flex;
+  justify-content: center;
+}
+
+.relatedViewAllBtn {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #6366f1;
+  border: 2px solid #6366f1;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.relatedViewAllBtn:hover {
+  background: #6366f1;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.caseStudiesViewAllBtn {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  background: #3b35c3;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.caseStudiesViewAllBtn:hover {
+  background: #312ec2;
+  transform: translateY(-2px);
+}
+
+/* ── Case Study Cards ── */
+.caseStudyGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 1024px) {
+  .caseStudyGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .caseStudyGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.caseStudyCardLink {
+  text-decoration: none;
+  display: block;
+  border-radius: 16px;
+}
+
+.caseStudyCard {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.caseStudyCardLink:hover .caseStudyCard {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  border-color: #3b35c3;
+}
+
+.caseStudyCardLeft {
+  flex-shrink: 0;
+}
+
+.caseStudyAvatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+}
+
+.caseStudyAvatarFallback {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.caseStudyCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.caseStudyMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.caseStudyTag {
+  background: #eef2ff;
+  color: #3b35c3;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+:global([data-theme='dark']) .caseStudyTag {
+  background: #1e1b4b;
+  color: #a5b4fc;
+}
+
+.caseStudyNiche {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-tertiary, #94a3b8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.caseStudyTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.caseStudyStats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.caseStudyStat {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.caseStudyStatIcon {
+  font-size: 0.85rem;
+}
+
+.caseStudyStatDivider {
+  color: var(--border-color);
+  font-size: 1rem;
+}
+
+.caseStudyCta {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #3b35c3;
+  transition: color 0.2s;
+  margin-top: 2px;
+}
+
+:global([data-theme='dark']) .caseStudyCta {
+  color: #a5b4fc;
+}
+
+.caseStudyCardLink:hover .caseStudyCta {
+  color: #312ec2;
+}
+
+@media (max-width: 768px) {
+  .relatedSection,
+  .caseStudiesSection {
+    padding: 48px 20px 56px;
+  }
+  .relatedTitle {
+    font-size: 1.5rem;
+  }
+}
+
