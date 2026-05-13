@@ -547,7 +547,7 @@
 }
 
 /* ─────────────────────────────────────────
-   FAQ SECTION
+   FAQ SECTION (homepage – static, kept for legacy)
 ───────────────────────────────────────── */
 .faqSection {
   max-width: 800px;
@@ -588,6 +588,130 @@
   line-height: 1.6;
   font-size: 0.95rem;
 }
+
+/* ─────────────────────────────────────────
+   STORY-PAGE COLLAPSIBLE FAQ ACCORDION
+───────────────────────────────────────── */
+.storyFaqSection {
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-color);
+}
+
+.storyFaqInner {
+  max-width: 100%;
+}
+
+.storyFaqTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  line-height: 1.3;
+}
+
+.storyFaqList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.storyFaqItem {
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-card);
+  transition: background 0.2s;
+}
+
+.storyFaqItem:last-child {
+  border-bottom: none;
+}
+
+.storyFaqItemOpen {
+  background: var(--bg-secondary, #fafafa);
+}
+
+:global([data-theme='dark']) .storyFaqItemOpen {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.storyFaqQuestion {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 650;
+  font-family: inherit;
+  line-height: 1.45;
+  transition: color 0.15s;
+}
+
+.storyFaqQuestion:hover {
+  color: #6366f1;
+}
+
+.storyFaqItemOpen .storyFaqQuestion {
+  color: #6366f1;
+}
+
+:global([data-theme='dark']) .storyFaqQuestion:hover,
+:global([data-theme='dark']) .storyFaqItemOpen .storyFaqQuestion {
+  color: #a5b4fc;
+}
+
+.storyFaqChevron {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary);
+  transition: transform 0.3s ease, color 0.15s;
+}
+
+.storyFaqItemOpen .storyFaqChevron {
+  transform: rotate(180deg);
+  color: #6366f1;
+}
+
+:global([data-theme='dark']) .storyFaqItemOpen .storyFaqChevron {
+  color: #a5b4fc;
+}
+
+.storyFaqAnswer {
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.25s ease;
+}
+
+.storyFaqAnswerInner {
+  padding: 0 20px 20px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 640px) {
+  .storyFaqTitle {
+    font-size: 1.25rem;
+  }
+  .storyFaqQuestion {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+  }
+  .storyFaqAnswerInner {
+    padding: 0 16px 16px;
+  }
+}
+
 
 /* ─────────────────────────────────────────
    BOTTOM CTA SECTION

@@ -16,6 +16,7 @@ import Footer from '../../components/Footer';
 import { Metadata } from 'next';
 import { countries } from '@/lib/countries';
 import ImageZoom from '../../components/ImageZoom';
+import StoryFAQ from '../../components/StoryFAQ';
 
 export const revalidate = 60;
 
@@ -198,6 +199,27 @@ export default async function StoryPage({ params }: { params: { slug: string } }
     }
   ];
 
+  // FAQ JSON-LD — only added when FAQ items exist
+  const faqItems: { q: string; a: string }[] = (() => {
+    try { return story.faq ? JSON.parse(story.faq) : []; }
+    catch { return []; }
+  })();
+
+  if (faqItems.length > 0) {
+    jsonLd.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqItems.map(item => ({
+        "@type": "Question",
+        "name": item.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.a
+        }
+      }))
+    } as any);
+  }
+
   return (
     <>
       {/* ── JSON-LD Schema ── */}
@@ -249,6 +271,11 @@ export default async function StoryPage({ params }: { params: { slug: string } }
               {sanitizeMarkdown(story.content)}
             </ReactMarkdown>
           </div>
+
+          {/* FAQ accordion — only rendered when FAQ items exist */}
+          {faqItems.length > 0 && (
+            <StoryFAQ items={faqItems} />
+          )}
 
           {/* Disclaimer moved to /terms */}
         </article>

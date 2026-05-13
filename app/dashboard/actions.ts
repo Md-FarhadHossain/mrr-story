@@ -19,7 +19,9 @@ export async function saveStory(formData: FormData) {
   const profileImageUrl = formData.get('profileImageUrl') as string;
   const twitterUrl = formData.get('twitterUrl') as string;
   const location = formData.get('location') as string;
+  const tags = formData.get('tags') as string;
   const content = formData.get('content') as string;
+  const faq = formData.get('faq') as string;
 
   if (!title || !businessName || !founderName || !revenue || !content) {
     throw new Error('All required fields must be filled');
@@ -47,7 +49,9 @@ export async function saveStory(formData: FormData) {
     profileImageUrl: profileImageUrl || null,
     twitterUrl: twitterUrl || null,
     location: location || null,
+    tags: tags || null,
     content,
+    faq: faq || null,
   }).returning({ id: storiesTable.id });
 
   revalidatePath('/');
@@ -77,7 +81,9 @@ export async function updateStory(id: number, formData: FormData) {
   const profileImageUrl = formData.get('profileImageUrl') as string;
   const twitterUrl = formData.get('twitterUrl') as string;
   const location = formData.get('location') as string;
+  const tags = formData.get('tags') as string;
   const content = formData.get('content') as string;
+  const faq = formData.get('faq') as string;
 
   if (!title || !businessName || !founderName || !revenue || !content) {
     throw new Error('All required fields must be filled');
@@ -104,7 +110,9 @@ export async function updateStory(id: number, formData: FormData) {
     profileImageUrl: profileImageUrl || null,
     twitterUrl: twitterUrl || null,
     location: location || null,
+    tags: tags || null,
     content,
+    faq: faq || null,
   }).where(eq(storiesTable.id, id));
 
   revalidatePath('/');

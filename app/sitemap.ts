@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { db } from '../db';
 import { storiesTable, blogsTable } from '../db/schema';
+import GithubSlugger from 'github-slugger';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.mrrstory.com';
@@ -22,6 +23,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: blog.updatedAt || blog.createdAt || new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
+  }));
+
+  const slugger = new GithubSlugger();
+  const uniqueTags = new Set<string>();
+  stories.forEach(story => {
+    if (story.tags) {
+      story.tags.split(',').forEach(tag => {
+        slugger.reset();
+        uniqueTags.add(slugger.slug(tag.trim()));
+      });
+    }
+  });
+
+  const tagUrls = Array.from(uniqueTags).map(tag => ({
+    url: `${baseUrl}/stories/tag/${tag}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
   }));
 
   return [
@@ -75,5 +94,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     ...storyUrls,
     ...blogUrls,
+    ...tagUrls,
   ];
 }

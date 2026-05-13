@@ -153,7 +153,7 @@ export default async function Feed() {
                   <span className={styles.revenueBadge}>{story.revenue}/mo</span>
                 </div>
                 <div className={styles.caseCardBody}>
-                  <span className={styles.caseStudyTag}>founder story</span>
+                  <span className={styles.caseStudyTag}>{story.tags ? story.tags.split(',')[0].trim().toLowerCase() : 'founder story'}</span>
                   <h3 className={styles.caseCardTitle}>{story.title}</h3>
                   <p className={styles.caseCardBreaks}>
                     <strong>{story.founderName}</strong> shares:

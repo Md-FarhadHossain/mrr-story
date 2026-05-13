@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useTransition } from 'react';
+import { useRef, useTransition, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { updateStory } from '../../../actions';
 import { ThemeToggle } from '../../../../components/ThemeToggle';
@@ -45,6 +45,49 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+
+  // Define predefined themes for stories
+  const AVAILABLE_TAGS = [
+    { label: 'AI SaaS', color: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.1)' },
+    { label: 'Reddit Growth', color: '#ff4500', bg: 'rgba(255, 69, 0, 0.1)' },
+    { label: 'TikTok Marketing', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.1)' },
+    { label: 'No-Code', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
+    { label: 'Solo Dev', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' },
+    { label: 'Bootstrapped', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)' },
+    { label: 'B2B', color: '#06b6d4', bg: 'rgba(6, 182, 212, 0.1)' },
+    { label: 'B2C', color: '#84cc16', bg: 'rgba(132, 204, 22, 0.1)' },
+  ];
+
+  // Initialize selected tags from the story.tags string (comma separated)
+  const initialTags = story.tags ? story.tags.split(',').map((t: string) => t.trim()).filter(Boolean) : [];
+  const [selectedTags, setSelectedTags] = useState<string[]>(initialTags);
+
+  const toggleTag = (tagLabel: string) => {
+    setSelectedTags(prev => 
+      prev.includes(tagLabel)
+        ? prev.filter(t => t !== tagLabel)
+        : [...prev, tagLabel]
+    );
+  };
+
+  // FAQ state — pre-populate from story.faq
+  const initialFaq: { q: string; a: string }[] = (() => {
+    try { return story.faq ? JSON.parse(story.faq) : []; }
+    catch { return []; }
+  })();
+  const [faqItems, setFaqItems] = useState<{ q: string; a: string }[]>(initialFaq);
+
+  const addFaq = useCallback(() => {
+    setFaqItems(prev => [...prev, { q: '', a: '' }]);
+  }, []);
+
+  const removeFaq = useCallback((index: number) => {
+    setFaqItems(prev => prev.filter((_, i) => i !== index));
+  }, []);
+
+  const updateFaq = useCallback((index: number, field: 'q' | 'a', value: string) => {
+    setFaqItems(prev => prev.map((item, i) => i === index ? { ...item, [field]: value } : item));
+  }, []);
 
   const clientAction = async (formData: FormData) => {
     startTransition(async () => {
@@ -102,7 +145,83 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
               placeholder="Who are you and what business did you start?..."
             />
           </div>
+
+          {/* ── FAQ Editor ── */}
+          <div className={styles.faqEditorWrap}>
+            <div className={styles.faqEditorHeader}>
+              <div className={styles.faqEditorHeaderLeft}>
+                <div className={styles.faqEditorIcon}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <div className={styles.faqEditorTitleGroup}>
+                  <span className={styles.faqEditorTitle}>FAQ Section</span>
+                  <span className={styles.faqEditorHint}>Shown at the bottom of the story as collapsible Q&amp;A — great for SEO.</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                className={styles.faqAddBtn}
+                onClick={addFaq}
+                aria-label="Add FAQ item"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add FAQ
+              </button>
+            </div>
+
+            {faqItems.length === 0 && (
+              <div className={styles.faqEmptyState}>
+                <div className={styles.faqEmptyStateIcon}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <p className={styles.faqEmptyStateTitle}>No FAQ items yet</p>
+                <p className={styles.faqEmptyStateSub}>Click <strong>+ Add FAQ</strong> to add your first question and answer. These help readers and boost SEO.</p>
+              </div>
+            )}
+
+            <div className={styles.faqEditorList}>
+              {faqItems.map((item, i) => (
+                <div key={i} className={styles.faqEditorItem}>
+                  <div className={styles.faqEditorItemNum}>Q{i + 1}</div>
+                  <div className={styles.faqEditorFields}>
+                    <div className={styles.faqFieldGroup}>
+                      <label className={styles.faqEditorFieldLabel}>Question</label>
+                      <textarea
+                        className={styles.faqEditorInput}
+                        placeholder="e.g. How did you get your first customer?"
+                        value={item.q}
+                        onChange={e => updateFaq(i, 'q', e.target.value)}
+                        rows={2}
+                      />
+                    </div>
+                    <div className={styles.faqFieldGroup}>
+                      <label className={styles.faqEditorFieldLabel}>Answer</label>
+                      <textarea
+                        className={`${styles.faqEditorInput} ${styles.faqEditorAnswer}`}
+                        placeholder="Be specific and helpful — a detailed answer adds more SEO value."
+                        value={item.a}
+                        onChange={e => updateFaq(i, 'a', e.target.value)}
+                        rows={4}
+                      />
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.faqRemoveBtn}
+                    onClick={() => removeFaq(i)}
+                    aria-label="Remove FAQ item"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Serialize FAQ as JSON for form submission */}
+            <input type="hidden" name="faq" value={JSON.stringify(faqItems)} />
+          </div>
         </div>
+
 
         {/* ── Right: Properties panel ── */}
         <aside className={styles.propertiesPanel}>
@@ -229,6 +348,37 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
                   </option>
                 ))}
               </select>
+            </div>
+
+            {/* Tags (Clickable Chips) */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Story Tags / Themes</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '4px' }}>
+                {AVAILABLE_TAGS.map((tag) => {
+                  const isSelected = selectedTags.includes(tag.label);
+                  return (
+                    <button
+                      key={tag.label}
+                      type="button"
+                      onClick={() => toggleTag(tag.label)}
+                      style={{
+                        padding: '4px 10px',
+                        borderRadius: '20px',
+                        fontSize: '12px',
+                        fontWeight: isSelected ? '600' : '500',
+                        color: isSelected ? tag.color : 'var(--text-secondary)',
+                        backgroundColor: isSelected ? tag.bg : 'var(--bg-secondary)',
+                        border: `1px solid ${isSelected ? tag.color : 'var(--border-color)'}`,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {tag.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <input type="hidden" name="tags" value={selectedTags.join(',')} />
             </div>
 
           </div>

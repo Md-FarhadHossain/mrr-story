@@ -61,7 +61,9 @@ export const storiesTable = sqliteTable('stories', {
   profileImageUrl: text('profile_image_url'),
   twitterUrl: text('twitter_url'),
   location: text('location'),
+  tags: text('tags'),
   content: text('content').notNull(),
+  faq: text('faq'), // JSON array: [{q: string, a: string}]
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
 
