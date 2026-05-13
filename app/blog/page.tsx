@@ -94,15 +94,9 @@ export default async function BlogFeed() {
                           className={blogStyles.cardImage}
                           style={{ backgroundImage: `url(${img})` }}
                         >
-                          {blog.tags && (
-                            <span className={blogStyles.tag}>{blog.tags.split(',')[0].trim()}</span>
-                          )}
                         </div>
                       ) : (
                         <div className={blogStyles.cardImagePlaceholder}>
-                          {blog.tags && (
-                            <span className={blogStyles.tag}>{blog.tags.split(',')[0].trim()}</span>
-                          )}
                         </div>
                       );
                     })()}
