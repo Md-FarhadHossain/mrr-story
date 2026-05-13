@@ -28,18 +28,22 @@ function sanitizeMarkdown(md: string): string {
   return out;
 }
 
+import GithubSlugger from 'github-slugger';
+
 function extractHeaders(markdown: string) {
   const headers: { id: string; text: string }[] = [];
+  const slugger = new GithubSlugger();
   const regex = /^(?:##|###)\s+(.+?)\s*$/gm;
   let match;
   while ((match = regex.exec(markdown)) !== null) {
     let rawText = match[1];
-    let id = rawText.toLowerCase().trim()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_-]+/g, '-')
-      .replace(/^-+|-+$/g, '');
-    if (!id) id = `header-${headers.length}`;
+    
+    // Strip formatting before slugifying
     const cleanText = rawText.replace(/(\*\*|__|\\*|_|`)/g, '').trim();
+    
+    let id = slugger.slug(cleanText);
+    
+    if (!id) id = `header-${headers.length}`;
     headers.push({ id, text: cleanText });
   }
   return headers;

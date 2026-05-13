@@ -19,6 +19,8 @@ import ImageZoom from '../../components/ImageZoom';
 
 export const revalidate = 60;
 
+import GithubSlugger from 'github-slugger';
+
 /**
  * Fix content saved by tiptap-markdown / Tiptap HTML that has `###` either:
  * 1. Backslash-escaped at start of line: `\### text` → `### text`
@@ -44,20 +46,20 @@ function sanitizeMarkdown(md: string): string {
 
 function extractHeaders(markdown: string) {
   const headers: { id: string; text: string }[] = [];
+  const slugger = new GithubSlugger();
   // Match both ## and ### heading tags and trim excess whitespace
   const regex = /^(?:##|###)\s+(.+?)\s*$/gm;
   let match;
   while ((match = regex.exec(markdown)) !== null) {
     let rawText = match[1];
-    let id = rawText.toLowerCase().trim()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_-]+/g, '-')
-      .replace(/^-+|-+$/g, '');
+    
+    // Strip markdown formatting BEFORE generating the ID so it exactly matches the text node rehypeSlug sees
+    const cleanText = rawText.replace(/(\*\*|__|\*|_|`)/g, '').trim();
+    
+    let id = slugger.slug(cleanText);
     
     if (!id) id = `header-${headers.length}`;
     
-    // Strip markdown formatting characters (*, _, `) for display in Table of Contents
-    const cleanText = rawText.replace(/(\*\*|__|\*|_|`)/g, '').trim();
     headers.push({ id, text: cleanText });
   }
   return headers;

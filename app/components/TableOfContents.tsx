@@ -22,33 +22,37 @@ export default function TableOfContents({ title, headers }: TableOfContentsProps
   const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: '-10% 0px -70% 0px' }
-    );
-
-    headers.forEach((header) => {
-      const element = document.getElementById(header.id);
-      if (element) observer.observe(element);
-    });
-
-    // When no section is in view (e.g. user scrolled back to top),
-    // fall back to 'overview'
     const handleScroll = () => {
-      if (window.scrollY < 200) {
+      // If at the top of the page, Overview is active
+      if (window.scrollY < 100) {
         setActiveId(OVERVIEW_ID);
+        return;
       }
+
+      // The trigger line is 40% down the viewport
+      const triggerY = window.scrollY + window.innerHeight * 0.4;
+      
+      let currentActive = OVERVIEW_ID;
+
+      // Find the last header that has passed the trigger line
+      for (const header of headers) {
+        const element = document.getElementById(header.id);
+        if (element) {
+          const elementTop = element.getBoundingClientRect().top + window.scrollY;
+          if (elementTop <= triggerY) {
+            currentActive = header.id;
+          }
+        }
+      }
+
+      setActiveId(currentActive);
     };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
+    // Call once to set initial state if page is already scrolled on load
+    handleScroll();
 
     return () => {
-      observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
     };
   }, [headers]);
