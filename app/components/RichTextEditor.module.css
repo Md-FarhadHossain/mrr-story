@@ -91,6 +91,38 @@
   line-height: 1.7;
 }
 
+/* Inline code — pill/tag style */
+.editorContainer :global(.ProseMirror code) {
+  font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+  font-size: 0.88em;
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 5px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+/* Fenced code block */
+.editorContainer :global(.ProseMirror pre) {
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin: 24px 0;
+  overflow-x: auto;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.editorContainer :global(.ProseMirror pre code) {
+  background: transparent;
+  color: #e2e8f0;
+  border: none;
+  padding: 0;
+  font-size: 0.9rem;
+  white-space: pre;
+}
+
+
 .editorContainer :global(.ProseMirror > *:first-child) {
   margin-top: 0;
 }

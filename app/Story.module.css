@@ -1261,6 +1261,43 @@
   margin: 0;
 }
 
+/* ── Inline code tag styling ── */
+.contentBlock :global(code) {
+  font-family: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', monospace;
+  font-size: 0.88em;
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 5px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+:global([data-theme='dark']) .contentBlock :global(code) {
+  background: rgba(129, 140, 248, 0.12);
+  color: #a5b4fc;
+  border-color: rgba(129, 140, 248, 0.2);
+}
+
+/* code blocks (``` fenced) get a different full-block style */
+.contentBlock :global(pre) {
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin: 24px 0;
+  overflow-x: auto;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.contentBlock :global(pre code) {
+  background: transparent;
+  color: #e2e8f0;
+  border: none;
+  padding: 0;
+  font-size: 0.9rem;
+  white-space: pre;
+}
+
 :global([data-theme='dark']) .markdownBlockquote {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%);
   border-left-color: #818cf8;
