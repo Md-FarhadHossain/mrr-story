@@ -912,6 +912,19 @@
   opacity: 1;
 }
 
+.tocItem.active .circle {
+  border-color: #6366f1;
+}
+
+.tocItem.active .circle::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6366f1;
+  display: block;
+}
+
 .circle {
   width: 16px;
   height: 16px;

@@ -13,8 +13,11 @@ interface TableOfContentsProps {
   headers: Header[];
 }
 
+const OVERVIEW_ID = 'overview';
+
 export default function TableOfContents({ title, headers }: TableOfContentsProps) {
-  const [activeId, setActiveId] = useState<string>('');
+  // Default to 'overview' so the first item is always highlighted on load
+  const [activeId, setActiveId] = useState<string>(OVERVIEW_ID);
   const listRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
 
@@ -35,7 +38,19 @@ export default function TableOfContents({ title, headers }: TableOfContentsProps
       if (element) observer.observe(element);
     });
 
-    return () => observer.disconnect();
+    // When no section is in view (e.g. user scrolled back to top),
+    // fall back to 'overview'
+    const handleScroll = () => {
+      if (window.scrollY < 200) {
+        setActiveId(OVERVIEW_ID);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [headers]);
 
   // Auto-scroll the TOC list so the active item is always visible
@@ -51,10 +66,8 @@ export default function TableOfContents({ title, headers }: TableOfContentsProps
     const listHeight = list.clientHeight;
 
     if (itemTop < listScrollTop) {
-      // Item is above the visible area — scroll up
       list.scrollTo({ top: itemTop - 16, behavior: 'smooth' });
     } else if (itemBottom > listScrollTop + listHeight) {
-      // Item is below the visible area — scroll down
       list.scrollTo({ top: itemBottom - listHeight + 16, behavior: 'smooth' });
     }
   }, [activeId]);
@@ -64,10 +77,26 @@ export default function TableOfContents({ title, headers }: TableOfContentsProps
       <p className={styles.leftSidebarLabel}>In this story</p>
       <h2 className={styles.leftSidebarTitle}>{title}</h2>
       <div className={styles.tocList} ref={listRef}>
+        {/* ── Overview item — always first, active by default ── */}
+        <a
+          href="#"
+          ref={(el) => { itemRefs.current[OVERVIEW_ID] = el; }}
+          className={`${styles.tocItem} ${activeId === OVERVIEW_ID ? styles.active : ''} ${activeId !== OVERVIEW_ID ? styles.completed : ''}`}
+          onClick={(e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setActiveId(OVERVIEW_ID);
+          }}
+        >
+          <div className={styles.circle}></div>
+          <span>Overview</span>
+        </a>
+
         {headers.map((header, index) => {
           const isActive = activeId === header.id;
           const activeIndex = headers.findIndex((h) => h.id === activeId);
-          const isCompleted = activeIndex !== -1 && index < activeIndex;
+          // A header is "completed" only when a real section (not overview) is active
+          const isCompleted = activeId !== OVERVIEW_ID && activeIndex !== -1 && index < activeIndex;
 
           return (
             <a
