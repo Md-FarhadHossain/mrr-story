@@ -9,8 +9,31 @@ import styles from '../Story.module.css';
 import blogStyles from './blog.module.css';
 
 export const metadata: Metadata = {
-  title: "Founder Growth Stories & Insights — MRR Story Blog",
-  description: "Read SEO-friendly articles, insights, and growth hacks from the MRR Story team.",
+  title: "Indie Hacker Blog: Growth Hacks & Revenue Playbooks | MRR Story",
+  description: "Actionable growth hacks, SEO strategies, and marketing playbooks for indie hackers and bootstrapped SaaS founders. Learn how to scale your startup from zero to MRR.",
+  alternates: {
+    canonical: 'https://www.mrrstory.com/blog',
+  },
+  openGraph: {
+    title: "Indie Hacker Blog: Growth Hacks & Revenue Playbooks | MRR Story",
+    description: "Actionable growth hacks, SEO strategies, and marketing playbooks for indie hackers and bootstrapped SaaS founders. Learn how to scale your startup from zero to MRR.",
+    url: 'https://www.mrrstory.com/blog',
+    type: 'website',
+    images: [
+      {
+        url: 'https://www.mrrstory.com/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'MRR Story Blog - Growth Hacks & Playbooks',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Indie Hacker Blog: Growth Hacks & Revenue Playbooks | MRR Story",
+    description: "Actionable growth hacks, SEO strategies, and marketing playbooks for indie hackers and bootstrapped SaaS founders.",
+    images: ['https://www.mrrstory.com/og-image.png'],
+  },
 };
 
 export const revalidate = 60;

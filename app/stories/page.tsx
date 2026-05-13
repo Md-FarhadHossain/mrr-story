@@ -12,22 +12,31 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Indie Hacker Success Stories Database | MRR Story',
   description:
-    'Browse our database of indie hacker and solopreneur success stories. Real case studies with exact revenue numbers, growth strategies, and first-dollar moments from bootstrapped founders.',
+    'Browse our complete database of indie hacker and solopreneur success stories. Read real case studies with exact revenue numbers, growth strategies, and first-dollar moments from bootstrapped founders.',
   alternates: {
     canonical: 'https://www.mrrstory.com/stories',
   },
   openGraph: {
     title: 'Indie Hacker Success Stories Database | MRR Story',
     description:
-      'Browse our database of indie hacker and solopreneur success stories. Real case studies with exact revenue numbers, growth strategies, and first-dollar moments.',
+      'Browse our complete database of indie hacker and solopreneur success stories. Read real case studies with exact revenue numbers, growth strategies, and first-dollar moments.',
     url: 'https://www.mrrstory.com/stories',
     type: 'website',
+    images: [
+      {
+        url: 'https://www.mrrstory.com/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'MRR Story - Indie Hacker Success Stories Database',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Indie Hacker Success Stories Database | MRR Story',
     description:
-      'Browse our database of indie hacker and solopreneur success stories. Real case studies with exact revenue numbers and first-dollar moments.',
+      'Browse our complete database of indie hacker and solopreneur success stories. Real case studies with exact revenue numbers and first-dollar moments.',
+    images: ['https://www.mrrstory.com/og-image.png'],
   },
 };
 
