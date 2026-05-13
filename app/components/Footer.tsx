@@ -14,6 +14,7 @@ export default function Footer() {
           <Link href="/support">Support</Link>
           <Link href="/privacy">Privacy</Link>
           <Link href="/terms">Terms of Use</Link>
+          <Link href="/sitemap.xml">Sitemap</Link>
           <a href="https://x.com/mrrstory" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">𝕏</a>
         </nav>
         <p className={styles.footerCopy}>© {new Date().getFullYear()} MRR Story. All rights reserved.</p>
