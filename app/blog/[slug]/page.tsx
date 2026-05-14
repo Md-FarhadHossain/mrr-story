@@ -223,11 +223,157 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </article>
 
         <aside className={styles.sidebar}>
-          {/* ── CTA Widget ── */}
-          <div className={styles.ctaWidget}>
-            <h3>Enjoyed this post?</h3>
-            <p>Join our newsletter to get a curated digest of 4-7 founder stories, case studies, and growth hacks delivered to your inbox every Tuesday.</p>
-            <Link href="/newsletter" className={styles.ctaButton}>Subscribe</Link>
+          {/* ── Premium Newsletter CTA Widget ── */}
+          <div style={{
+            borderRadius: '20px',
+            overflow: 'hidden',
+            border: '1px solid var(--border-color)',
+            boxShadow: '0 8px 40px rgba(99,102,241,0.12)',
+          }}>
+            {/* Gradient header band */}
+            <div style={{
+              background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 60%, #a855f7 100%)',
+              padding: '28px 24px 20px',
+              textAlign: 'center',
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              {/* Decorative blobs */}
+              <div style={{
+                position: 'absolute', top: '-20px', right: '-20px',
+                width: '100px', height: '100px', borderRadius: '50%',
+                background: 'rgba(255,255,255,0.08)',
+              }} />
+              <div style={{
+                position: 'absolute', bottom: '-30px', left: '-15px',
+                width: '80px', height: '80px', borderRadius: '50%',
+                background: 'rgba(255,255,255,0.06)',
+              }} />
+
+              {/* Emoji with animated pulse ring */}
+              <div style={{ position: 'relative', display: 'inline-flex', marginBottom: '14px' }}>
+                <div style={{
+                  position: 'absolute', inset: '-6px',
+                  borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.15)',
+                  animation: 'pulse 2s ease-in-out infinite',
+                }} />
+                <div style={{
+                  width: '52px', height: '52px', borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.2)',
+                  backdropFilter: 'blur(8px)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1.5rem',
+                }}>
+                  📬
+                </div>
+              </div>
+
+              <h3 style={{
+                color: '#fff', fontSize: '1.15rem', fontWeight: 800,
+                margin: '0 0 8px', lineHeight: 1.3,
+                position: 'relative', zIndex: 1,
+              }}>
+                Get Weekly Founder Insights
+              </h3>
+              <p style={{
+                color: 'rgba(255,255,255,0.8)', fontSize: '0.82rem',
+                margin: 0, lineHeight: 1.6,
+                position: 'relative', zIndex: 1,
+              }}>
+                4–7 real stories, growth tactics &amp; revenue breakdowns — every Tuesday.
+              </p>
+            </div>
+
+            {/* Body */}
+            <div style={{
+              background: 'var(--bg-card)',
+              padding: '20px 24px 24px',
+            }}>
+              {/* Avatar stack + social proof */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '10px',
+                marginBottom: '18px',
+                padding: '12px 14px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, rgba(79,70,229,0.06) 0%, rgba(168,85,247,0.04) 100%)',
+                border: '1px solid rgba(99,102,241,0.12)',
+              }}>
+                {/* Mini avatar stack */}
+                <div style={{ display: 'flex', flexShrink: 0 }}>
+                  {['4f46e5','7c3aed','a855f7'].map((c, idx) => (
+                    <div key={idx} style={{
+                      width: '26px', height: '26px', borderRadius: '50%',
+                      background: `#${c}`,
+                      border: '2px solid var(--bg-card)',
+                      marginLeft: idx === 0 ? 0 : '-8px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '0.6rem', color: '#fff', fontWeight: 700,
+                    }}>
+                      {['F','S','B'][idx]}
+                    </div>
+                  ))}
+                </div>
+                <p style={{
+                  fontSize: '0.75rem', color: 'var(--text-secondary)',
+                  margin: 0, lineHeight: 1.4,
+                }}>
+                  <strong style={{ color: 'var(--text-primary)' }}>2,400+ founders</strong> already reading
+                </p>
+              </div>
+
+              {/* Trust bullets */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
+                {[
+                  'Real revenue numbers & strategies',
+                  'Zero fluff, 100% actionable',
+                  'Unsubscribe any time, no spam',
+                ].map((point, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{
+                      width: '18px', height: '18px', borderRadius: '50%', flexShrink: 0,
+                      background: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </div>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
+                      {point}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA Button */}
+              <Link
+                href="/newsletter"
+                style={{
+                  display: 'block',
+                  background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: '0.92rem',
+                  padding: '13px 20px',
+                  borderRadius: '10px',
+                  textDecoration: 'none',
+                  textAlign: 'center',
+                  letterSpacing: '0.2px',
+                  boxShadow: '0 4px 16px rgba(79,70,229,0.4)',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                }}
+              >
+                🚀 Join the Newsletter — Free
+              </Link>
+
+              <p style={{
+                textAlign: 'center', fontSize: '0.7rem',
+                color: 'var(--text-secondary)', marginTop: '10px', opacity: 0.7,
+              }}>
+                Trusted by indie hackers &amp; bootstrappers worldwide
+              </p>
+            </div>
           </div>
         </aside>
       </main>
