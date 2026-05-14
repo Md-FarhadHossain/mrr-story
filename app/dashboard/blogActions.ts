@@ -20,9 +20,11 @@ export async function saveBlog(formData: FormData) {
   const coverImageUrl = formData.get('coverImageUrl') as string;
   const coverImageAlt = formData.get('coverImageAlt') as string;
   const focusKeyword = formData.get('focusKeyword') as string;
+  const metaKeywords = formData.get('metaKeywords') as string;
   const tags = formData.get('tags') as string;
   const content = formData.get('content') as string;
   const customSlug = formData.get('slug') as string;
+  const faq = formData.get('faq') as string;
 
   if (!title || !description || !content) {
     throw new Error('Title, description, and content are required');
@@ -38,8 +40,10 @@ export async function saveBlog(formData: FormData) {
     coverImageUrl: coverImageUrl || null,
     coverImageAlt: coverImageAlt || null,
     focusKeyword: focusKeyword || null,
+    metaKeywords: metaKeywords || null,
     tags: tags || null,
     content,
+    faq: faq || null,
   });
 
   revalidatePath('/');
@@ -60,9 +64,11 @@ export async function updateBlog(id: number, formData: FormData) {
   const coverImageUrl = formData.get('coverImageUrl') as string;
   const coverImageAlt = formData.get('coverImageAlt') as string;
   const focusKeyword = formData.get('focusKeyword') as string;
+  const metaKeywords = formData.get('metaKeywords') as string;
   const tags = formData.get('tags') as string;
   const content = formData.get('content') as string;
   const customSlug = formData.get('slug') as string;
+  const faq = formData.get('faq') as string;
 
   if (!title || !description || !content) {
     throw new Error('Title, description, and content are required');
@@ -77,8 +83,10 @@ export async function updateBlog(id: number, formData: FormData) {
     coverImageUrl: coverImageUrl || null,
     coverImageAlt: coverImageAlt || null,
     focusKeyword: focusKeyword || null,
+    metaKeywords: metaKeywords || null,
     tags: tags || null,
     content,
+    faq: faq || null,
   }).where(eq(blogsTable.id, id));
 
   revalidatePath('/');

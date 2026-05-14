@@ -75,6 +75,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: blog.title,
     description: blog.description,
+    keywords: blog.metaKeywords ? blog.metaKeywords.split(',').map((k: string) => k.trim()).filter(Boolean) : undefined,
     alternates: { canonical: `https://www.mrrstory.com/blog/${slug}` },
     openGraph: {
       title: blog.title,

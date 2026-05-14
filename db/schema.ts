@@ -75,8 +75,10 @@ export const blogsTable = sqliteTable('blogs', {
   coverImageUrl: text('cover_image_url'),
   coverImageAlt: text('cover_image_alt'),
   focusKeyword: text('focus_keyword'),
+  metaKeywords: text('meta_keywords'), // comma-separated meta keywords for <meta name="keywords">
   tags: text('tags'), // comma-separated e.g. "Marketing,Growth,Bootstrapping"
   content: text('content').notNull(),
+  faq: text('faq'), // JSON array: [{q: string, a: string}]
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
