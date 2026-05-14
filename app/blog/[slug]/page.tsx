@@ -217,10 +217,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               {sanitizeMarkdown(blog.content)}
             </ReactMarkdown>
           </div>
-        </article>
 
-        {/* ── FAQ Section ── */}
-        {faqItems.length > 0 && <StoryFAQ items={faqItems} />}
+          {/* ── FAQ Section ── */}
+          {faqItems.length > 0 && <StoryFAQ items={faqItems} />}
+        </article>
 
         <aside className={styles.sidebar}>
           {/* ── CTA Widget ── */}
