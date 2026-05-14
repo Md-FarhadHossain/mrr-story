@@ -13,6 +13,7 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { Metadata } from 'next';
 import ImageZoom from '../../components/ImageZoom';
+import StoryFAQ from '../../components/StoryFAQ';
 
 export const revalidate = 60;
 
@@ -132,7 +133,13 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     .orderBy(desc(storiesTable.createdAt))
     .limit(3);
 
-  const jsonLd = [
+  // Parse FAQ items
+  const faqItems: { q: string; a: string }[] = (() => {
+    try { return blog.faq ? JSON.parse(blog.faq) : []; }
+    catch { return []; }
+  })();
+
+  const jsonLd: object[] = [
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
@@ -157,6 +164,19 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       ],
     },
   ];
+
+  // Add FAQPage schema if there are FAQ items
+  if (faqItems.length > 0) {
+    jsonLd.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqItems.map(item => ({
+        "@type": "Question",
+        "name": item.q,
+        "acceptedAnswer": { "@type": "Answer", "text": item.a },
+      })),
+    });
+  }
 
   return (
     <>
@@ -198,6 +218,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             </ReactMarkdown>
           </div>
         </article>
+
+        {/* ── FAQ Section ── */}
+        {faqItems.length > 0 && <StoryFAQ items={faqItems} />}
 
         <aside className={styles.sidebar}>
           {/* ── CTA Widget ── */}
