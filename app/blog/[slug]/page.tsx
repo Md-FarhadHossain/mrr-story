@@ -402,7 +402,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                         style={img ? { backgroundImage: `url(${img})` } : {}}
                       >
                         {!img && <span className={styles.relatedCardImageIcon}>📝</span>}
-                        {firstTag && <span className={styles.relatedCardTag}>{firstTag}</span>}
                       </div>
                       <div className={styles.relatedCardBody}>
                         <p className={styles.relatedCardDate}>{formatDate(b.createdAt)}</p>

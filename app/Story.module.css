@@ -1705,10 +1705,10 @@
 }
 
 .relatedCardImage {
-  height: 190px;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   background-size: cover;
   background-position: center;
-  background-color: linear-gradient(135deg, #3b35c3 0%, #6366f1 100%);
   background-image: linear-gradient(135deg, #3b35c3 0%, #6366f1 100%);
   position: relative;
   flex-shrink: 0;
