@@ -116,11 +116,6 @@ export const countries = [
   },
   {
     "name": "Benin",
-    "flag": "🇧🇯",
-    "code": "BJ"
-  },
-  {
-    "name": "Benin",
     "flag": "🇩🇾",
     "code": "DY"
   },
@@ -173,11 +168,6 @@ export const countries = [
     "name": "Bulgaria",
     "flag": "🇧🇬",
     "code": "BG"
-  },
-  {
-    "name": "Burkina Faso",
-    "flag": "🇧🇫",
-    "code": "BF"
   },
   {
     "name": "Burkina Faso",
@@ -271,11 +261,6 @@ export const countries = [
   },
   {
     "name": "Congo - Kinshasa",
-    "flag": "🇨🇩",
-    "code": "CD"
-  },
-  {
-    "name": "Congo - Kinshasa",
     "flag": "🇿🇷",
     "code": "ZR"
   },
@@ -303,11 +288,6 @@ export const countries = [
     "name": "Cuba",
     "flag": "🇨🇺",
     "code": "CU"
-  },
-  {
-    "name": "Curaçao",
-    "flag": "🇦🇳",
-    "code": "AN"
   },
   {
     "name": "Curaçao",
@@ -421,11 +401,6 @@ export const countries = [
   },
   {
     "name": "France",
-    "flag": "🇫🇷",
-    "code": "FR"
-  },
-  {
-    "name": "France",
     "flag": "🇫🇽",
     "code": "FX"
   },
@@ -458,11 +433,6 @@ export const countries = [
     "name": "Georgia",
     "flag": "🇬🇪",
     "code": "GE"
-  },
-  {
-    "name": "Germany",
-    "flag": "🇩🇩",
-    "code": "DD"
   },
   {
     "name": "Germany",
@@ -966,11 +936,6 @@ export const countries = [
   },
   {
     "name": "Russia",
-    "flag": "🇷🇺",
-    "code": "RU"
-  },
-  {
-    "name": "Russia",
     "flag": "🇸🇺",
     "code": "SU"
   },
@@ -1003,16 +968,6 @@ export const countries = [
     "name": "Senegal",
     "flag": "🇸🇳",
     "code": "SN"
-  },
-  {
-    "name": "Serbia",
-    "flag": "🇨🇸",
-    "code": "CS"
-  },
-  {
-    "name": "Serbia",
-    "flag": "🇷🇸",
-    "code": "RS"
   },
   {
     "name": "Serbia",
@@ -1151,11 +1106,6 @@ export const countries = [
   },
   {
     "name": "Timor-Leste",
-    "flag": "🇹🇱",
-    "code": "TL"
-  },
-  {
-    "name": "Timor-Leste",
     "flag": "🇹🇵",
     "code": "TP"
   },
@@ -1226,11 +1176,6 @@ export const countries = [
   },
   {
     "name": "United Kingdom",
-    "flag": "🇬🇧",
-    "code": "GB"
-  },
-  {
-    "name": "United Kingdom",
     "flag": "🇺🇰",
     "code": "UK"
   },
@@ -1261,11 +1206,6 @@ export const countries = [
   },
   {
     "name": "Vanuatu",
-    "flag": "🇳🇭",
-    "code": "NH"
-  },
-  {
-    "name": "Vanuatu",
     "flag": "🇻🇺",
     "code": "VU"
   },
@@ -1281,11 +1221,6 @@ export const countries = [
   },
   {
     "name": "Vietnam",
-    "flag": "🇻🇩",
-    "code": "VD"
-  },
-  {
-    "name": "Vietnam",
     "flag": "🇻🇳",
     "code": "VN"
   },
@@ -1296,11 +1231,6 @@ export const countries = [
   },
   {
     "name": "Yemen",
-    "flag": "🇾🇩",
-    "code": "YD"
-  },
-  {
-    "name": "Yemen",
     "flag": "🇾🇪",
     "code": "YE"
   },
@@ -1308,11 +1238,6 @@ export const countries = [
     "name": "Zambia",
     "flag": "🇿🇲",
     "code": "ZM"
-  },
-  {
-    "name": "Zimbabwe",
-    "flag": "🇷🇭",
-    "code": "RH"
   },
   {
     "name": "Zimbabwe",
