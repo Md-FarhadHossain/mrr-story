@@ -64,6 +64,8 @@ export const storiesTable = sqliteTable('stories', {
   tags: text('tags'),
   content: text('content').notNull(),
   faq: text('faq'), // JSON array: [{q: string, a: string}]
+  startedYear: text('started_year'), // e.g. "2022" or "2019"
+  founderAge: text('founder_age'),   // e.g. "24"
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
 

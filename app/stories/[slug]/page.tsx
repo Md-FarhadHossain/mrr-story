@@ -342,6 +342,20 @@ export default async function StoryPage({ params }: { params: { slug: string } }
                 <span className={styles.aboutStatValue}>1</span>
               </div>
 
+              {story.startedYear && (
+                <div className={styles.aboutStatBox}>
+                  <span className={styles.aboutStatLabel}>Started</span>
+                  <span className={styles.aboutStatValue}>{story.startedYear}</span>
+                </div>
+              )}
+
+              {story.founderAge && (
+                <div className={styles.aboutStatBox}>
+                  <span className={styles.aboutStatLabel}>Age</span>
+                  <span className={styles.aboutStatValue}>{story.founderAge} yrs</span>
+                </div>
+              )}
+
               {story.niche && (
                 <div className={`${styles.aboutStatBox} ${styles.aboutStatBoxFull}`}>
                   <span className={styles.aboutStatLabel}>Niche</span>

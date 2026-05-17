@@ -347,6 +347,37 @@ export default function Dashboard() {
               </select>
             </div>
 
+            {/* Started Year + Founder Age — side by side */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Started Year & Founder Age</label>
+              <div className={styles.propRow}>
+                <div style={{ flex: 1 }}>
+                  <input
+                    type="number"
+                    name="startedYear"
+                    placeholder="e.g. 2022"
+                    min="2000"
+                    max="2099"
+                    className={styles.input}
+                    style={{ width: '100%' }}
+                  />
+                  <span style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px', display: 'block' }}>Year started</span>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <input
+                    type="number"
+                    name="founderAge"
+                    placeholder="e.g. 24"
+                    min="16"
+                    max="99"
+                    className={styles.input}
+                    style={{ width: '100%' }}
+                  />
+                  <span style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px', display: 'block' }}>Founder age</span>
+                </div>
+              </div>
+            </div>
+
             {/* Tags (Clickable Chips) */}
             <div className={styles.propGroup}>
               <label className={styles.propLabel}>Story Tags / Themes</label>

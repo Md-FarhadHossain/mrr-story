@@ -22,6 +22,8 @@ export async function saveStory(formData: FormData) {
   const tags = formData.get('tags') as string;
   const content = formData.get('content') as string;
   const faq = formData.get('faq') as string;
+  const startedYear = formData.get('startedYear') as string;
+  const founderAge = formData.get('founderAge') as string;
 
   if (!title || !businessName || !founderName || !revenue || !content) {
     throw new Error('All required fields must be filled');
@@ -52,6 +54,8 @@ export async function saveStory(formData: FormData) {
     tags: tags || null,
     content,
     faq: faq || null,
+    startedYear: startedYear || null,
+    founderAge: founderAge || null,
   }).returning({ id: storiesTable.id });
 
   revalidatePath('/');
@@ -84,6 +88,8 @@ export async function updateStory(id: number, formData: FormData) {
   const tags = formData.get('tags') as string;
   const content = formData.get('content') as string;
   const faq = formData.get('faq') as string;
+  const startedYear = formData.get('startedYear') as string;
+  const founderAge = formData.get('founderAge') as string;
 
   if (!title || !businessName || !founderName || !revenue || !content) {
     throw new Error('All required fields must be filled');
@@ -113,6 +119,8 @@ export async function updateStory(id: number, formData: FormData) {
     tags: tags || null,
     content,
     faq: faq || null,
+    startedYear: startedYear || null,
+    founderAge: founderAge || null,
   }).where(eq(storiesTable.id, id));
 
   revalidatePath('/');
