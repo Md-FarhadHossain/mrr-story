@@ -310,7 +310,8 @@ export default async function StoryPage({ params }: { params: { slug: string } }
                             src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
                             width={16}
                             height={12}
-                            alt={country.name}
+                            alt=""
+                            aria-hidden="true"
                             style={{ borderRadius: '2px', marginRight: '6px' }}
                           />
                         )}

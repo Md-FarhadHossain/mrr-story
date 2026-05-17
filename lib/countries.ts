@@ -401,8 +401,8 @@ export const countries = [
   },
   {
     "name": "France",
-    "flag": "🇫🇽",
-    "code": "FX"
+    "flag": "🇫🇷",
+    "code": "FR"
   },
   {
     "name": "French Guiana",
@@ -1177,7 +1177,7 @@ export const countries = [
   {
     "name": "United Kingdom",
     "flag": "🇺🇰",
-    "code": "UK"
+    "code": "GB"
   },
   {
     "name": "United Nations",
