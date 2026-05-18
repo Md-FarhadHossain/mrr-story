@@ -24,10 +24,7 @@ export default function ImageUploader({ name, defaultValue = '', className = '' 
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const uploadFile = async (file: File) => {
     setIsUploading(true);
     try {
       const authRes = await fetch('/api/imagekit-auth');
@@ -56,8 +53,28 @@ export default function ImageUploader({ name, defaultValue = '', className = '' 
     }
   };
 
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await uploadFile(file);
+  };
+
+  const handlePaste = async (e: React.ClipboardEvent<HTMLDivElement>) => {
+    const items = Array.from(e.clipboardData?.items ?? []);
+    const imageItem = items.find((item) => item.kind === 'file' && item.type.startsWith('image/'));
+    if (!imageItem) return;
+    e.preventDefault();
+    const file = imageItem.getAsFile();
+    if (file) await uploadFile(file);
+  };
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className={className}>
+    <div
+      style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+      className={className}
+      onPaste={handlePaste}
+      tabIndex={0}
+    >
       {imageUrl ? (
         <div style={{ position: 'relative', width: '96px', height: '96px', borderRadius: '50%', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}

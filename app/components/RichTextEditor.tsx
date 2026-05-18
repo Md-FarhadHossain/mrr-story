@@ -82,11 +82,33 @@ const MenuBar = ({ editor, onImageUpload, isUploading }: { editor: any; onImageU
   );
 };
 
+// Shared helper: upload a File to ImageKit and return the CDN URL
+async function uploadFileToImageKit(file: File): Promise<string> {
+  const authRes = await fetch('/api/imagekit-auth');
+  if (!authRes.ok) throw new Error('Failed to get ImageKit auth params');
+  const { token, signature, expire, publicKey } = await authRes.json();
+
+  const result = await upload({
+    file,
+    fileName: file.name,
+    publicKey,
+    token,
+    signature,
+    expire,
+    useUniqueFileName: true,
+  });
+
+  if (!result.url) throw new Error('ImageKit returned no URL');
+  return result.url;
+}
+
 export default function RichTextEditor({ name, defaultValue = '', placeholder = 'Start writing your story...' }: RichTextEditorProps) {
   const [mounted, setMounted] = useState(false);
   const [markdownOutput, setMarkdownOutput] = useState(defaultValue);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  // Keep a stable ref to the editor so the paste handler can read the latest instance
+  const editorRef = useRef<ReturnType<typeof useEditor>>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -106,6 +128,36 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
   sanitized = sanitized.replace(/^\s*([*_]{1,3})(#{1,6}\s+[\s\S]*?)\1/gm, '$2');
   // Ensure headings always have a blank line before them (fixes missing newlines from previous blocks)
   sanitized = sanitized.replace(/^(#{1,6}\s+[A-Za-z0-9])/gm, '\n\n$1').replace(/\n{3,}/g, '\n\n').trimStart();
+
+  // Intercept paste events: if the clipboard contains image files, upload them
+  // to ImageKit and insert the CDN URL — skipping the base64 path entirely.
+  const handlePaste = async (view: any, event: ClipboardEvent) => {
+    const items = Array.from(event.clipboardData?.items ?? []);
+    const imageItems = items.filter((item) => item.kind === 'file' && item.type.startsWith('image/'));
+
+    if (imageItems.length === 0) return false; // let Tiptap handle non-image pastes
+
+    event.preventDefault();
+    const currentEditor = editorRef.current;
+    if (!currentEditor) return true;
+
+    setIsUploading(true);
+    try {
+      for (const item of imageItems) {
+        const file = item.getAsFile();
+        if (!file) continue;
+        const url = await uploadFileToImageKit(file);
+        currentEditor.chain().focus().setImage({ src: url, alt: file.name || 'pasted-image' }).run();
+      }
+    } catch (err) {
+      console.error('Paste image upload failed:', err);
+      alert('Image upload failed. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+
+    return true; // mark as handled
+  };
 
   const editor = useEditor({
     extensions: [
@@ -129,8 +181,12 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
     },
     editorProps: {
       attributes: { class: styles.editorContent },
+      handlePaste,
     },
   });
+
+  // Keep the ref in sync with the latest editor instance
+  (editorRef as any).current = editor;
 
   // Sync initial markdown output after first mount
   useEffect(() => {
@@ -154,25 +210,8 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
 
     setIsUploading(true);
     try {
-      // 1. Get signed auth params from our server
-      const authRes = await fetch('/api/imagekit-auth');
-      const { token, signature, expire, publicKey, urlEndpoint } = await authRes.json();
-
-      // 2. Upload to ImageKit
-      const result = await upload({
-        file,
-        fileName: file.name,
-        publicKey,
-        token,
-        signature,
-        expire,
-        useUniqueFileName: true,
-      });
-
-      // 3. Insert the returned CDN URL into the editor
-      if (result.url) {
-        editor.chain().focus().setImage({ src: result.url, alt: file.name }).run();
-      }
+      const url = await uploadFileToImageKit(file);
+      editor.chain().focus().setImage({ src: url, alt: file.name }).run();
     } catch (err) {
       console.error('ImageKit upload failed:', err);
       alert('Image upload failed. Please try again.');
@@ -186,6 +225,14 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
   return (
     <div className={styles.editorContainer}>
       <MenuBar editor={editor} onImageUpload={handleImageUpload} isUploading={isUploading} />
+      {isUploading && (
+        <div className={styles.pasteUploadBanner}>
+          <span className={styles.spinning} style={{ display: 'inline-flex' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+          </span>
+          Uploading image to CDN…
+        </div>
+      )}
       <EditorContent editor={editor} />
       {/* Hidden file input for ImageKit uploads */}
       <input
