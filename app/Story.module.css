@@ -39,7 +39,7 @@
   top: 0;
   z-index: 100;
   background: #3b35c3;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 :global([data-theme='dark']) .header {
@@ -89,7 +89,7 @@
 .navLinks a {
   font-size: 0.95rem;
   font-weight: 500;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255, 255, 255, 0.85);
   transition: color 0.2s;
   text-decoration: none;
 }
@@ -107,7 +107,7 @@
 .loginBtn {
   font-size: 0.9rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
   transition: color 0.2s;
 }
@@ -171,7 +171,7 @@
 
 .heroSub {
   font-size: 1.1rem;
-  color: rgba(255,255,255,0.8);
+  color: rgba(255, 255, 255, 0.8);
   margin-bottom: 32px;
   line-height: 1.6;
 }
@@ -249,81 +249,182 @@
   font-weight: 800;
 }
 
-/* Phone mockup on the right */
+/* ─────────────────────────────────────────
+   HERO RIGHT — DUAL-COLUMN FOUNDER TICKER
+───────────────────────────────────────── */
 .heroRight {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   position: relative;
-}
-
-.heroPhoneMock {
-  background: #fff;
-  border-radius: 28px;
-  width: 320px;
   overflow: hidden;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.3);
-  border: 6px solid #e2e8f0;
+  height: 460px;
+}
+
+.founderTickerWrapper {
   position: relative;
-  z-index: 2;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  max-width: 380px; /* Restrict width to avoid feeling stretched */
+  margin: 0 auto;
 }
 
-.phoneScreen {
-  background: #f8fafc;
-  min-height: 260px;
-  padding: 20px;
+.founderTickerFadeTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, #3b35c3, transparent);
+  z-index: 10;
+  pointer-events: none;
 }
 
-.phoneAppBar {
+:global([data-theme='dark']) .founderTickerFadeTop {
+  background: linear-gradient(to bottom, #1e1b4b, transparent);
+}
+
+.founderTickerFadeBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to top, #3b35c3, transparent);
+  z-index: 10;
+  pointer-events: none;
+}
+
+:global([data-theme='dark']) .founderTickerFadeBottom {
+  background: linear-gradient(to top, #1e1b4b, transparent);
+}
+
+.founderTickerTrackUp,
+.founderTickerTrackDown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.founderTickerTrackUp {
+  animation: tickerUp 90s linear infinite;
+}
+
+.founderTickerTrackDown {
+  animation: tickerDown 90s linear infinite;
+}
+
+.founderTickerTrackUp:hover,
+.founderTickerTrackDown:hover {
+  animation-play-state: paused;
+}
+
+@keyframes tickerUp {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes tickerDown {
+  0%   { transform: translateY(-50%); }
+  100% { transform: translateY(0); }
+}
+
+.founderTickerCard {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 20px;
-}
-
-.phoneAppDot {
-  width: 28px;
-  height: 28px;
-  background: #3b35c3;
-  border-radius: 50%;
-}
-
-.phoneAppBar span {
-  font-weight: 800;
-  font-size: 0.9rem;
-  color: #111;
-}
-
-.phoneCard {
-  background: #fff;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 14px;
-  padding: 18px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  padding: 12px 14px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s ease, transform 0.2s ease;
+  cursor: default;
+  flex-shrink: 0;
 }
 
-.phoneTrend {
-  font-size: 0.7rem;
+.founderTickerCard:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateX(4px);
+}
+
+.founderTickerAvatar {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.founderTickerInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.founderTickerName {
+  color: #fff;
+  font-size: 0.85rem;
   font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.founderTickerBiz {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.72rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.founderTickerRevenue {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  gap: 1px;
+}
+
+.mrrLabel {
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: rgba(134, 239, 172, 0.65);
   text-transform: uppercase;
-  color: #22c55e;
-  letter-spacing: 0.5px;
-  margin-bottom: 10px;
+  letter-spacing: 0.8px;
 }
 
-.phoneCardTitle {
-  font-size: 1rem;
+.mrrValue {
+  font-size: 0.9rem;
   font-weight: 800;
-  color: #111;
-  line-height: 1.4;
-  margin-bottom: 8px;
+  color: #86efac;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
 }
 
-.phoneCardSub {
-  font-size: 0.8rem;
-  color: #6b7280;
-  line-height: 1.5;
+.mrrValue::before {
+  content: '▲';
+  font-size: 0.52rem;
+  color: #4ade80;
+  line-height: 1;
 }
+
+/* (legacy class stubs — not used in new layout) */
+.founderTickerCardTop { display: contents; }
+.founderTickerCardBottom { display: none; }
+.founderTickerRevenueLabel { display: none; }
 
 /* Diagonal clip */
 .heroClip {
@@ -388,7 +489,7 @@
 
 .caseCard:hover {
   transform: translateY(-3px);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.07);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.07);
   border-color: #3b35c3;
 }
 
@@ -411,7 +512,7 @@
   background: var(--bg-card, #fff);
   border: 1px solid var(--border-color);
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   cursor: pointer;
   align-items: center;
 }
@@ -689,7 +790,7 @@
 .storyFaqAnswer {
   overflow: hidden;
   transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.25s ease;
+    opacity 0.25s ease;
 }
 
 .storyFaqAnswerInner {
@@ -703,10 +804,12 @@
   .storyFaqTitle {
     font-size: 1.25rem;
   }
+
   .storyFaqQuestion {
     padding: 14px 16px;
     font-size: 0.95rem;
   }
+
   .storyFaqAnswerInner {
     padding: 0 16px 16px;
   }
@@ -890,12 +993,15 @@
     grid-template-columns: 1fr;
     padding-top: 50px;
   }
+
   .heroRight {
     display: none;
   }
+
   .heroTitle {
     font-size: 2.2rem;
   }
+
   .caseGrid {
     grid-template-columns: 1fr;
   }
@@ -906,12 +1012,15 @@
     gap: 16px;
     font-size: 0.72rem;
   }
+
   .headerContent {
     padding: 0 16px;
   }
+
   .navLinks {
     display: none;
   }
+
   .heroTitle {
     font-size: 1.9rem;
   }
@@ -920,19 +1029,24 @@
     padding: 40px 20px 36px;
     margin: 40px 16px;
   }
+
   .ctaTitle {
     font-size: 1.4rem;
   }
+
   .heroForm {
     flex-direction: column;
   }
+
   .heroBtn {
     width: 100%;
   }
+
   .ctaForm {
     flex-direction: column;
     align-items: stretch;
   }
+
   .ctaBtn {
     width: 100%;
   }
@@ -954,6 +1068,7 @@
   .mainLayout {
     grid-template-columns: 1fr 300px;
   }
+
   .leftSidebar {
     display: none !important;
   }
@@ -1691,7 +1806,7 @@
   overflow: hidden;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
   display: flex;
   flex-direction: column;
@@ -1700,7 +1815,7 @@
 
 .relatedCardLink:hover .relatedCard {
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
   border-color: #6366f1;
 }
 
@@ -1855,7 +1970,7 @@
   background: var(--bg-color);
   border: 1px solid var(--border-color);
   border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   align-items: flex-start;
   height: 100%;
@@ -1863,7 +1978,7 @@
 
 .caseStudyCardLink:hover .caseStudyCard {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
   border-color: #3b35c3;
 }
 
@@ -1982,12 +2097,13 @@
 }
 
 @media (max-width: 768px) {
+
   .relatedSection,
   .caseStudiesSection {
     padding: 48px 20px 56px;
   }
+
   .relatedTitle {
     font-size: 1.5rem;
   }
 }
-

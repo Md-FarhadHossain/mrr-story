@@ -89,9 +89,10 @@ export default async function Feed() {
       {/* ── Hero ── */}
       <div className={styles.heroWrapper}>
         <div className={styles.heroInner}>
+          {/* Left: Headline + form + social proof */}
           <div className={styles.heroLeft}>
-            <h1 className={styles.heroTitle}>The exact <span style={{color:'#22c55e'}}>playbooks & case studies</span> of successful indie hackers</h1>
-            <p className={styles.heroSub}>Inside the Businesses Built by Indie Hackers & SaaS Founders. Real case studies from solopreneurs who built profitable products with exact numbers and full breakdowns.</p>
+            <h1 className={styles.heroTitle}>The exact <span style={{color:'#22c55e'}}>playbooks &amp; case studies</span> of successful indie hackers</h1>
+            <p className={styles.heroSub}>Inside the Businesses Built by Indie Hackers &amp; SaaS Founders. Real case studies from solopreneurs who built profitable products with exact numbers and full breakdowns.</p>
             <NewsletterForm 
               formClassName={styles.heroForm}
               inputClassName={styles.heroInput}
@@ -114,18 +115,37 @@ export default async function Feed() {
               <span className={styles.heroPoofText}>Join thousands of founders</span>
             </div>
           </div>
+
+          {/* Right: Single-column infinite scrolling founder ticker */}
           <div className={styles.heroRight}>
-            <div className={styles.heroPhoneMock}>
-              <div className={styles.phoneScreen}>
-                <div className={styles.phoneAppBar}>
-                  <div className={styles.phoneAppDot} />
-                  <span>MRR Story</span>
-                </div>
-                <div className={styles.phoneCard}>
-                  <div className={styles.phoneTrend}>🔥 FEATURED THIS WEEK</div>
-                  <div className={styles.phoneCardTitle}>How I Made My First $47 Selling a Notion Template</div>
-                  <div className={styles.phoneCardSub}>A 22-year-old's story of going from 0 to first customer</div>
-                </div>
+            <div className={styles.founderTickerWrapper}>
+              {/* Gradient fades at top and bottom */}
+              <div className={styles.founderTickerFadeTop} />
+              <div className={styles.founderTickerFadeBottom} />
+
+              {/* Single Column — scrolls up */}
+              <div className={styles.founderTickerTrackUp}>
+                {[...allStories.filter(s => s.profileImageUrl), ...allStories.filter(s => s.profileImageUrl)].map((story, idx) => (
+                  <div key={`up-${story.id}-${idx}`} className={styles.founderTickerCard}>
+                    <Image
+                      src={story.profileImageUrl!}
+                      alt={story.founderName}
+                      className={styles.founderTickerAvatar}
+                      width={44}
+                      height={44}
+                    />
+                    <div className={styles.founderTickerInfo}>
+                      <span className={styles.founderTickerName}>{story.founderName}</span>
+                      <span className={styles.founderTickerBiz}>{story.businessName}</span>
+                    </div>
+                    {story.revenue && (
+                      <div className={styles.founderTickerRevenue}>
+                        <span className={styles.mrrLabel}>MRR</span>
+                        <span className={styles.mrrValue}>{story.revenue}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
