@@ -1296,6 +1296,31 @@
   margin-bottom: 40px;
 }
 
+/* ── Inline links inside article content ── */
+.contentBlock :global(a) {
+  color: #6366f1;
+  text-decoration: underline;
+  text-decoration-color: rgba(99, 102, 241, 0.35);
+  text-underline-offset: 3px;
+  font-weight: 500;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.contentBlock :global(a:hover) {
+  color: #4f46e5;
+  text-decoration-color: #4f46e5;
+}
+
+:global([data-theme='dark']) .contentBlock :global(a) {
+  color: #a5b4fc;
+  text-decoration-color: rgba(165, 180, 252, 0.4);
+}
+
+:global([data-theme='dark']) .contentBlock :global(a:hover) {
+  color: #c7d2fe;
+  text-decoration-color: #c7d2fe;
+}
+
 .contentBlock img {
   max-width: 100%;
   height: auto;
