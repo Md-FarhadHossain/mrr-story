@@ -220,6 +220,126 @@ export default async function StoryPage({ params }: { params: { slug: string } }
     } as any);
   }
 
+  // --- Split content to inject mobile card after TL;DR ---
+  const h2Match = story.content.match(/(^|\n)## /);
+  let beforeContent = story.content;
+  let afterContent = '';
+
+  if (h2Match !== null && h2Match.index !== undefined) {
+    const actualSplitIndex = story.content[h2Match.index] === '\n' ? h2Match.index + 1 : h2Match.index;
+    beforeContent = story.content.substring(0, actualSplitIndex);
+    afterContent = story.content.substring(actualSplitIndex);
+  }
+
+  // --- Extracted Markdown Components ---
+  const markdownComponents = {
+    h2: ({node, ...props}: any) => <h2 className={styles.markdownHeader} {...props} />,
+    h3: ({node, ...props}: any) => <h3 className={styles.markdownHeader} {...props} />,
+    p: ({node, ...props}: any) => <p className={styles.markdownParagraph} {...props} />,
+    blockquote: ({node, ...props}: any) => <blockquote className={styles.markdownBlockquote} {...props} />,
+    ul: ({node, ...props}: any) => <ul className={styles.markdownList} {...props} />,
+    ol: ({node, ...props}: any) => <ol className={styles.markdownOrderedList} {...props} />,
+    li: ({node, ...props}: any) => <li className={styles.markdownListItem} {...props} />,
+    img: ({node, ...props}: any) => <ImageZoom src={props.src || ''} alt={props.alt || ''} className={styles.markdownImage} style={{maxWidth: '100%', height: 'auto', borderRadius: '12px', border: '1px solid var(--border-color)', margin: '16px 0', display: 'block'}} {...props as any} />
+  };
+
+  // --- Extracted Mobile Founder Card ---
+  const mobileFounderCardElement = (
+    <div className={styles.mobileFounderCard}>
+      <div
+        className={styles.mobileFounderHero}
+        style={{
+          backgroundImage: story.profileImageUrl
+            ? `url(${story.profileImageUrl})`
+            : undefined,
+        }}
+      >
+        <div className={styles.mobileFounderScrim} />
+        <div className={styles.mobileFounderRevenuePill}>
+          <span className={styles.mobileFounderRevenuePillDot} />
+          <span className={styles.mobileFounderRevenuePillText}>{story.revenue}<span className={styles.mobileFounderRevenuePillSub}>/mo</span></span>
+        </div>
+        <div className={styles.mobileFounderHeroBottom}>
+          <div className={styles.mobileFounderHeroId}>
+            <p className={styles.mobileFounderHeroName}>{story.founderName}</p>
+            <p className={styles.mobileFounderHeroRole}>
+              {story.founderType || 'Founder'} · <strong>{story.businessName}</strong>
+            </p>
+          </div>
+          {story.location && (() => {
+            const country = countries.find(c => c.name === story.location);
+            return (
+              <span className={styles.mobileFounderHeroLoc}>
+                {country?.code && (
+                  <Image
+                    src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
+                    width={16} height={12} alt="" aria-hidden="true"
+                    style={{ borderRadius: '3px', display: 'block' }}
+                  />
+                )}
+                {story.location}
+              </span>
+            );
+          })()}
+        </div>
+      </div>
+      <div className={styles.mobileFounderChips}>
+        {story.customers && (
+          <div className={styles.mobileFounderChip}>
+            <span className={styles.mobileFounderChipVal}>{story.customers}</span>
+            <span className={styles.mobileFounderChipKey}>customers</span>
+          </div>
+        )}
+        {story.startedYear && (
+          <div className={styles.mobileFounderChip}>
+            <span className={styles.mobileFounderChipVal}>{story.startedYear}</span>
+            <span className={styles.mobileFounderChipKey}>started</span>
+          </div>
+        )}
+        <div className={styles.mobileFounderChip}>
+          <span className={styles.mobileFounderChipVal}>solo</span>
+          <span className={styles.mobileFounderChipKey}>founder</span>
+        </div>
+        {story.founderAge && (
+          <div className={styles.mobileFounderChip}>
+            <span className={styles.mobileFounderChipVal}>{story.founderAge}</span>
+            <span className={styles.mobileFounderChipKey}>years old</span>
+          </div>
+        )}
+      </div>
+      {story.niche && (
+        <div className={styles.mobileFounderNicheRow}>
+          <span className={styles.mobileFounderNicheRowLabel}>Niche</span>
+          <span className={styles.mobileFounderNicheRowValue}>{story.niche}</span>
+        </div>
+      )}
+      <div className={styles.mobileFounderActions}>
+        {story.productUrl && (
+          <a
+            href={story.productUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${styles.mobileFounderActionBtn} ${styles.mobileFounderActionProduct}`}
+          >
+            <Globe size={16} />
+            Visit {story.businessName}
+          </a>
+        )}
+        {story.twitterUrl && (
+          <a
+            href={story.twitterUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${styles.mobileFounderActionBtn} ${styles.mobileFounderActionTwitter}`}
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            @{story.twitterUrl.replace(/.*\//, '')}
+          </a>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <>
       {/* ── JSON-LD Schema ── */}
@@ -240,7 +360,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
               {story.createdAt ? new Date(story.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'N/A'}
             </span>
           </div>
-          
+
           <h1 className={styles.articleTitle}>{story.title}</h1>
 
           {story.heroImageUrl && (
@@ -255,21 +375,26 @@ export default async function StoryPage({ params }: { params: { slug: string } }
           )}
 
           <div className={styles.contentBlock}>
-            <ReactMarkdown
-              rehypePlugins={[rehypeSlug, rehypeRaw]}
-              components={{
-                h2: ({node, ...props}) => <h2 className={styles.markdownHeader} {...props} />,
-                h3: ({node, ...props}) => <h3 className={styles.markdownHeader} {...props} />,
-                p: ({node, ...props}) => <p className={styles.markdownParagraph} {...props} />,
-                blockquote: ({node, ...props}) => <blockquote className={styles.markdownBlockquote} {...props} />,
-                ul: ({node, ...props}) => <ul className={styles.markdownList} {...props} />,
-                ol: ({node, ...props}) => <ol className={styles.markdownOrderedList} {...props} />,
-                li: ({node, ...props}) => <li className={styles.markdownListItem} {...props} />,
-                img: ({node, ...props}) => <ImageZoom src={props.src || ''} alt={props.alt || ''} className={styles.markdownImage} style={{maxWidth: '100%', height: 'auto', borderRadius: '12px', border: '1px solid var(--border-color)', margin: '16px 0', display: 'block'}} {...props as any} />
-              }}
-            >
-              {sanitizeMarkdown(story.content)}
-            </ReactMarkdown>
+            {beforeContent && (
+              <ReactMarkdown
+                rehypePlugins={[rehypeSlug, rehypeRaw]}
+                components={markdownComponents}
+              >
+                {sanitizeMarkdown(beforeContent)}
+              </ReactMarkdown>
+            )}
+
+            {/* Render the mobile founder card right after the TL;DR and before the first H2 */}
+            {mobileFounderCardElement}
+
+            {afterContent && (
+              <ReactMarkdown
+                rehypePlugins={[rehypeSlug, rehypeRaw]}
+                components={markdownComponents}
+              >
+                {sanitizeMarkdown(afterContent)}
+              </ReactMarkdown>
+            )}
           </div>
 
           {/* FAQ accordion — only rendered when FAQ items exist */}

@@ -1079,6 +1079,349 @@
     grid-template-columns: 1fr;
     padding: 0 20px;
   }
+
+  /* Hide the right sidebar entirely on mobile — the mobile founder card takes its place */
+  .sidebar {
+    display: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────
+   MOBILE FOUNDER CARD  (visible only ≤768px)
+   Premium hero-photo design with glass overlay,
+   revenue pill, scrollable stat chips & CTA buttons.
+───────────────────────────────────────── */
+
+/* Base wrapper — hidden on desktop */
+.mobileFounderCard {
+  display: none;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 32px;
+  margin-bottom: 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Hero section: full-bleed photo + dark scrim ── */
+.mobileFounderHero {
+  position: relative;
+  height: 200px;
+  background-color: #1e1b4b;
+  background-size: cover;
+  background-position: center top;
+  overflow: hidden;
+  /* Noise texture overlay for depth */
+}
+
+.mobileFounderHero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.3;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Gradient scrim: transparent top → dark bottom */
+.mobileFounderScrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.08) 0%,
+    rgba(0, 0, 0, 0.18) 40%,
+    rgba(0, 0, 0, 0.72) 80%,
+    rgba(0, 0, 0, 0.88) 100%
+  );
+  z-index: 2;
+}
+
+/* Revenue pill — top-right corner */
+.mobileFounderRevenuePill {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  border-radius: 100px;
+  padding: 5px 12px 5px 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.mobileFounderRevenuePillDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px #4ade80;
+  flex-shrink: 0;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.85); }
+}
+
+.mobileFounderRevenuePillText {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #4ade80;
+  letter-spacing: -0.3px;
+  line-height: 1;
+}
+
+.mobileFounderRevenuePillSub {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(74, 222, 128, 0.75);
+  margin-left: 1px;
+}
+
+/* Identity block — pinned to bottom of hero */
+.mobileFounderHeroBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 0 16px 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mobileFounderHeroId {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mobileFounderHeroName {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobileFounderHeroRole {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobileFounderHeroRole strong {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 700;
+}
+
+.mobileFounderHeroLoc {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ── Stat chips — horizontally scrollable row ── */
+.mobileFounderChips {
+  display: flex;
+  gap: 8px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--border-color);
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobileFounderChips::-webkit-scrollbar {
+  display: none;
+}
+
+.mobileFounderChip {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: var(--bg-secondary, #f8fafc);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 8px 14px;
+  min-width: 56px;
+}
+
+:global([data-theme='dark']) .mobileFounderChip {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+.mobileFounderChipVal {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.mobileFounderChipKey {
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+/* Niche row — full-width, sits between chips and buttons */
+.mobileFounderNicheRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.mobileFounderNicheRowLabel {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  padding: 2px 0;
+}
+
+.mobileFounderNicheRowValue {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #7c3aed;
+  line-height: 1.4;
+}
+
+:global([data-theme='dark']) .mobileFounderNicheRowValue {
+  color: #a78bfa;
+}
+
+/* ── Action buttons — two side-by-side full-width CTAs ── */
+.mobileFounderActions {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px 16px;
+}
+
+.mobileFounderActionBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none !important;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.1px;
+}
+
+.mobileFounderActionBtn:hover {
+  text-decoration: none !important;
+}
+
+.mobileFounderActionBtn:active {
+  transform: scale(0.97);
+}
+
+.mobileFounderActionBtn svg {
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+  display: inline-block !important;
+}
+
+/* Product button — bold green */
+.mobileFounderActionProduct {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 16px rgba(22, 163, 74, 0.3);
+}
+
+.mobileFounderActionProduct:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 6px 20px rgba(22, 163, 74, 0.4);
+  transform: translateY(-1px);
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+:global([data-theme='dark']) .mobileFounderActionProduct {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.25);
+}
+
+/* Twitter button — dark glass */
+.mobileFounderActionTwitter {
+  background: rgba(15, 23, 42, 0.88) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.mobileFounderActionTwitter:hover {
+  background: rgba(15, 23, 42, 1) !important;
+  color: #fff !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  transform: translateY(-1px);
+  text-decoration: none !important;
+}
+
+:global([data-theme='dark']) .mobileFounderActionTwitter {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+:global([data-theme='dark']) .mobileFounderActionTwitter:hover {
+  background: rgba(255, 255, 255, 0.13) !important;
+  color: #fff !important;
+}
+
+/* Show on mobile only */
+@media (max-width: 768px) {
+  .mobileFounderCard {
+    display: block;
+  }
 }
 
 .leftSidebar {
