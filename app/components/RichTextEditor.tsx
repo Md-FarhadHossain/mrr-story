@@ -131,7 +131,7 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
 
   // Intercept paste events: if the clipboard contains image files, upload them
   // to ImageKit and insert the CDN URL — skipping the base64 path entirely.
-  const handlePaste = async (view: any, event: ClipboardEvent) => {
+  const handlePaste = (view: any, event: ClipboardEvent): boolean => {
     const items = Array.from(event.clipboardData?.items ?? []);
     const imageItems = items.filter((item) => item.kind === 'file' && item.type.startsWith('image/'));
 
@@ -142,19 +142,21 @@ export default function RichTextEditor({ name, defaultValue = '', placeholder = 
     if (!currentEditor) return true;
 
     setIsUploading(true);
-    try {
-      for (const item of imageItems) {
-        const file = item.getAsFile();
-        if (!file) continue;
-        const url = await uploadFileToImageKit(file);
-        currentEditor.chain().focus().setImage({ src: url, alt: file.name || 'pasted-image' }).run();
+    (async () => {
+      try {
+        for (const item of imageItems) {
+          const file = item.getAsFile();
+          if (!file) continue;
+          const url = await uploadFileToImageKit(file);
+          currentEditor.chain().focus().setImage({ src: url, alt: file.name || 'pasted-image' }).run();
+        }
+      } catch (err) {
+        console.error('Paste image upload failed:', err);
+        alert('Image upload failed. Please try again.');
+      } finally {
+        setIsUploading(false);
       }
-    } catch (err) {
-      console.error('Paste image upload failed:', err);
-      alert('Image upload failed. Please try again.');
-    } finally {
-      setIsUploading(false);
-    }
+    })();
 
     return true; // mark as handled
   };
