@@ -265,6 +265,30 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
               </div>
             </div>
 
+            {/* Number of Founders */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Number of Founders</label>
+              <input
+                type="number"
+                name="numberOfFounders"
+                defaultValue={story.numberOfFounders || 1}
+                min="1"
+                className={styles.input}
+              />
+            </div>
+
+            {/* Number of Employees */}
+            <div className={styles.propGroup}>
+              <label className={styles.propLabel}>Number of Employees</label>
+              <input
+                type="number"
+                name="numberOfEmployees"
+                defaultValue={story.numberOfEmployees ?? 0}
+                min="0"
+                className={styles.input}
+              />
+            </div>
+
             {/* Revenue */}
             <div className={styles.propGroup}>
               <label className={styles.propLabel}>Revenue / Month *</label>

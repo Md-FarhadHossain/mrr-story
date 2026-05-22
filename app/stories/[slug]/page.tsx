@@ -297,8 +297,20 @@ export default async function StoryPage({ params }: { params: { slug: string } }
           </div>
         )}
         <div className={styles.mobileFounderChip}>
-          <span className={styles.mobileFounderChipVal}>solo</span>
-          <span className={styles.mobileFounderChipKey}>founder</span>
+          <span className={styles.mobileFounderChipVal}>
+            {story.numberOfFounders && story.numberOfFounders > 1 ? story.numberOfFounders : 'solo'}
+          </span>
+          <span className={styles.mobileFounderChipKey}>
+            {story.numberOfFounders && story.numberOfFounders > 1 ? 'founders' : 'founder'}
+          </span>
+        </div>
+        <div className={styles.mobileFounderChip}>
+          <span className={styles.mobileFounderChipVal}>
+            {story.numberOfEmployees ?? 0}
+          </span>
+          <span className={styles.mobileFounderChipKey}>
+            {story.numberOfEmployees === 1 ? 'employee' : 'employees'}
+          </span>
         </div>
         {story.founderAge && (
           <div className={styles.mobileFounderChip}>
@@ -464,7 +476,12 @@ export default async function StoryPage({ params }: { params: { slug: string } }
 
               <div className={styles.aboutStatBox}>
                 <span className={styles.aboutStatLabel}>Founders</span>
-                <span className={styles.aboutStatValue}>1</span>
+                <span className={styles.aboutStatValue}>{story.numberOfFounders || 1}</span>
+              </div>
+
+              <div className={styles.aboutStatBox}>
+                <span className={styles.aboutStatLabel}>Employees</span>
+                <span className={styles.aboutStatValue}>{story.numberOfEmployees ?? 0}</span>
               </div>
 
               {story.startedYear && (

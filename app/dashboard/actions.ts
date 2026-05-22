@@ -24,6 +24,10 @@ export async function saveStory(formData: FormData) {
   const faq = formData.get('faq') as string;
   const startedYear = formData.get('startedYear') as string;
   const founderAge = formData.get('founderAge') as string;
+  const numberOfFoundersRaw = formData.get('numberOfFounders') as string;
+  const numberOfFounders = numberOfFoundersRaw ? parseInt(numberOfFoundersRaw, 10) : 1;
+  const numberOfEmployeesRaw = formData.get('numberOfEmployees') as string;
+  const numberOfEmployees = numberOfEmployeesRaw ? parseInt(numberOfEmployeesRaw, 10) : 0;
 
   if (!title || !businessName || !founderName || !revenue || !content) {
     throw new Error('All required fields must be filled');
@@ -56,10 +60,12 @@ export async function saveStory(formData: FormData) {
     faq: faq || null,
     startedYear: startedYear || null,
     founderAge: founderAge || null,
+    numberOfFounders,
+    numberOfEmployees,
   }).returning({ id: storiesTable.id });
 
-  revalidatePath('/');
-  revalidatePath('/dashboard');
+  revalidatePath('/', 'layout');
+  revalidatePath('/dashboard', 'layout');
   revalidatePath('/dashboard/stories');
 
   return newStory.id;
@@ -90,6 +96,10 @@ export async function updateStory(id: number, formData: FormData) {
   const faq = formData.get('faq') as string;
   const startedYear = formData.get('startedYear') as string;
   const founderAge = formData.get('founderAge') as string;
+  const numberOfFoundersRaw = formData.get('numberOfFounders') as string;
+  const numberOfFounders = numberOfFoundersRaw ? parseInt(numberOfFoundersRaw, 10) : 1;
+  const numberOfEmployeesRaw = formData.get('numberOfEmployees') as string;
+  const numberOfEmployees = numberOfEmployeesRaw ? parseInt(numberOfEmployeesRaw, 10) : 0;
 
   if (!title || !businessName || !founderName || !revenue || !content) {
     throw new Error('All required fields must be filled');
@@ -121,10 +131,12 @@ export async function updateStory(id: number, formData: FormData) {
     faq: faq || null,
     startedYear: startedYear || null,
     founderAge: founderAge || null,
+    numberOfFounders,
+    numberOfEmployees,
   }).where(eq(storiesTable.id, id));
 
-  revalidatePath('/');
-  revalidatePath('/dashboard');
+  revalidatePath('/', 'layout');
+  revalidatePath('/dashboard', 'layout');
   revalidatePath('/dashboard/stories');
   revalidatePath(`/stories/${slug}`);
 }
