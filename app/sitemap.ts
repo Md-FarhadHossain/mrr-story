@@ -1,14 +1,15 @@
 import { MetadataRoute } from 'next';
 import { db } from '../db';
 import { storiesTable, blogsTable } from '../db/schema';
+import { eq } from 'drizzle-orm';
 import GithubSlugger from 'github-slugger';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.mrrstory.com';
 
   const [stories, blogs] = await Promise.all([
-    db.select().from(storiesTable),
-    db.select().from(blogsTable),
+    db.select().from(storiesTable).where(eq(storiesTable.isDraft, false)),
+    db.select().from(blogsTable).where(eq(blogsTable.isDraft, false)),
   ]);
 
   const storyUrls = stories.map((story) => ({

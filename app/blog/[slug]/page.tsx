@@ -7,7 +7,7 @@ import rehypeRaw from 'rehype-raw';
 import TableOfContents from '../../components/TableOfContents';
 import { db } from '../../../db';
 import { blogsTable, storiesTable } from '../../../db/schema';
-import { eq, ne, desc } from 'drizzle-orm';
+import { eq, ne, desc, and } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -66,7 +66,7 @@ function formatDate(date: Date | null) {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const { slug } = await params;
-  const fetchedBlogs = await db.select().from(blogsTable).where(eq(blogsTable.slug, slug)).limit(1);
+  const fetchedBlogs = await db.select().from(blogsTable).where(and(eq(blogsTable.slug, slug), eq(blogsTable.isDraft, false))).limit(1);
   const blog = fetchedBlogs[0];
 
   if (!blog) return { title: 'Blog Not Found' };
@@ -96,7 +96,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const { slug } = await params;
 
-  const fetchedBlogs = await db.select().from(blogsTable).where(eq(blogsTable.slug, slug)).limit(1);
+  const fetchedBlogs = await db.select().from(blogsTable).where(and(eq(blogsTable.slug, slug), eq(blogsTable.isDraft, false))).limit(1);
   const blog = fetchedBlogs[0];
 
   if (!blog) return notFound();
@@ -107,7 +107,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   const allOtherBlogs = await db
     .select()
     .from(blogsTable)
-    .where(ne(blogsTable.slug, slug))
+    .where(and(ne(blogsTable.slug, slug), eq(blogsTable.isDraft, false)))
     .orderBy(desc(blogsTable.createdAt));
 
   const currentTags = blog.tags
@@ -130,6 +130,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   const caseStudies = await db
     .select()
     .from(storiesTable)
+    .where(eq(storiesTable.isDraft, false))
     .orderBy(desc(storiesTable.createdAt))
     .limit(3);
 

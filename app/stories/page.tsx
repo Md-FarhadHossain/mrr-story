@@ -2,7 +2,7 @@ import styles from '../Story.module.css';
 import Link from 'next/link';
 import { db } from '../../db';
 import { storiesTable } from '../../db/schema';
-import { desc } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import { ThemeToggle } from '../components/ThemeToggle';
 import Navbar from '../components/Navbar';
 import NewsletterForm from '../components/NewsletterForm';
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function StoriesPage() {
-  const allStories = await db.select().from(storiesTable).orderBy(desc(storiesTable.createdAt));
+  const allStories = await db.select().from(storiesTable).where(eq(storiesTable.isDraft, false)).orderBy(desc(storiesTable.createdAt));
 
   return (
     <>

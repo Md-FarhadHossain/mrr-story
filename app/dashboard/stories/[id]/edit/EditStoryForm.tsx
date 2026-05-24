@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef, useTransition, useState, useCallback } from 'react';
+import { useRef, useTransition, useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { updateStory } from '../../../actions';
+import { updateStory, saveStoryDraft } from '../../../actions';
 import { ThemeToggle } from '../../../../components/ThemeToggle';
 import RichTextEditor from '../../../../components/RichTextEditor';
 import ImageUploader from '../../../../components/ImageUploader';
@@ -44,6 +44,8 @@ interface EditStoryFormProps {
 export default function EditStoryForm({ story }: EditStoryFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
+  const [isDraftSaving, setIsDraftSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const router = useRouter();
 
   // Define predefined themes for stories
@@ -89,6 +91,45 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
     setFaqItems(prev => prev.map((item, i) => i === index ? { ...item, [field]: value } : item));
   }, []);
 
+  const handleSaveDraft = async () => {
+    if (!formRef.current) return;
+    setIsDraftSaving(true);
+    try {
+      const formData = new FormData(formRef.current);
+      await saveStoryDraft(formData, story.id);
+      setLastSaved(new Date());
+      toast.success('Draft saved');
+    } catch (error) {
+      toast.error('Failed to save draft');
+    } finally {
+      setIsDraftSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        handleSaveDraft();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!formRef.current) return;
+      const formData = new FormData(formRef.current);
+      if (formData.get('title')) {
+        saveStoryDraft(formData, story.id)
+          .then(() => setLastSaved(new Date()))
+          .catch(console.error);
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [story.id]);
+
   const clientAction = async (formData: FormData) => {
     startTransition(async () => {
       try {
@@ -109,8 +150,12 @@ export default function EditStoryForm({ story }: EditStoryFormProps) {
           <p className={styles.topbarSub}>Editing: {story.title}</p>
         </div>
         <div className={styles.actionArea}>
+          {lastSaved && <span style={{fontSize: '12px', color: 'var(--text-secondary)'}}>Saved {lastSaved.toLocaleTimeString()}</span>}
+          <button type="button" onClick={handleSaveDraft} disabled={isDraftSaving} style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}>
+            {isDraftSaving ? 'Saving...' : 'Save Draft'}
+          </button>
           <button type="submit" disabled={isPending}>
-            {isPending ? 'Saving...' : 'Save Changes'}
+            {isPending ? 'Saving...' : 'Publish Changes'}
           </button>
           <ThemeToggle />
         </div>

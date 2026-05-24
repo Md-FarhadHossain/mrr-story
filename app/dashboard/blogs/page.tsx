@@ -47,7 +47,10 @@ export default async function DashboardBlogs() {
               <div key={blog.id} className={pageStyles.storyCard}>
                 <div className={pageStyles.storyIndex}>{String(index + 1).padStart(2, '0')}</div>
                 <div className={pageStyles.storyInfo}>
-                  <h3 className={pageStyles.storyTitle}>{blog.title}</h3>
+                  <h3 className={pageStyles.storyTitle}>
+                    {blog.title}
+                    {blog.isDraft && <span style={{ marginLeft: '8px', fontSize: '0.7rem', backgroundColor: '#fbbf24', color: '#78350f', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>Draft</span>}
+                  </h3>
                   <div className={pageStyles.storyMeta}>
                     <span className={pageStyles.date}>
                       {blog.createdAt

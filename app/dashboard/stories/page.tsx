@@ -47,7 +47,10 @@ export default async function DashboardStories() {
               <div key={story.id} className={pageStyles.storyCard}>
                 <div className={pageStyles.storyIndex}>{String(index + 1).padStart(2, '0')}</div>
                 <div className={pageStyles.storyInfo}>
-                  <h3 className={pageStyles.storyTitle}>{story.title}</h3>
+                  <h3 className={pageStyles.storyTitle}>
+                    {story.title}
+                    {story.isDraft && <span style={{ marginLeft: '8px', fontSize: '0.7rem', backgroundColor: '#fbbf24', color: '#78350f', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>Draft</span>}
+                  </h3>
                   <div className={pageStyles.storyMeta}>
                     <span className={pageStyles.businessTag}>{story.businessName}</span>
                     <span className={pageStyles.dot} />

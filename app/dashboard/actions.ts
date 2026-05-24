@@ -62,6 +62,7 @@ export async function saveStory(formData: FormData) {
     founderAge: founderAge || null,
     numberOfFounders,
     numberOfEmployees,
+    isDraft: false,
   }).returning({ id: storiesTable.id });
 
   revalidatePath('/', 'layout');
@@ -133,10 +134,76 @@ export async function updateStory(id: number, formData: FormData) {
     founderAge: founderAge || null,
     numberOfFounders,
     numberOfEmployees,
+    isDraft: false,
   }).where(eq(storiesTable.id, id));
 
   revalidatePath('/', 'layout');
   revalidatePath('/dashboard', 'layout');
   revalidatePath('/dashboard/stories');
   revalidatePath(`/stories/${slug}`);
+}
+
+export async function saveStoryDraft(formData: FormData, id?: number) {
+  const title = (formData.get('title') as string) || 'Untitled Draft';
+  const businessName = (formData.get('businessName') as string) || '';
+  const founderName = (formData.get('founderName') as string) || '';
+  const founderType = (formData.get('founderType') as string) || 'Founder';
+  const revenue = (formData.get('revenue') as string) || '';
+  const customers = formData.get('customers') as string;
+  const niche = formData.get('niche') as string;
+  const productUrl = formData.get('productUrl') as string;
+  const heroImageUrl = formData.get('heroImageUrl') as string;
+  const profileImageUrl = formData.get('profileImageUrl') as string;
+  const twitterUrl = formData.get('twitterUrl') as string;
+  const location = formData.get('location') as string;
+  const tags = formData.get('tags') as string;
+  const content = (formData.get('content') as string) || '';
+  const faq = formData.get('faq') as string;
+  const startedYear = formData.get('startedYear') as string;
+  const founderAge = formData.get('founderAge') as string;
+  const numberOfFoundersRaw = formData.get('numberOfFounders') as string;
+  const numberOfFounders = numberOfFoundersRaw ? parseInt(numberOfFoundersRaw, 10) : 1;
+  const numberOfEmployeesRaw = formData.get('numberOfEmployees') as string;
+  const numberOfEmployees = numberOfEmployeesRaw ? parseInt(numberOfEmployeesRaw, 10) : 0;
+
+  const slug = title
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '') || `draft-${Date.now()}`;
+
+  const values = {
+    slug,
+    title,
+    businessName,
+    founderName,
+    founderType,
+    revenue,
+    customers: customers || null,
+    niche: niche || null,
+    productUrl: productUrl || null,
+    heroImageUrl: heroImageUrl || null,
+    profileImageUrl: profileImageUrl || null,
+    twitterUrl: twitterUrl || null,
+    location: location || null,
+    tags: tags || null,
+    content,
+    faq: faq || null,
+    startedYear: startedYear || null,
+    founderAge: founderAge || null,
+    numberOfFounders,
+    numberOfEmployees,
+    isDraft: true,
+  };
+
+  if (id) {
+    await db.update(storiesTable).set(values).where(eq(storiesTable.id, id));
+    revalidatePath('/dashboard/stories');
+    return id;
+  } else {
+    const [newStory] = await db.insert(storiesTable).values(values).returning({ id: storiesTable.id });
+    revalidatePath('/dashboard/stories');
+    return newStory.id;
+  }
 }

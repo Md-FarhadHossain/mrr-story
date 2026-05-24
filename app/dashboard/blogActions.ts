@@ -44,6 +44,7 @@ export async function saveBlog(formData: FormData) {
     tags: tags || null,
     content,
     faq: faq || null,
+    isDraft: false,
   });
 
   revalidatePath('/');
@@ -87,10 +88,50 @@ export async function updateBlog(id: number, formData: FormData) {
     tags: tags || null,
     content,
     faq: faq || null,
+    isDraft: false,
   }).where(eq(blogsTable.id, id));
 
   revalidatePath('/');
   revalidatePath('/blog');
   revalidatePath('/dashboard/blogs');
   revalidatePath(`/blog/${slug}`);
+}
+
+export async function saveBlogDraft(formData: FormData, id?: number) {
+  const title = (formData.get('title') as string) || 'Untitled Draft';
+  const description = (formData.get('description') as string) || '';
+  const coverImageUrl = formData.get('coverImageUrl') as string;
+  const coverImageAlt = formData.get('coverImageAlt') as string;
+  const focusKeyword = formData.get('focusKeyword') as string;
+  const metaKeywords = formData.get('metaKeywords') as string;
+  const tags = formData.get('tags') as string;
+  const content = (formData.get('content') as string) || '';
+  const customSlug = formData.get('slug') as string;
+  const faq = formData.get('faq') as string;
+
+  const slug = customSlug ? buildSlug(customSlug) : buildSlug(title) || `draft-${Date.now()}`;
+
+  const values = {
+    slug,
+    title,
+    description,
+    coverImageUrl: coverImageUrl || null,
+    coverImageAlt: coverImageAlt || null,
+    focusKeyword: focusKeyword || null,
+    metaKeywords: metaKeywords || null,
+    tags: tags || null,
+    content,
+    faq: faq || null,
+    isDraft: true,
+  };
+
+  if (id) {
+    await db.update(blogsTable).set(values).where(eq(blogsTable.id, id));
+    revalidatePath('/dashboard/blogs');
+    return id;
+  } else {
+    const [newBlog] = await db.insert(blogsTable).values(values).returning({ id: blogsTable.id });
+    revalidatePath('/dashboard/blogs');
+    return newBlog.id;
+  }
 }

@@ -2,7 +2,7 @@
 
 import { useRef, useTransition, useEffect, useState, useCallback } from 'react';
 import styles from '../../Dashboard.module.css';
-import { saveBlog } from '../../blogActions';
+import { saveBlog, saveBlogDraft, updateBlog } from '../../blogActions';
 import { ThemeToggle } from '../../../components/ThemeToggle';
 import RichTextEditor from '../../../components/RichTextEditor';
 import ImageUploader from '../../../components/ImageUploader';
@@ -40,6 +40,9 @@ export default function NewBlog() {
   const { data: session, isPending: isSessionPending } = useSession();
   const formRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
+  const [isDraftSaving, setIsDraftSaving] = useState(false);
+  const [draftId, setDraftId] = useState<number | null>(null);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const router = useRouter();
 
   const [title, setTitle] = useState('');
@@ -99,11 +102,64 @@ export default function NewBlog() {
 
   if (!session) return null;
 
+  const handleSaveDraft = async () => {
+    if (!formRef.current) return;
+    setIsDraftSaving(true);
+    try {
+      const formData = new FormData(formRef.current);
+      formData.set('tags', selectedTags.join(','));
+      const newDraftId = await saveBlogDraft(formData, draftId || undefined);
+      if (!draftId) {
+        setDraftId(newDraftId);
+        window.history.replaceState(null, '', `/dashboard/blogs/${newDraftId}/edit`);
+      }
+      setLastSaved(new Date());
+      toast.success('Draft saved');
+    } catch (error) {
+      toast.error('Failed to save draft');
+    } finally {
+      setIsDraftSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        handleSaveDraft();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [draftId, selectedTags]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!formRef.current) return;
+      const formData = new FormData(formRef.current);
+      formData.set('tags', selectedTags.join(','));
+      if (formData.get('title')) {
+        saveBlogDraft(formData, draftId || undefined).then(id => {
+          if (!draftId) {
+            setDraftId(id);
+            window.history.replaceState(null, '', `/dashboard/blogs/${id}/edit`);
+          }
+          setLastSaved(new Date());
+        }).catch(console.error);
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [draftId, selectedTags]);
+
   const clientAction = async (formData: FormData) => {
     formData.set('tags', selectedTags.join(','));
     startTransition(async () => {
       try {
-        await saveBlog(formData);
+        if (draftId) {
+          await updateBlog(draftId, formData);
+        } else {
+          await saveBlog(formData);
+        }
         toast.success('Blog published successfully!');
         router.push('/dashboard/blogs');
       } catch (error: any) {
@@ -123,6 +179,10 @@ export default function NewBlog() {
           <p className={styles.topbarSub}>Share your insights with the world</p>
         </div>
         <div className={styles.actionArea}>
+          {lastSaved && <span style={{fontSize: '12px', color: 'var(--text-secondary)'}}>Saved {lastSaved.toLocaleTimeString()}</span>}
+          <button type="button" onClick={handleSaveDraft} disabled={isDraftSaving} style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}>
+            {isDraftSaving ? 'Saving...' : 'Save Draft'}
+          </button>
           <button type="submit" disabled={isPending}>
             {isPending ? 'Publishing...' : 'Publish Blog'}
           </button>

@@ -8,7 +8,7 @@ import TableOfContents from '../../components/TableOfContents';
 import { Globe } from 'lucide-react';
 import { db } from '../../../db';
 import { storiesTable } from '../../../db/schema';
-import { eq, not, desc } from 'drizzle-orm';
+import { eq, not, desc, and } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import Navbar from '../../components/Navbar';
@@ -68,7 +68,7 @@ function extractHeaders(markdown: string) {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const { slug } = await params;
-  const fetchedStories = await db.select().from(storiesTable).where(eq(storiesTable.slug, slug)).limit(1);
+  const fetchedStories = await db.select().from(storiesTable).where(and(eq(storiesTable.slug, slug), eq(storiesTable.isDraft, false))).limit(1);
   const story = fetchedStories[0];
 
   if (!story) {
@@ -116,7 +116,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 export default async function StoryPage({ params }: { params: { slug: string } }) {
   const { slug } = await params;
   
-  const fetchedStories = await db.select().from(storiesTable).where(eq(storiesTable.slug, slug)).limit(1);
+  const fetchedStories = await db.select().from(storiesTable).where(and(eq(storiesTable.slug, slug), eq(storiesTable.isDraft, false))).limit(1);
   const story = fetchedStories[0];
 
   if (!story) {
@@ -126,7 +126,7 @@ export default async function StoryPage({ params }: { params: { slug: string } }
   // --- Algo for similar stories ---
   const allOtherStories = await db.select()
     .from(storiesTable)
-    .where(not(eq(storiesTable.slug, slug)))
+    .where(and(not(eq(storiesTable.slug, slug)), eq(storiesTable.isDraft, false)))
     .orderBy(desc(storiesTable.createdAt))
     .limit(10);
 

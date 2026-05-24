@@ -2,7 +2,7 @@ import styles from '../../../Story.module.css';
 import Link from 'next/link';
 import { db } from '../../../../db';
 import { storiesTable } from '../../../../db/schema';
-import { desc } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import { Metadata } from 'next';
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function TagPage({ params }: Props) {
-  const allStories = await db.select().from(storiesTable).orderBy(desc(storiesTable.createdAt));
+  const allStories = await db.select().from(storiesTable).where(eq(storiesTable.isDraft, false)).orderBy(desc(storiesTable.createdAt));
   
   const slugger = new GithubSlugger();
   const filteredStories = allStories.filter((story) => {

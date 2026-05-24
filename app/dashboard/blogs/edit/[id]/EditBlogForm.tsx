@@ -2,7 +2,7 @@
 
 import { useRef, useTransition, useEffect, useState, useCallback } from 'react';
 import styles from '../../../Dashboard.module.css';
-import { updateBlog } from '../../../blogActions';
+import { updateBlog, saveBlogDraft } from '../../../blogActions';
 import { ThemeToggle } from '../../../../components/ThemeToggle';
 import RichTextEditor from '../../../../components/RichTextEditor';
 import ImageUploader from '../../../../components/ImageUploader';
@@ -40,6 +40,8 @@ export default function EditBlogForm({ blog }: { blog: any }) {
   const { data: session, isPending: isSessionPending } = useSession();
   const formRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
+  const [isDraftSaving, setIsDraftSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const router = useRouter();
 
   const [title, setTitle] = useState(blog.title || '');
@@ -107,6 +109,47 @@ export default function EditBlogForm({ blog }: { blog: any }) {
 
   if (!session) return null;
 
+  const handleSaveDraft = async () => {
+    if (!formRef.current) return;
+    setIsDraftSaving(true);
+    try {
+      const formData = new FormData(formRef.current);
+      formData.set('tags', selectedTags.join(','));
+      await saveBlogDraft(formData, blog.id);
+      setLastSaved(new Date());
+      toast.success('Draft saved');
+    } catch (error) {
+      toast.error('Failed to save draft');
+    } finally {
+      setIsDraftSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        handleSaveDraft();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedTags]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!formRef.current) return;
+      const formData = new FormData(formRef.current);
+      formData.set('tags', selectedTags.join(','));
+      if (formData.get('title')) {
+        saveBlogDraft(formData, blog.id)
+          .then(() => setLastSaved(new Date()))
+          .catch(console.error);
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [blog.id, selectedTags]);
+
   const clientAction = async (formData: FormData) => {
     formData.set('tags', selectedTags.join(','));
     startTransition(async () => {
@@ -131,6 +174,10 @@ export default function EditBlogForm({ blog }: { blog: any }) {
           <p className={styles.topbarSub}>Editing: {blog.title}</p>
         </div>
         <div className={styles.actionArea}>
+          {lastSaved && <span style={{fontSize: '12px', color: 'var(--text-secondary)'}}>Saved {lastSaved.toLocaleTimeString()}</span>}
+          <button type="button" onClick={handleSaveDraft} disabled={isDraftSaving} style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}>
+            {isDraftSaving ? 'Saving...' : 'Save Draft'}
+          </button>
           <button type="submit" disabled={isPending}>
             {isPending ? 'Saving...' : 'Save Changes'}
           </button>

@@ -68,6 +68,7 @@ export const storiesTable = sqliteTable('stories', {
   founderAge: text('founder_age'),   // e.g. "24"
   numberOfFounders: integer('number_of_founders').default(1),
   numberOfEmployees: integer('number_of_employees').default(0),
+  isDraft: integer('is_draft', { mode: 'boolean' }).default(false),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
 
@@ -83,6 +84,7 @@ export const blogsTable = sqliteTable('blogs', {
   tags: text('tags'), // comma-separated e.g. "Marketing,Growth,Bootstrapping"
   content: text('content').notNull(),
   faq: text('faq'), // JSON array: [{q: string, a: string}]
+  isDraft: integer('is_draft', { mode: 'boolean' }).default(false),
   createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });

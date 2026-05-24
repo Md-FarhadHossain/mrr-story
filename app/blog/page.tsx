@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { db } from '../../db';
 import { blogsTable } from '../../db/schema';
-import { desc } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Metadata } from 'next';
@@ -58,7 +58,7 @@ function extractFirstImage(content: string | null): string | null {
 
 
 export default async function BlogFeed() {
-  const allBlogs = await db.select().from(blogsTable).orderBy(desc(blogsTable.createdAt));
+  const allBlogs = await db.select().from(blogsTable).where(eq(blogsTable.isDraft, false)).orderBy(desc(blogsTable.createdAt));
 
   return (
     <>
