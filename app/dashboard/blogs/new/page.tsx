@@ -96,12 +96,6 @@ export default function NewBlog() {
     );
   };
 
-  if (isSessionPending) {
-    return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>;
-  }
-
-  if (!session) return null;
-
   const handleSaveDraft = async () => {
     if (!formRef.current) return;
     setIsDraftSaving(true);
@@ -167,6 +161,12 @@ export default function NewBlog() {
       }
     });
   };
+
+  if (isSessionPending) {
+    return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>;
+  }
+
+  if (!session) return null;
 
   return (
     <form ref={formRef} action={clientAction} style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}>

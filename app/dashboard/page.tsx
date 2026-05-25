@@ -90,12 +90,6 @@ export default function Dashboard() {
     }
   }, [session, isSessionPending, router]);
 
-  if (isSessionPending) {
-    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>Loading...</div>;
-  }
-
-  if (!session) return null;
-
   const handleSaveDraft = async () => {
     if (!formRef.current) return;
     setIsDraftSaving(true);
@@ -161,6 +155,12 @@ export default function Dashboard() {
       }
     });
   };
+
+  if (isSessionPending) {
+    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>Loading...</div>;
+  }
+
+  if (!session) return null;
 
   return (
     <form ref={formRef} action={clientAction} style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}>
