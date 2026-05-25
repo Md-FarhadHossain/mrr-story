@@ -349,6 +349,19 @@ export default async function StoryPage({ params }: { params: { slug: string } }
           </a>
         )}
       </div>
+      
+      {/* ── Mobile Research-Based Tag ── */}
+      <div style={{ margin: '0 16px 16px', padding: '14px', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-color)', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+          <span style={{ fontSize: '1rem', marginTop: '1px' }}>🔍</span>
+          <div>
+            <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '2px' }}>Research-Based</strong>
+            <p style={{ margin: 0, lineHeight: 1.4 }}>
+              This story is compiled from public sources and presented in an interview format for a better reading experience.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 
@@ -536,8 +549,21 @@ export default async function StoryPage({ params }: { params: { slug: string } }
             </div>
           </div>
 
+          {/* ── Research-Based Tag ── */}
+          <div style={{ marginTop: '24px', padding: '16px', backgroundColor: 'var(--bg-secondary)', borderRadius: '12px', border: '1px solid var(--border-color)', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+              <span style={{ fontSize: '1.1rem', marginTop: '1px' }}>🔍</span>
+              <div>
+                <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '4px' }}>Research-Based</strong>
+                <p style={{ margin: 0, lineHeight: 1.4 }}>
+                  This story is compiled from public sources and presented in an interview format for a better reading experience.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* ── CTA Widget ── */}
-          <div className={styles.ctaWidget}>
+          <div className={styles.ctaWidget} style={{ marginTop: '24px' }}>
             <h3>MRR Story</h3>
             <p>A growing library of case studies from successful indie hackers and solopreneurs.</p>
             <Link href="/" className={styles.ctaButton}>See more Case Studies</Link>

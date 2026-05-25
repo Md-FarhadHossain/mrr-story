@@ -47,7 +47,7 @@ export default function TermsPage() {
               not been directly verified through a personal interview with the founder. Information is
               compiled from publicly available sources — including podcasts, blog posts, social media
               threads, Product Hunt pages, and press coverage — and presented in an interview-style
-              format for readability. We make every effort to ensure accuracy, but we cannot guarantee
+              format for better reading expreince. We make every effort to ensure accuracy, but we cannot guarantee
               that all figures or statements are current or fully verified. If you are a featured
               founder and wish to correct or remove your story, please contact us at{' '}
               <a href="mailto:support@mrrstory.com" style={{ color: '#92400e', fontWeight: 700 }}>

@@ -207,3 +207,10 @@ export async function saveStoryDraft(formData: FormData, id?: number) {
     return newStory.id;
   }
 }
+
+export async function unpublishStory(id: number) {
+  await db.update(storiesTable).set({ isDraft: true }).where(eq(storiesTable.id, id));
+  revalidatePath('/', 'layout');
+  revalidatePath('/dashboard', 'layout');
+  revalidatePath('/dashboard/stories');
+}

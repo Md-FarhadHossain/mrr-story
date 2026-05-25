@@ -60,7 +60,7 @@ export default async function DashboardBlogs() {
                   </div>
                 </div>
                 <div className={pageStyles.storyActions}>
-                  <BlogActions id={blog.id} slug={blog.slug} />
+                  <BlogActions id={blog.id} slug={blog.slug} isDraft={blog.isDraft} />
                 </div>
               </div>
             ))}

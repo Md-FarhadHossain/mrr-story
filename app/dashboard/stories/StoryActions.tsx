@@ -2,16 +2,17 @@
 
 import Link from 'next/link';
 import { useTransition } from 'react';
-import { deleteStory } from '../actions';
-import { Pencil, Trash2, ExternalLink } from 'lucide-react';
+import { deleteStory, unpublishStory } from '../actions';
+import { Pencil, Trash2, ExternalLink, EyeOff } from 'lucide-react';
 import styles from './StoryActions.module.css';
 
 interface StoryActionsProps {
   id: number;
   slug: string;
+  isDraft?: boolean | null;
 }
 
-export default function StoryActions({ id, slug }: StoryActionsProps) {
+export default function StoryActions({ id, slug, isDraft }: StoryActionsProps) {
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
@@ -26,8 +27,30 @@ export default function StoryActions({ id, slug }: StoryActionsProps) {
     }
   };
 
+  const handleUnpublish = () => {
+    if (window.confirm('Are you sure you want to unpublish this story? It will be moved to drafts.')) {
+      startTransition(async () => {
+        try {
+          await unpublishStory(id);
+        } catch (error) {
+          alert('Failed to unpublish story');
+        }
+      });
+    }
+  };
+
   return (
     <div className={styles.actions}>
+      {!isDraft && (
+        <button
+          onClick={handleUnpublish}
+          disabled={isPending}
+          className={styles.iconBtn}
+          title="Unpublish story"
+        >
+          <EyeOff size={15} />
+        </button>
+      )}
       <Link href={`/dashboard/stories/${id}/edit`} className={styles.iconBtn} title="Edit story">
         <Pencil size={15} />
       </Link>

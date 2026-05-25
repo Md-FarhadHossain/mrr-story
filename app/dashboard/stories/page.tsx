@@ -62,7 +62,7 @@ export default async function DashboardStories() {
                   </div>
                 </div>
                 <div className={pageStyles.storyActions}>
-                  <StoryActions id={story.id} slug={story.slug} />
+                  <StoryActions id={story.id} slug={story.slug} isDraft={story.isDraft} />
                 </div>
               </div>
             ))}

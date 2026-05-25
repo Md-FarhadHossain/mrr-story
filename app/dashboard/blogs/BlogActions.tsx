@@ -2,16 +2,17 @@
 
 import Link from 'next/link';
 import { useTransition } from 'react';
-import { deleteBlog } from '../blogActions';
-import { Pencil, Trash2, ExternalLink } from 'lucide-react';
+import { deleteBlog, unpublishBlog } from '../blogActions';
+import { Pencil, Trash2, ExternalLink, EyeOff } from 'lucide-react';
 import styles from '../stories/StoryActions.module.css';
 
 interface BlogActionsProps {
   id: number;
   slug: string;
+  isDraft?: boolean | null;
 }
 
-export default function BlogActions({ id, slug }: BlogActionsProps) {
+export default function BlogActions({ id, slug, isDraft }: BlogActionsProps) {
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
@@ -26,8 +27,30 @@ export default function BlogActions({ id, slug }: BlogActionsProps) {
     }
   };
 
+  const handleUnpublish = () => {
+    if (window.confirm('Are you sure you want to unpublish this blog? It will be moved to drafts.')) {
+      startTransition(async () => {
+        try {
+          await unpublishBlog(id);
+        } catch (error) {
+          alert('Failed to unpublish blog');
+        }
+      });
+    }
+  };
+
   return (
     <div className={styles.actions}>
+      {!isDraft && (
+        <button
+          onClick={handleUnpublish}
+          disabled={isPending}
+          className={styles.iconBtn}
+          title="Unpublish blog"
+        >
+          <EyeOff size={15} />
+        </button>
+      )}
       <Link href={`/dashboard/blogs/edit/${id}`} className={styles.iconBtn} title="Edit blog">
         <Pencil size={15} />
       </Link>

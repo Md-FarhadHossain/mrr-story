@@ -135,3 +135,10 @@ export async function saveBlogDraft(formData: FormData, id?: number) {
     return newBlog.id;
   }
 }
+
+export async function unpublishBlog(id: number) {
+  await db.update(blogsTable).set({ isDraft: true }).where(eq(blogsTable.id, id));
+  revalidatePath('/');
+  revalidatePath('/blog');
+  revalidatePath('/dashboard/blogs');
+}

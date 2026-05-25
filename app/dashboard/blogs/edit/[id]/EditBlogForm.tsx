@@ -2,7 +2,7 @@
 
 import { useRef, useTransition, useEffect, useState, useCallback } from 'react';
 import styles from '../../../Dashboard.module.css';
-import { updateBlog, saveBlogDraft } from '../../../blogActions';
+import { updateBlog, saveBlogDraft, unpublishBlog } from '../../../blogActions';
 import { ThemeToggle } from '../../../../components/ThemeToggle';
 import RichTextEditor from '../../../../components/RichTextEditor';
 import ImageUploader from '../../../../components/ImageUploader';
@@ -41,6 +41,8 @@ export default function EditBlogForm({ blog }: { blog: any }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [isPending, startTransition] = useTransition();
   const [isDraftSaving, setIsDraftSaving] = useState(false);
+  const [isUnpublishing, setIsUnpublishing] = useState(false);
+  const [isDraftStatus, setIsDraftStatus] = useState(blog.isDraft ?? true);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const router = useRouter();
 
@@ -119,6 +121,20 @@ export default function EditBlogForm({ blog }: { blog: any }) {
     }
   };
 
+  const handleUnpublish = async () => {
+    if (!confirm('Are you sure you want to unpublish this blog? It will be moved to drafts.')) return;
+    setIsUnpublishing(true);
+    try {
+      await unpublishBlog(blog.id);
+      setIsDraftStatus(true);
+      toast.success('Blog unpublished and moved to drafts');
+    } catch (error) {
+      toast.error('Failed to unpublish blog');
+    } finally {
+      setIsUnpublishing(false);
+    }
+  };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 's') {
@@ -149,6 +165,7 @@ export default function EditBlogForm({ blog }: { blog: any }) {
     startTransition(async () => {
       try {
         await updateBlog(blog.id, formData);
+        setIsDraftStatus(false);
         toast.success('Blog updated successfully!');
         router.push('/dashboard/blogs');
       } catch (error: any) {
@@ -175,9 +192,14 @@ export default function EditBlogForm({ blog }: { blog: any }) {
         </div>
         <div className={styles.actionArea}>
           {lastSaved && <span style={{fontSize: '12px', color: 'var(--text-secondary)'}}>Saved {lastSaved.toLocaleTimeString()}</span>}
-          <button type="button" onClick={handleSaveDraft} disabled={isDraftSaving} style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}>
+          <button type="button" onClick={handleSaveDraft} disabled={isDraftSaving || isUnpublishing} style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}>
             {isDraftSaving ? 'Saving...' : 'Save Draft'}
           </button>
+          {!isDraftStatus && (
+            <button type="button" onClick={handleUnpublish} disabled={isUnpublishing || isDraftSaving} style={{ background: 'transparent', border: '1px solid #ef4444', color: '#ef4444' }}>
+              {isUnpublishing ? 'Unpublishing...' : 'Unpublish'}
+            </button>
+          )}
           <button type="submit" disabled={isPending}>
             {isPending ? 'Saving...' : 'Save Changes'}
           </button>
