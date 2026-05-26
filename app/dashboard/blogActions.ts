@@ -142,3 +142,10 @@ export async function unpublishBlog(id: number) {
   revalidatePath('/blog');
   revalidatePath('/dashboard/blogs');
 }
+
+export async function publishBlog(id: number) {
+  await db.update(blogsTable).set({ isDraft: false }).where(eq(blogsTable.id, id));
+  revalidatePath('/');
+  revalidatePath('/blog');
+  revalidatePath('/dashboard/blogs');
+}

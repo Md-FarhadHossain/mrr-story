@@ -214,3 +214,10 @@ export async function unpublishStory(id: number) {
   revalidatePath('/dashboard', 'layout');
   revalidatePath('/dashboard/stories');
 }
+
+export async function publishStory(id: number) {
+  await db.update(storiesTable).set({ isDraft: false }).where(eq(storiesTable.id, id));
+  revalidatePath('/', 'layout');
+  revalidatePath('/dashboard', 'layout');
+  revalidatePath('/dashboard/stories');
+}

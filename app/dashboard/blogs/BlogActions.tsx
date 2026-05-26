@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { useTransition } from 'react';
-import { deleteBlog, unpublishBlog } from '../blogActions';
-import { Pencil, Trash2, ExternalLink, EyeOff } from 'lucide-react';
+import { deleteBlog, unpublishBlog, publishBlog } from '../blogActions';
+import { Pencil, Trash2, ExternalLink, EyeOff, Eye } from 'lucide-react';
 import styles from '../stories/StoryActions.module.css';
 
 interface BlogActionsProps {
@@ -39,8 +39,30 @@ export default function BlogActions({ id, slug, isDraft }: BlogActionsProps) {
     }
   };
 
+  const handlePublish = () => {
+    if (window.confirm('Are you sure you want to publish this blog? It will be visible to everyone.')) {
+      startTransition(async () => {
+        try {
+          await publishBlog(id);
+        } catch (error) {
+          alert('Failed to publish blog');
+        }
+      });
+    }
+  };
+
   return (
     <div className={styles.actions}>
+      {isDraft && (
+        <button
+          onClick={handlePublish}
+          disabled={isPending}
+          className={styles.iconBtn}
+          title="Publish blog"
+        >
+          <Eye size={15} />
+        </button>
+      )}
       {!isDraft && (
         <button
           onClick={handleUnpublish}

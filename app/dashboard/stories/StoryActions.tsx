@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { useTransition } from 'react';
-import { deleteStory, unpublishStory } from '../actions';
-import { Pencil, Trash2, ExternalLink, EyeOff } from 'lucide-react';
+import { deleteStory, unpublishStory, publishStory } from '../actions';
+import { Pencil, Trash2, ExternalLink, EyeOff, Eye } from 'lucide-react';
 import styles from './StoryActions.module.css';
 
 interface StoryActionsProps {
@@ -39,8 +39,30 @@ export default function StoryActions({ id, slug, isDraft }: StoryActionsProps) {
     }
   };
 
+  const handlePublish = () => {
+    if (window.confirm('Are you sure you want to publish this story? It will be visible to everyone.')) {
+      startTransition(async () => {
+        try {
+          await publishStory(id);
+        } catch (error) {
+          alert('Failed to publish story');
+        }
+      });
+    }
+  };
+
   return (
     <div className={styles.actions}>
+      {isDraft && (
+        <button
+          onClick={handlePublish}
+          disabled={isPending}
+          className={styles.iconBtn}
+          title="Publish story"
+        >
+          <Eye size={15} />
+        </button>
+      )}
       {!isDraft && (
         <button
           onClick={handleUnpublish}
